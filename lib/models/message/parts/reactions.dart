@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/reactions/reactor_tile.dart';
@@ -10,6 +12,7 @@ import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:http/http.dart' as http;
 import 'package:pillowchat/models/members.dart';
+import 'package:pillowchat/models/message/message.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/markdown.dart';
 import 'package:pillowchat/themes/ui.dart';
@@ -90,45 +93,200 @@ class Reaction {
   }
 
   static showInfo(
-    List<dynamic> emotes,
+    RxList<dynamic> emotes,
     dynamic messageIndex,
     Rx<int> tabIndex,
     ItemScrollController scrollController,
     ItemPositionsListener positionsListener,
     ScrollOffsetListener offsetListener,
   ) {
-    late List<dynamic> reactors = messageIndex.reactions.reactionMap.values
+    RxList<dynamic> reactors = [].obs;
+    reactors.value = (messageIndex.reactions.reactionMap.values
         .elementAt(tabIndex.value)
         .map((e) => e)
-        .toList();
-    // if (Platform.isAndroid || Platform.isIOS) {
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      showDragHandle: true,
-      context: MyApp.navigatorKey.currentState!.context,
-      builder: (context) {
-        return Obx(
-          () => ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(15),
-            ),
-            child: Container(
-              color: Dark.background.value,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
+        .toList());
+    if (Platform.isAndroid || Platform.isIOS) {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        showDragHandle: true,
+        context: MyApp.navigatorKey.currentState!.context,
+        builder: (context) {
+          return ReactorsMenu(
+            reactors: reactors,
+            emotes: emotes,
+            offsetListener: offsetListener,
+            positionsListener: positionsListener,
+            scrollController: scrollController,
+            message: messageIndex,
+            tabIndex: tabIndex,
+          );
+          // return Obx(
+          //   () => ClipRRect(
+          //     borderRadius: const BorderRadius.vertical(
+          //       top: Radius.circular(15),
+          //     ),
+          //     child: Container(
+          //       color: Dark.background.value,
+          //       padding: const EdgeInsets.symmetric(
+          //         horizontal: 8,
+          //       ),
+          //       child: Column(
+          //         children: [
+          //           Flexible(
+          //             child: Padding(
+          //               padding: const EdgeInsets.symmetric(
+          //                 horizontal: 8,
+          //                 vertical: 16,
+          //               ),
+          //               // REACTION LIST
+          //               child: ScrollablePositionedList.builder(
+          //                 scrollDirection: Axis.horizontal,
+          //                 shrinkWrap: true,
+          //                 itemScrollController: scrollController,
+          //                 itemPositionsListener: positionsListener,
+          //                 scrollOffsetListener: offsetListener,
+          //                 itemCount: emotes.length,
+          //                 itemBuilder: (context, index) {
+          //                   return Column(
+          //                     children: [
+          //                       if (emotes[index].toString().length == 26)
+          //                         Flexible(
+          //                           child: Emote(
+          //                             ulid: emotes[index],
+          //                             size: 30,
+          //                             onTap: () {
+          //                               tabIndex.value = index;
+
+          //                               reactors = messageIndex
+          //                                   .reactions.reactionMap.values
+          //                                   .elementAt(tabIndex.value)
+          //                                   .map((e) => e)
+          //                                   .toList();
+          //                               scrollController.scrollTo(
+          //                                 index: index,
+          //                                 duration:
+          //                                     const Duration(milliseconds: 300),
+          //                               );
+          //                             },
+          //                           ),
+          //                         )
+          //                       else
+          //                         Flexible(
+          //                           child: InkWell(
+          //                             onTap: () {
+          //                               tabIndex.value = index;
+          //                               scrollController.scrollTo(
+          //                                 index: index,
+          //                                 duration:
+          //                                     const Duration(milliseconds: 300),
+          //                               );
+          //                               reactors = messageIndex
+          //                                   .reactions.reactionMap.values
+          //                                   .elementAt(tabIndex.value)
+          //                                   .map((e) => e)
+          //                                   .toList();
+          //                             },
+          //                             child: Text(
+          //                               emotes[index],
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       Visibility(
+          //                         visible: index == tabIndex.value,
+          //                         child: Container(
+          //                           height: 8,
+          //                           width: 20,
+          //                           color: Dark.accent.value,
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   );
+          //                 },
+          //               ),
+          //             ),
+          //           ),
+          //           // REACTORS
+          //           ReactorList(reactors: reactors),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
+        },
+      );
+    } else {
+      return showDialog(
+        context: MyApp.navigatorKey.currentState!.context,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Dark.background.value,
+                  ),
+                  child: ReactorsMenu(
+                    reactors: reactors,
+                    emotes: emotes,
+                    scrollController: scrollController,
+                    offsetListener: offsetListener,
+                    positionsListener: positionsListener,
+                    tabIndex: tabIndex,
+                    message: messageIndex,
+                  ),
+                ),
               ),
-              child: Column(
+            ),
+          );
+        },
+      );
+    }
+  }
+}
+
+class ReactorsMenu extends StatelessWidget {
+  const ReactorsMenu({
+    super.key,
+    required this.reactors,
+    required this.emotes,
+    required this.offsetListener,
+    required this.positionsListener,
+    required this.scrollController,
+    required this.message,
+    required this.tabIndex,
+  });
+
+  final RxList<dynamic> reactors;
+  final List emotes;
+
+  final ScrollOffsetListener offsetListener;
+  final ItemPositionsListener positionsListener;
+  final ItemScrollController scrollController;
+  final Message message;
+  final Rx<int> tabIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Column(
+        children: [
+          Flexible(
+            child: SizedBox(
+              height: 70,
+              child: Row(
                 children: [
                   Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
-                      // REACTION LIST
-                      child: ScrollablePositionedList.builder(
-                        scrollDirection: Axis.horizontal,
+                    // REACTION LIST
+                    child: ScrollablePositionedList.builder(
                         shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const ScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
                         itemScrollController: scrollController,
                         itemPositionsListener: positionsListener,
                         scrollOffsetListener: offsetListener,
@@ -136,48 +294,61 @@ class Reaction {
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
-                              if (emotes[index].toString().length == 26)
-                                Flexible(
-                                  child: Emote(
-                                    ulid: emotes[index],
-                                    size: 30,
-                                    onTap: () {
-                                      tabIndex.value = index;
+                              Flexible(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: SizedBox(
+                                    width: 24,
+                                    child: emotes[index].length == 26
+                                        ? Emote(
+                                            size: 30,
+                                            ulid: emotes[index],
+                                            onTap: () {
+                                              reactors.assignAll(message
+                                                  .reactions.reactionMap.values
+                                                  .elementAt(tabIndex.value)
+                                                  .map((e) => e)
+                                                  .toList());
+                                              tabIndex.value = index;
 
-                                      reactors = messageIndex
-                                          .reactions.reactionMap.values
-                                          .elementAt(tabIndex.value)
-                                          .map((e) => e)
-                                          .toList();
-                                      scrollController.scrollTo(
-                                        index: index,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                      );
-                                    },
-                                  ),
-                                )
-                              else
-                                Flexible(
-                                  child: InkWell(
-                                    onTap: () {
-                                      tabIndex.value = index;
-                                      scrollController.scrollTo(
-                                        index: index,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                      );
-                                      reactors = messageIndex
-                                          .reactions.reactionMap.values
-                                          .elementAt(tabIndex.value)
-                                          .map((e) => e)
-                                          .toList();
-                                    },
-                                    child: Text(
-                                      emotes[index],
-                                    ),
+                                              // reactors.refresh();
+
+                                              scrollController.scrollTo(
+                                                index: index,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                              );
+                                            },
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              reactors.assignAll(message
+                                                  .reactions.reactionMap.values
+                                                  .elementAt(tabIndex.value)
+                                                  .map((e) => e)
+                                                  .toList());
+                                              tabIndex.value = index;
+
+                                              // reactors.refresh();
+
+                                              scrollController.scrollTo(
+                                                index: index,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                              );
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                emotes[index],
+                                                style: const TextStyle(
+                                                    fontSize: 24),
+                                              ),
+                                            ),
+                                          ),
                                   ),
                                 ),
+                              ),
                               Visibility(
                                 visible: index == tabIndex.value,
                                 child: Container(
@@ -188,79 +359,17 @@ class Reaction {
                               ),
                             ],
                           );
-                        },
-                      ),
-                    ),
+                        }),
                   ),
-                  // EMOTE ID
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Text(":${emotes[tabIndex.value]}:"),
-                  // ),
-                  // REACTORS
-                  ReactorList(reactors: reactors),
                 ],
               ),
             ),
           ),
-        );
-      },
+          ReactorList(reactors: reactors),
+        ],
+      ),
     );
-    // } else {
-    //   ScrollController controller = ScrollController();
-    //   return showModalBottomSheet(
-    //     context: MyApp.navigatorKey.currentState!.context,
-    //     // position: RelativeRect.fill,
-    //     builder: (context) {
-    //       return Column(
-    //         children: [
-    //           SizedBox(
-    //             height: 100,
-    //             child: Row(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: [
-    //                 Flexible(
-    //                   child: ListView.builder(
-    //                       controller: controller,
-    //                       shrinkWrap: true,
-    //                       scrollDirection: Axis.horizontal,
-    //                       itemCount: emotes.length,
-    //                       itemBuilder: (context, index) {
-    //                         return Padding(
-    //                           padding:
-    //                               const EdgeInsets.symmetric(horizontal: 8),
-    //                           child: SizedBox(
-    //                             width: 24,
-    //                             child: emotes[index].length == 26
-    //                                 ? Emote(
-    //                                     size: 24,
-    //                                     ulid: emotes[index],
-    //                                     onTap: () {},
-    //                                   )
-    //                                 : Center(
-    //                                     child: Text(
-    //                                       emotes[index],
-    //                                       style: const TextStyle(fontSize: 32),
-    //                                     ),
-    //                                   ),
-    //                           ),
-    //                         );
-    //                       }),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //           ReactorList(reactors: reactors),
-    //         ],
-    //       );
-    //     },
-    //   );
-    // }
   }
-}
-
-showPopUp() {
-  // showMenu(context: context, position: position, items: items)
 }
 
 class ReactorList extends StatelessWidget {
@@ -269,50 +378,53 @@ class ReactorList extends StatelessWidget {
     required this.reactors,
   });
 
-  final List reactors;
+  final RxList reactors;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 3,
-      child: ListView.builder(
-        // shrinkWrap: true,
-        itemCount: reactors.length,
-        itemBuilder: (context, index) {
-          late int userIndex;
-          if (!ClientController.controller.home.value) {
-            userIndex = ServerController.controller.selected.value.users
-                .indexWhere((user) => user.id == reactors[index]);
-          } else {
-            userIndex = ChannelController.controller.selected.value.users
-                .indexWhere((user) => user.id == reactors[index]);
-          }
+      child: Obx(
+        () => ListView.builder(
+          itemCount: reactors.length,
+          itemBuilder: (context, index) {
+            late int userIndex;
+            if (!ClientController.controller.home.value) {
+              userIndex = ServerController.controller.selected.value.users
+                  .indexWhere((user) => user.id == reactors[index]);
+            } else {
+              userIndex = ChannelController.controller.selected.value.users
+                  .indexWhere((user) => user.id == reactors[index]);
+            }
 
-          User user = User(id: '', name: '');
-          // IF NOT HOME
+            User user = User(id: '', name: '');
+            // IF NOT HOME
 
-          if (!ClientController.controller.home.value && userIndex != -1) {
-            user = ServerController.controller.selected.value.users[userIndex];
-          } else if (ClientController.controller.home.value == true &&
-              userIndex != -1) {
-            user = ChannelController.controller.selected.value.users[userIndex];
-          }
-          final int memberIndex = ServerController
-              .controller.selected.value.members
-              .indexWhere((member) => member.userId == reactors[index]);
-          Member? member;
-          if (memberIndex != -1) {
-            member =
-                ServerController.controller.selected.value.members[memberIndex];
-          }
-          return ReactorTile(
-            userIndex: userIndex,
-            user: user,
-            member: member,
-            reactors: reactors,
-            index: index,
-          );
-        },
+            if (!ClientController.controller.home.value && userIndex != -1) {
+              user =
+                  ServerController.controller.selected.value.users[userIndex];
+            } else if (ClientController.controller.home.value == true &&
+                userIndex != -1) {
+              user =
+                  ChannelController.controller.selected.value.users[userIndex];
+            }
+            final int memberIndex = ServerController
+                .controller.selected.value.members
+                .indexWhere((member) => member.userId == reactors[index]);
+            Member? member;
+            if (memberIndex != -1) {
+              member = ServerController
+                  .controller.selected.value.members[memberIndex];
+            }
+            return ReactorTile(
+              userIndex: userIndex,
+              user: user,
+              member: member,
+              reactors: reactors,
+              index: index,
+            );
+          },
+        ),
       ),
     );
   }

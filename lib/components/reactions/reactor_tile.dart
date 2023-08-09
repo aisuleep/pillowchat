@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
@@ -22,7 +23,7 @@ class ReactorTile extends StatelessWidget {
   final int index;
   final User user;
   final Member? member;
-  final List reactors;
+  final RxList reactors;
   static String getUrl(bool isMessage, User user,
       {Member? serverMember, Message? messageIndex, String? reactor}) {
     Member? member;

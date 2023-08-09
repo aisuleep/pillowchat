@@ -149,7 +149,7 @@ class MessageOptions extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                       Reaction.showInfo(
-                        emotes!,
+                        emotes!.obs,
                         messageIndex,
                         tabIndex!,
                         scrollController!,
