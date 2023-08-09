@@ -46,6 +46,7 @@ dependencies:
   get: ^4.6.5
   scrollable_positioned_list: ^0.3.7
   shared_preferences:
+  simple_gradient_text: ^1.2.4
 
 dev_dependencies:
   flutter_test:

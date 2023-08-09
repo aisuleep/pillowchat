@@ -107,7 +107,7 @@ class Member {
           roleIds.sort((a, b) =>
               serverRole.id.indexOf(a).compareTo(serverRole.id.indexOf(b)));
 
-          if (role.color?.length == 7) {
+          if (role.color != null) {
             roleColor = role.color!;
           }
         }

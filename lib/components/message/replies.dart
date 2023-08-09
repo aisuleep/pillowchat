@@ -9,10 +9,12 @@ import 'package:pillowchat/custom/markdown.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
+import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/themes/markdown.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class Replies extends StatelessWidget {
   const Replies(this.messageIndex, this.itemScrollController, {super.key});
@@ -210,7 +212,7 @@ class Replies extends StatelessWidget {
                       if (contentIndex != 0)
                         Padding(
                           padding: const EdgeInsets.only(right: 6),
-                          child: Text(
+                          child: GradientText(
                             member?.nickname != null
                                 ? member!.nickname!.trim()
                                 : user.bot == null ||
@@ -219,22 +221,39 @@ class Replies extends StatelessWidget {
                                         ? user.displayName!.trim()
                                         : user.name.trim()
                                     : replyIndex.masquerade!.name.trim(),
-                            style: TextStyle(
+                            colors: member != null &&
+                                    member.roles.isNotEmpty &&
+                                    member.roles[0].color != null &&
+                                    member.roles[0].color!.contains("gradient")
+                                ? Role.getCssGradient(member.roles[0].color!)
+                                : ClientController.controller.home.value ||
+                                        user.bot != null &&
+                                            replyIndex.masquerade?.name != ''
+                                    ? [
+                                        Dark.foreground.value,
+                                        Dark.foreground.value
+                                      ]
+                                    : member != null &&
+                                            member.roles.isNotEmpty &&
+                                            member.roles[0].color != '' &&
+                                            member.roles[0].color?.length == 7
+                                        ? [
+                                            Color(
+                                              int.parse(
+                                                  '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                            ),
+                                            Color(
+                                              int.parse(
+                                                  '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                            )
+                                          ]
+                                        : [
+                                            Dark.foreground.value,
+                                            Dark.foreground.value
+                                          ],
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              color: ClientController.controller.home.value ||
-                                      user.bot != null &&
-                                          replyIndex.masquerade?.name != ''
-                                  ? Dark.foreground.value
-                                  : member != null &&
-                                          member.roles.isNotEmpty &&
-                                          member.roles[0].color != '' &&
-                                          member.roles[0].color?.length == 7
-                                      ? Color(
-                                          int.parse(
-                                              '0xff${member.roles[0].color?.replaceAll("#", "")}'),
-                                        )
-                                      : Dark.foreground.value,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),

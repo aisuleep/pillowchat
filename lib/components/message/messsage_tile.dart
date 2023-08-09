@@ -10,10 +10,12 @@ import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
 import 'package:pillowchat/models/message/parts/reactions.dart';
+import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/markdown.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pillowchat/models/message/parts/embeds.dart';
 
@@ -54,6 +56,7 @@ class MessageTile extends StatelessWidget {
   late List<dynamic>? emotes;
   // final bool fromSentTime;
   // final bool fiveMinutes;
+
   @override
   Widget build(BuildContext context) {
     // LIST OF EMOTE REACTIONS ON MESSAGE
@@ -127,6 +130,12 @@ class MessageTile extends StatelessWidget {
                             );
                           },
                           onLongPress: () {
+                            if (member != null) {
+                              if (member!.roles.isNotEmpty) {
+                                print(member?.roles[0].color);
+                              }
+                            }
+
                             Picture.view(
                               context,
                               url,
@@ -192,7 +201,7 @@ class MessageTile extends StatelessWidget {
                                             padding:
                                                 const EdgeInsets.only(right: 8),
                                             child: Obx(
-                                              () => Text(
+                                              () => GradientText(
                                                 member?.nickname != null
                                                     ? member?.nickname!.trim()
                                                     : user.bot == null ||
@@ -206,54 +215,65 @@ class MessageTile extends StatelessWidget {
                                                         : messageIndex
                                                             .masquerade.name
                                                             .trim(),
-                                                style: TextStyle(
+                                                colors: member != null &&
+                                                        member!
+                                                            .roles.isNotEmpty &&
+                                                        member!.roles[0].color !=
+                                                            null &&
+                                                        member!.roles[0].color!
+                                                            .contains(
+                                                                "gradient")
+                                                    ? Role.getCssGradient(
+                                                        member!.roles[0].color!)
+                                                    : ClientController
+                                                                .controller
+                                                                .home
+                                                                .value ||
+                                                            user.bot != null &&
+                                                                messageIndex
+                                                                        .masquerade
+                                                                        .name !=
+                                                                    '' &&
+                                                                messageIndex
+                                                                        .masquerade
+                                                                        .color ==
+                                                                    null ||
+                                                            member == null ||
+                                                            member != null &&
+                                                                member!.roles
+                                                                    .isEmpty
+                                                        ? [
+                                                            Dark.foreground
+                                                                .value,
+                                                            Dark.foreground
+                                                                .value
+                                                          ]
+                                                        : member != null &&
+                                                                member!.roles.isNotEmpty &&
+                                                                member?.roles[0].color != null &&
+                                                                member?.roles[0].color?.length == 7 &&
+                                                                messageIndex.masquerade.name == ''
+                                                            ? [
+                                                                Color(
+                                                                  int.parse(
+                                                                      '0xff${member?.roles[0].color?.replaceAll("#", "")}'),
+                                                                ),
+                                                                Color(
+                                                                  int.parse(
+                                                                      '0xff${member?.roles[0].color?.replaceAll("#", "")}'),
+                                                                )
+                                                              ]
+                                                            : messageIndex.masquerade.color != null && messageIndex.masquerade.color.length == 7
+                                                                ? [Color(int.parse('0xff${messageIndex.masquerade.color?.replaceAll("#", "")}'))]
+                                                                : [
+                                                                    Dark.foreground
+                                                                        .value,
+                                                                    Dark.foreground
+                                                                        .value,
+                                                                  ],
+                                                style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
-                                                  color: ClientController
-                                                              .controller
-                                                              .home
-                                                              .value ||
-                                                          user.bot != null &&
-                                                              messageIndex
-                                                                      .masquerade
-                                                                      .name !=
-                                                                  '' &&
-                                                              messageIndex
-                                                                      .masquerade
-                                                                      .color ==
-                                                                  null ||
-                                                          member == null ||
-                                                          member != null &&
-                                                              member!
-                                                                  .roles.isEmpty
-                                                      ? Dark.foreground.value
-                                                      : member != null &&
-                                                              member!.roles
-                                                                  .isNotEmpty &&
-                                                              member?.roles[0].color !=
-                                                                  null &&
-                                                              member
-                                                                      ?.roles[0]
-                                                                      .color
-                                                                      ?.length ==
-                                                                  7 &&
-                                                              messageIndex
-                                                                      .masquerade
-                                                                      .name ==
-                                                                  ''
-                                                          ? Color(
-                                                              int.parse(
-                                                                  '0xff${member?.roles[0].color?.replaceAll("#", "")}'),
-                                                            )
-                                                          : messageIndex.masquerade.color !=
-                                                                      null &&
-                                                                  messageIndex
-                                                                          .masquerade
-                                                                          .color
-                                                                          .length ==
-                                                                      7
-                                                              ? Color(int.parse('0xff${messageIndex.masquerade.color?.replaceAll("#", "")}'))
-                                                              : Dark.foreground.value,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -330,7 +350,6 @@ class MessageContent extends StatelessWidget {
     required this.index,
     required this.user,
     required this.member,
-    // required this.serverRoles,
     required this.previousAuthor,
     required this.author,
     this.content,

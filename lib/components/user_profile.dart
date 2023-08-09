@@ -12,6 +12,7 @@ import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/markdown.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/models/message/parts/embeds.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 // ignore: must_be_immutable
 class UserProfile extends StatelessWidget {
@@ -412,14 +413,33 @@ class RoleList extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: Container(
-                    color: roles[index].color?.length == 7
-                        ? Color(
-                            int.parse(
-                                '0xff${roles[index].color!.replaceAll("#", "")}'),
-                          ).withOpacity(0.5)
-                        : Dark.primaryBackground.value,
-                    child: Padding(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: roles.isNotEmpty &&
+                                roles[0].color != null &&
+                                roles[0].color!.contains("gradient")
+                            ? Role.getCssGradient(roles[0].color!)
+                            : roles[index].color?.length == 7
+                                ? [
+                                    Color(
+                                      int.parse(
+                                          '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                    ),
+                                    Color(
+                                      int.parse(
+                                          '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                    )
+                                  ]
+                                : [
+                                    Dark.primaryBackground.value,
+                                    Dark.primaryBackground.value
+                                  ],
+                      ),
+                    ),
+                    child: Container(
+                      color: Dark.primaryBackground.value.withOpacity(0.8),
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
@@ -431,12 +451,29 @@ class RoleList extends StatelessWidget {
                               child: Container(
                                 height: 15,
                                 width: 15,
-                                color: roles[index].color?.length == 7
-                                    ? Color(
-                                        int.parse(
-                                            '0xff${roles[index].color!.replaceAll("#", "")}'),
-                                      )
-                                    : Dark.foreground.value,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: roles.isNotEmpty &&
+                                            roles[0].color != null &&
+                                            roles[0].color!.contains("gradient")
+                                        ? Role.getCssGradient(roles[0].color!)
+                                        : roles[index].color?.length == 7
+                                            ? [
+                                                Color(
+                                                  int.parse(
+                                                      '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                ),
+                                                Color(
+                                                  int.parse(
+                                                      '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                )
+                                              ]
+                                            : [
+                                                Dark.foreground.value,
+                                                Dark.foreground.value
+                                              ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -448,15 +485,29 @@ class RoleList extends StatelessWidget {
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
                                     ..strokeWidth = 2
-                                    ..color = roles[index].color?.length == 7
-                                        ? Color(
-                                            int.parse(
-                                                '0xff${roles[index].color!.replaceAll("#", "")}'),
-                                          )
-                                        : Dark.primaryBackground.value,
+                                    ..color = Dark.primaryBackground.value,
                                 ),
                               ),
-                              Text(
+                              GradientText(
+                                colors: roles.isNotEmpty &&
+                                        roles[0].color != null &&
+                                        roles[0].color!.contains("gradient")
+                                    ? Role.getCssGradient(roles[0].color!)
+                                    : roles[index].color?.length == 7
+                                        ? [
+                                            Color(
+                                              int.parse(
+                                                  '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                            ),
+                                            Color(
+                                              int.parse(
+                                                  '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                            )
+                                          ]
+                                        : [
+                                            Dark.foreground.value,
+                                            Dark.foreground.value
+                                          ],
                                 roles[index].name,
                                 style: TextStyle(
                                   color: Dark.foreground.value,

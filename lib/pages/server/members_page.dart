@@ -11,9 +11,11 @@ import 'package:pillowchat/custom/hole_puncher.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/members.dart';
+import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/themes/markdown.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class MembersPage extends StatelessWidget {
   const MembersPage({super.key});
@@ -198,8 +200,7 @@ class MembersPage extends StatelessWidget {
                                           vertical: 0,
                                           horizontal: 4,
                                         ),
-                                        hoverColor:
-                                            Dark.primaryBackground.value,
+                                        hoverColor: Dark.background.value,
                                         onTap: () {
                                           User.view(
                                             context,
@@ -233,7 +234,7 @@ class MembersPage extends StatelessWidget {
                                                   Row(
                                                     children: [
                                                       Flexible(
-                                                        child: Text(
+                                                        child: GradientText(
                                                           // IF USER HAS NICKNAME
                                                           member.nickname !=
                                                                   null
@@ -246,30 +247,50 @@ class MembersPage extends StatelessWidget {
                                                                       .trim()
                                                                   : user.name
                                                                       .trim(),
-                                                          style: TextStyle(
+                                                          colors: member
+                                                                      .roles.isNotEmpty &&
+                                                                  member
+                                                                          .roles[
+                                                                              0]
+                                                                          .color !=
+                                                                      null &&
+                                                                  member
+                                                                      .roles[0]
+                                                                      .color!
+                                                                      .contains(
+                                                                          "gradient")
+                                                              ? Role.getCssGradient(
+                                                                  member
+                                                                      .roles[0]
+                                                                      .color!)
+                                                              : member.roles
+                                                                          .isNotEmpty &&
+                                                                      member.roles[0].color !=
+                                                                          null &&
+                                                                      member.roles[0].color!
+                                                                              .length ==
+                                                                          7
+                                                                  ? [
+                                                                      Color(
+                                                                        int.parse(
+                                                                            '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                                                      ),
+                                                                      Color(
+                                                                        int.parse(
+                                                                            '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                                                      )
+                                                                    ]
+                                                                  : [
+                                                                      Dark.foreground
+                                                                          .value,
+                                                                      Dark.foreground
+                                                                          .value,
+                                                                    ],
+                                                          style:
+                                                              const TextStyle(
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            color: member.roles
-                                                                        .isNotEmpty &&
-                                                                    member
-                                                                            .roles[
-                                                                                0]
-                                                                            .color !=
-                                                                        null &&
-                                                                    member
-                                                                            .roles[
-                                                                                0]
-                                                                            .color!
-                                                                            .length ==
-                                                                        7
-                                                                ? Color(
-                                                                    int.parse(
-                                                                        '0xff${member.roles[0].color?.replaceAll("#", "")}'),
-                                                                  )
-                                                                : Dark
-                                                                    .foreground
-                                                                    .value,
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,

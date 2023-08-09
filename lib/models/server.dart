@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/models/channel/channels.dart';
 import 'package:pillowchat/models/members.dart';
@@ -126,4 +127,75 @@ class Role {
       rank: json['rank'],
     );
   }
+
+  static bool isCssGradient(String color) {
+    return color.startsWith('linear-gradient');
+  }
+
+  static List<Color> getCssGradient(String cssGradient) {
+    List<Color> colors = [];
+    // Remove 'linear-gradient' and parentheses
+    if (isCssGradient(cssGradient)) {
+      cssGradient = cssGradient.replaceAll('linear-gradient', '');
+      cssGradient = cssGradient.replaceAll('(', '');
+      cssGradient = cssGradient.replaceAll(')', '');
+
+      // Split the gradient into components (direction and color stops)
+      List<String> gradientComponents = cssGradient.split(',');
+
+      // Extract the color values
+
+      for (String component in gradientComponents) {
+        String trimmedComponent = component.trim();
+        if (!trimmedComponent.contains('deg')) {
+          // Assuming any component without 'deg' is a color stop
+          // Convert color stop to Color object and add to the list
+          colors.add(parseColor(trimmedComponent, colors));
+        }
+      }
+    }
+    return colors;
+  }
+
+  static Color parseColor(String colorValue, List<Color> gradientColors) {
+    colorValue = colorValue.trim();
+
+    // Check if the colorValue is an RGB format
+    if (colorValue.startsWith('rgb(') && colorValue.endsWith(')')) {
+      String rgbValues = colorValue.substring(4, colorValue.length - 1);
+      List<int> rgbComponents = rgbValues.split(',').map(int.parse).toList();
+      if (rgbComponents.length == 3) {
+        return Color.fromRGBO(
+            rgbComponents[0], rgbComponents[1], rgbComponents[2], 1);
+      }
+    }
+
+    // Check if the colorValue is a hex value
+    if (colorValue.startsWith('#')) {
+      return Color(int.parse(colorValue.replaceAll('#', ''), radix: 16));
+    }
+
+    // Check if the colorValue is a color name
+    if (colorNames.containsKey(colorValue)) {
+      // Use the color mapping
+      return colorNames[colorValue]!;
+    }
+
+    // If no match is found, use a default color
+    return Colors.black;
+  }
+
+  static Map<String, Color> colorNames = {
+    'black': Colors.black,
+    'white': Colors.white,
+    'red': Colors.red,
+    'green': Colors.green,
+    'blue': Colors.blue,
+    'yellow': Colors.yellow,
+    'orange': Colors.orange,
+    'purple': Colors.purple,
+    'pink': Colors.pink,
+    'grey': Colors.grey,
+    'brown': Colors.brown,
+  };
 }
