@@ -38,14 +38,14 @@ class MyApp extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child: Container(
-                  width: 400,
-                  height: 400,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    width: 400,
+                    height: 400,
                     color: Dark.background.value,
+                    child: widget,
                   ),
-                  child: widget,
                 ),
               ),
             ),
