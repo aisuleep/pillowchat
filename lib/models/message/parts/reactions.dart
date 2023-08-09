@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -282,84 +283,95 @@ class ReactorsMenu extends StatelessWidget {
                 children: [
                   Flexible(
                     // REACTION LIST
-                    child: ScrollablePositionedList.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const ScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        itemScrollController: scrollController,
-                        itemPositionsListener: positionsListener,
-                        scrollOffsetListener: offsetListener,
-                        itemCount: emotes.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Flexible(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: SizedBox(
-                                    width: 24,
-                                    child: emotes[index].length == 26
-                                        ? Emote(
-                                            size: 30,
-                                            ulid: emotes[index],
-                                            onTap: () {
-                                              reactors.assignAll(message
-                                                  .reactions.reactionMap.values
-                                                  .elementAt(tabIndex.value)
-                                                  .map((e) => e)
-                                                  .toList());
-                                              tabIndex.value = index;
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(dragDevices: {
+                        PointerDeviceKind.mouse,
+                        PointerDeviceKind.touch,
+                      }),
+                      child: ScrollablePositionedList.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const ScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          itemScrollController: scrollController,
+                          itemPositionsListener: positionsListener,
+                          scrollOffsetListener: offsetListener,
+                          itemCount: emotes.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: SizedBox(
+                                      width: 24,
+                                      child: emotes[index].length == 26
+                                          ? Emote(
+                                              size: 30,
+                                              ulid: emotes[index],
+                                              onTap: () {
+                                                reactors.assignAll(message
+                                                    .reactions
+                                                    .reactionMap
+                                                    .values
+                                                    .elementAt(tabIndex.value)
+                                                    .map((e) => e)
+                                                    .toList());
+                                                tabIndex.value = index;
 
-                                              // reactors.refresh();
+                                                // reactors.refresh();
 
-                                              scrollController.scrollTo(
-                                                index: index,
-                                                duration: const Duration(
-                                                    milliseconds: 300),
-                                              );
-                                            },
-                                          )
-                                        : InkWell(
-                                            onTap: () {
-                                              reactors.assignAll(message
-                                                  .reactions.reactionMap.values
-                                                  .elementAt(tabIndex.value)
-                                                  .map((e) => e)
-                                                  .toList());
-                                              tabIndex.value = index;
+                                                scrollController.scrollTo(
+                                                  index: index,
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                );
+                                              },
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                reactors.assignAll(message
+                                                    .reactions
+                                                    .reactionMap
+                                                    .values
+                                                    .elementAt(tabIndex.value)
+                                                    .map((e) => e)
+                                                    .toList());
+                                                tabIndex.value = index;
 
-                                              // reactors.refresh();
+                                                // reactors.refresh();
 
-                                              scrollController.scrollTo(
-                                                index: index,
-                                                duration: const Duration(
-                                                    milliseconds: 300),
-                                              );
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                emotes[index],
-                                                style: const TextStyle(
-                                                    fontSize: 24),
+                                                scrollController.scrollTo(
+                                                  index: index,
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                );
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  emotes[index],
+                                                  style: const TextStyle(
+                                                      fontSize: 24),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Visibility(
-                                visible: index == tabIndex.value,
-                                child: Container(
-                                  height: 8,
-                                  width: 20,
-                                  color: Dark.accent.value,
+                                Visibility(
+                                  visible: index == tabIndex.value,
+                                  child: Container(
+                                    height: 8,
+                                    width: 20,
+                                    color: Dark.accent.value,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }),
+                              ],
+                            );
+                          }),
+                    ),
                   ),
                 ],
               ),
