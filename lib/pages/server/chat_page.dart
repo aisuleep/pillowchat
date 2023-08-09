@@ -33,7 +33,7 @@ class ChatPage extends StatelessWidget {
               child: ChannelController.controller.selected.value.type !=
                       'VoiceChannel'
                   ? Container(
-                      padding: !Platform.isAndroid && !Platform.isIOS
+                      padding: Platform.isAndroid || Platform.isIOS
                           ? null
                           : const EdgeInsets.only(bottom: 80),
                       child: Row(
@@ -252,8 +252,10 @@ class ChatPage extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible:
-                                ChannelController.controller.showMembers.value,
+                            visible: ChannelController
+                                    .controller.showMembers.value &&
+                                !Platform.isAndroid &&
+                                !Platform.isIOS,
                             child: const SizedBox(
                               width: 250,
                               child: MembersPage(),
@@ -267,7 +269,9 @@ class ChatPage extends StatelessWidget {
                         Flexible(child: VoiceChat()),
                         Visibility(
                           visible:
-                              ChannelController.controller.showMembers.value,
+                              ChannelController.controller.showMembers.value &&
+                                  !Platform.isAndroid &&
+                                  !Platform.isIOS,
                           child: const SizedBox(
                             width: 250,
                             child: MembersPage(),

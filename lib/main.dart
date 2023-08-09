@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_meedu_videoplayer/meedu_player.dart';
+// import 'package:flutter_meedu_videoplayer/meedu_player.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
@@ -22,7 +22,7 @@ import 'pages/home/discover.dart';
 import 'pages/home/welcome.dart';
 
 void main() {
-  initMeeduPlayer();
+  // initMeeduPlayer();
   runApp(const MyApp());
 }
 

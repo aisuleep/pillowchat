@@ -42,7 +42,7 @@ dependencies:
   photo_view:
   ulid:
   intl:
-  flutter_meedu_videoplayer:
+  # flutter_meedu_videoplayer:
   get: ^4.6.5
   scrollable_positioned_list: ^0.3.7
   shared_preferences:
