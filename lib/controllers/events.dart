@@ -106,9 +106,10 @@ class Events {
     int messageIndex;
     channelIndex =
         Client.channels.indexWhere((channel) => channel.id == json["channel"]);
-    dynamic data = json["data"];
-    String content = data["content"];
-    String edited = data["edited"];
+    final String messageId = json["id"];
+    final dynamic data = json["data"];
+    final String content = data["content"];
+    final String edited = data["edited"];
     List<Embeds> embeds = [];
     if (data["embeds"].length != 0) {
       embeds = data["embeds"];
@@ -128,7 +129,7 @@ class Events {
       // print(channelIndex);
       messageIndex = ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages
-          .indexWhere((message) => message.id == message.id);
+          .indexWhere((message) => message.id == messageId);
       // print(messageIndex);
       if (messageIndex != -1) {
         ServerController.controller.serversList[serverIndex]
