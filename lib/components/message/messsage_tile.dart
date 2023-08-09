@@ -305,7 +305,7 @@ class MessageTile extends StatelessWidget {
                             index: index,
                             user: user,
                             member: member ?? Member('', ''),
-                            emotes: emotes!.obs,
+                            emotes: emotes?.obs,
                             previousAuthor: previousAuthor,
                             author: author,
                           ),
