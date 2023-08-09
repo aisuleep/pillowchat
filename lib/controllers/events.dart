@@ -204,9 +204,11 @@ class Events {
           .indexWhere((server) => server.id == channel.server);
       // print(serverIndex);
 
-      channelIndex = ServerController
-          .controller.serversList[serverIndex].channels
-          .indexWhere((channel) => channel.id == channelId);
+      if (serverIndex != -1) {
+        channelIndex = ServerController
+            .controller.serversList[serverIndex].channels
+            .indexWhere((channel) => channel.id == channelId);
+      }
       // print(
       // "LAST ID: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
       if (serverIndex != -1) {
