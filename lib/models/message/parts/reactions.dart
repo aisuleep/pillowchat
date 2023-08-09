@@ -216,35 +216,17 @@ class Reaction {
         },
       );
     } else {
-      return showDialog(
+      MyApp.showPopup(
         context: MyApp.navigatorKey.currentState!.context,
-        builder: (context) {
-          return Material(
-            type: MaterialType.transparency,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 400,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Dark.background.value,
-                  ),
-                  child: ReactorsMenu(
-                    reactors: reactors,
-                    emotes: emotes,
-                    scrollController: scrollController,
-                    offsetListener: offsetListener,
-                    positionsListener: positionsListener,
-                    tabIndex: tabIndex,
-                    message: messageIndex,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+        widget: ReactorsMenu(
+          reactors: reactors,
+          emotes: emotes,
+          scrollController: scrollController,
+          offsetListener: offsetListener,
+          positionsListener: positionsListener,
+          tabIndex: tabIndex,
+          message: messageIndex,
+        ),
       );
     }
   }

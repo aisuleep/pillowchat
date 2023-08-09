@@ -24,10 +24,9 @@ class UserProfile extends StatelessWidget {
     required this.presence,
     required this.text,
     required this.id,
+    required this.roles,
     this.displayName,
     this.avatar,
-    required this.roles,
-    // this.serverRoles,
     this.profile,
   });
   final String? displayName;
@@ -61,127 +60,129 @@ class UserProfile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 150,
-              child: Stack(
-                children: [
-                  if (ServerController.controller.selected.value
-                          .users[userIndex].profile?.background !=
-                      null)
+            Expanded(
+              child: SizedBox(
+                height: 130,
+                child: Stack(
+                  children: [
+                    if (ServerController.controller.selected.value
+                            .users[userIndex].profile?.background !=
+                        null)
+                      Positioned.fill(
+                        child: AspectRatio(
+                          aspectRatio: 1 / 3,
+                          child: Image.network(
+                            '$autumn/backgrounds/${ServerController.controller.selected.value.users[userIndex].profile?.background?.id}',
+                            filterQuality: FilterQuality.medium,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     Positioned.fill(
-                      child: AspectRatio(
-                        aspectRatio: 1 / 3,
-                        child: Image.network(
-                          '$autumn/backgrounds/${ServerController.controller.selected.value.users[userIndex].profile?.background?.id}',
-                          filterQuality: FilterQuality.medium,
-                          fit: BoxFit.cover,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.black,
+                              Colors.black.withOpacity(0.5),
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
                         ),
                       ),
                     ),
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.black,
-                            Colors.black.withOpacity(0.5),
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Picture.view(
-                                    context,
-                                    avatar ?? '',
-                                    username,
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Picture.view(
+                                      context,
+                                      avatar ?? '',
+                                      username,
+                                      user: user,
+                                      isServer: false,
+                                    );
+                                  },
+                                  child: UserIcon(
+                                    hasStatus: true,
+                                    radius: 60,
                                     user: user,
-                                    isServer: false,
-                                  );
-                                },
-                                child: UserIcon(
-                                  hasStatus: true,
-                                  radius: 60,
-                                  user: user,
-                                  url: Client.getAvatar(user),
+                                    url: Client.getAvatar(user),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                  bottom: 8,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            displayName ?? user.name,
+                                            style: TextStyle(
+                                              fontSize: ClientController
+                                                  .controller.fontSize.value,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            '$username#$discriminator',
+                                            style: TextStyle(
+                                              color: Dark
+                                                  .secondaryForeground.value,
+                                              fontSize: ClientController
+                                                  .controller.fontSize.value,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: id !=
+                                          ClientController
+                                              .controller.selectedUser.value.id,
+                                      child: IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: Icon(
+                                          Icons.person_add_alt_1_rounded,
+                                          color: Dark.foreground.value,
+                                        ),
+                                        onPressed: () {
+                                          // IF NOT FRIENDS
+                                          // User.add();
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 12,
-                                bottom: 8,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          displayName ?? user.name,
-                                          style: TextStyle(
-                                            fontSize: ClientController
-                                                .controller.fontSize.value,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          '$username#$discriminator',
-                                          style: TextStyle(
-                                            color:
-                                                Dark.secondaryForeground.value,
-                                            fontSize: ClientController
-                                                .controller.fontSize.value,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: id !=
-                                        ClientController
-                                            .controller.selectedUser.value.id,
-                                    child: IconButton(
-                                      padding: const EdgeInsets.all(0),
-                                      icon: Icon(
-                                        Icons.person_add_alt_1_rounded,
-                                        color: Dark.foreground.value,
-                                      ),
-                                      onPressed: () {
-                                        // IF NOT FRIENDS
-                                        // User.add();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
@@ -246,17 +247,18 @@ class UserProfile extends StatelessWidget {
                 ),
               ),
             ),
+
             if (tabIndex.toInt() == 0)
-              ProfileTab(
-                user: user,
-                content: content,
-                roles: roles,
-                // serverRoles:
-                //     ServerController.controller.selected.value.roleList,
+              Flexible(
+                child: ProfileTab(
+                  user: user,
+                  content: content,
+                  roles: roles,
+                ),
               ),
-            if (tabIndex.toInt() == 1) const Friends(),
-            if (tabIndex.toInt() == 2) const Groups(),
-            if (tabIndex.toInt() == 3) const Servers(),
+            if (tabIndex.toInt() == 1) const Flexible(child: Friends()),
+            if (tabIndex.toInt() == 2) const Flexible(child: Groups()),
+            if (tabIndex.toInt() == 3) const Flexible(child: Servers()),
           ],
         ),
       ),
@@ -328,21 +330,16 @@ class ProfileTab extends StatelessWidget {
     required this.user,
     required this.content,
     required this.roles,
-    // required this.serverRoles,
   });
   User user = User(id: '', name: '');
-  // final int userIndex;
   final String? content;
   List<Role> roles;
-  // final List<dynamic>? roles;
-  // final List<Role>? serverRoles;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: [
           if (roles.length != 0)
             Padding(
@@ -359,43 +356,31 @@ class ProfileTab extends StatelessWidget {
             ),
           // BIO
 
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Information'.toUpperCase(),
-                      style: TextStyle(
-                        color: Dark.secondaryForeground.value,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (user.profile?.content != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            color: Dark.background.value,
-                            padding: const EdgeInsets.all(8),
-                            child: MarkdownBody(
-                              data: user.profile?.content ?? '',
-                              softLineBreak: true,
-                              styleSheet: markdown.styleSheet,
-                              builders: markdown.builders,
-                              extensionSet: markdown.extensionSet,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+          Text(
+            'Information'.toUpperCase(),
+            style: TextStyle(
+              color: Dark.secondaryForeground.value,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (user.profile?.content != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: Dark.primaryBackground.value,
+                  padding: const EdgeInsets.all(8),
+                  child: MarkdownBody(
+                    data: user.profile?.content ?? '',
+                    softLineBreak: true,
+                    styleSheet: markdown.styleSheet,
+                    builders: markdown.builders,
+                    extensionSet: markdown.extensionSet,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
         ],
       ),
     );

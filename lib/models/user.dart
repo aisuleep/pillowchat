@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pillowchat/components/user_profile.dart';
@@ -8,6 +9,7 @@ import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/l10n/en.dart';
+import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:http/http.dart' as http;
 import 'package:pillowchat/models/server.dart';
@@ -198,53 +200,67 @@ class User {
     String text,
     String id,
     List<Role> roles,
-    // List<dynamic>? roles,
-    // List<Role>? serverRoles,
   ) {
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      showDragHandle: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return DraggableScrollableSheet(
-            maxChildSize: 0.8,
-            initialChildSize: 0.6,
-            minChildSize: 0.4,
-            expand: false,
-            builder: (context, ScrollController scrollController) {
-              return SingleChildScrollView(
-                child: ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(15)),
-                  // padding: const EdgeInsets.symmetric(
-                  //     // horizontal: 16,
-                  //     // vertical: 8,
-                  //     ),
-                  child: Column(
-                    children: [
-                      UserProfile(
-                        user: user,
-                        displayName: user.displayName,
-                        username: user.name,
-                        discriminator: user.discriminator,
-                        userIndex: index ?? -1,
-                        avatar: avatar,
-                        presence: presence,
-                        text: text,
-                        id: id,
-                        roles: roles,
-                      ),
-                    ],
+    if (Platform.isAndroid || Platform.isIOS) {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        showDragHandle: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return DraggableScrollableSheet(
+              maxChildSize: 0.8,
+              initialChildSize: 0.6,
+              minChildSize: 0.4,
+              expand: false,
+              builder: (context, ScrollController scrollController) {
+                return SingleChildScrollView(
+                  child: ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(15)),
+                    // padding: const EdgeInsets.symmetric(
+                    //     // horizontal: 16,
+                    //     // vertical: 8,
+                    //     ),
+                    child: Column(
+                      children: [
+                        UserProfile(
+                          user: user,
+                          displayName: user.displayName,
+                          username: user.name,
+                          discriminator: user.discriminator,
+                          userIndex: index ?? -1,
+                          avatar: avatar,
+                          presence: presence,
+                          text: text,
+                          id: id,
+                          roles: roles,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            });
-      },
-    );
+                );
+              });
+        },
+      );
+    } else {
+      MyApp.showPopup(
+        context: context,
+        widget: UserProfile(
+          user: user,
+          username: user.name,
+          discriminator: user.discriminator,
+          userIndex: index ?? -1,
+          presence: presence,
+          text: text,
+          id: id,
+          roles: roles,
+        ),
+      );
+    }
   }
 }
 

@@ -29,6 +29,30 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static showPopup({required Widget widget, required BuildContext context}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Container(
+                  width: 400,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Dark.background.value,
+                  ),
+                  child: widget,
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
