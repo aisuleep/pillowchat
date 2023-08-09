@@ -225,7 +225,7 @@ class Reaction {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Container(
-                  width: 300,
+                  width: 400,
                   height: 300,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -273,33 +273,33 @@ class ReactorsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        children: [
-          Flexible(
-            child: SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Flexible(
-                    // REACTION LIST
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(dragDevices: {
-                        PointerDeviceKind.mouse,
-                        PointerDeviceKind.touch,
-                      }),
-                      child: ScrollablePositionedList.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          physics: const ScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          itemScrollController: scrollController,
-                          itemPositionsListener: positionsListener,
-                          scrollOffsetListener: offsetListener,
-                          itemCount: emotes.length,
-                          itemBuilder: (context, index) {
-                            return Column(
+    return Column(
+      children: [
+        Flexible(
+          child: SizedBox(
+            height: 70,
+            child: Row(
+              children: [
+                Flexible(
+                  // REACTION LIST
+                  child: ScrollConfiguration(
+                    behavior:
+                        ScrollConfiguration.of(context).copyWith(dragDevices: {
+                      PointerDeviceKind.mouse,
+                      PointerDeviceKind.touch,
+                    }),
+                    child: ScrollablePositionedList.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const ScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        itemScrollController: scrollController,
+                        itemPositionsListener: positionsListener,
+                        scrollOffsetListener: offsetListener,
+                        itemCount: emotes.length,
+                        itemBuilder: (context, index) {
+                          return Obx(
+                            () => Column(
                               children: [
                                 Flexible(
                                   child: Padding(
@@ -312,6 +312,12 @@ class ReactorsMenu extends StatelessWidget {
                                               size: 30,
                                               ulid: emotes[index],
                                               onTap: () {
+                                                tabIndex.value = index;
+                                                scrollController.scrollTo(
+                                                  index: index,
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                );
                                                 reactors.assignAll(message
                                                     .reactions
                                                     .reactionMap
@@ -319,19 +325,16 @@ class ReactorsMenu extends StatelessWidget {
                                                     .elementAt(tabIndex.value)
                                                     .map((e) => e)
                                                     .toList());
-                                                tabIndex.value = index;
-
-                                                // reactors.refresh();
-
-                                                scrollController.scrollTo(
-                                                  index: index,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                );
                                               },
                                             )
                                           : InkWell(
                                               onTap: () {
+                                                tabIndex.value = index;
+                                                scrollController.scrollTo(
+                                                  index: index,
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                );
                                                 reactors.assignAll(message
                                                     .reactions
                                                     .reactionMap
@@ -339,15 +342,6 @@ class ReactorsMenu extends StatelessWidget {
                                                     .elementAt(tabIndex.value)
                                                     .map((e) => e)
                                                     .toList());
-                                                tabIndex.value = index;
-
-                                                // reactors.refresh();
-
-                                                scrollController.scrollTo(
-                                                  index: index,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                );
                                               },
                                               child: Center(
                                                 child: Text(
@@ -369,17 +363,17 @@ class ReactorsMenu extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            );
-                          }),
-                    ),
+                            ),
+                          );
+                        }),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          ReactorList(reactors: reactors),
-        ],
-      ),
+        ),
+        ReactorList(reactors: reactors),
+      ],
     );
   }
 }
