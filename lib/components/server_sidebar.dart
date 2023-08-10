@@ -261,7 +261,12 @@ class ServerIconButton extends StatelessWidget {
                               ? '$autumn/icons/$icon'
                               : '$autumn/icons/$icon?max_side=256',
                         )
-                      : Text(server!.name.substring(0)),
+                      : Container(
+                          color: Dark.primaryBackground.value,
+                          child: Center(
+                            child: Text(server!.name[0]),
+                          ),
+                        ),
                 ),
               ),
             ),
