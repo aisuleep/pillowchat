@@ -27,9 +27,9 @@ class ReactorTile extends StatelessWidget {
   static String getUrl(bool isMessage, User user,
       {Member? serverMember, Message? messageIndex, String? reactor}) {
     Member? member;
+    int memberIndex;
     String url = Client.getAvatar(user, id: reactor);
 
-    int memberIndex;
     if (serverMember == null) {
       memberIndex = ServerController.controller.selected.value.members
           .indexWhere((member) => member.userId == reactor);
@@ -38,6 +38,8 @@ class ReactorTile extends StatelessWidget {
             ServerController.controller.selected.value.members[memberIndex];
       }
     } else {
+      // IS NOT A MEMBER OF THE SERVER
+
       member = serverMember;
     }
     // GET AVATAR URL

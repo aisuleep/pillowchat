@@ -146,6 +146,7 @@ class MessageTile extends StatelessWidget {
                           },
                           child: UserIcon(
                             url: url,
+                            user: user,
                             hasStatus: false,
                             radius: 36,
                           ),

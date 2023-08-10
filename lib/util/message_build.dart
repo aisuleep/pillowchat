@@ -96,10 +96,8 @@ class MessageBuild extends StatelessWidget {
             //     .indexWhere((user) => user.id == messageAuthor);
             User user = User(id: '', name: '');
             if (userIndex != -1) {
-              ServerController.controller.selected.value.users =
-                  ChannelController.controller.selected.value.users;
               user =
-                  ServerController.controller.selected.value.users[userIndex];
+                  ChannelController.controller.selected.value.users[userIndex];
 
               // ChannelController.controller.selected.value.users[userIndex];
               // } else if (recipientIndex != -1) {
