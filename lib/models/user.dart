@@ -1,7 +1,4 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +93,7 @@ class User {
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
 
-      print("[success] got user! $json");
+      if (kDebugMode) print("[success] got user! $json");
       final User user = User.fromJson(json);
 
       fetchProfile(target);
@@ -115,13 +112,13 @@ class User {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
         var self = User.fromJson(json);
-        print("got self!");
+        if (kDebugMode) print("got self!");
 
         ClientController.controller.selectUser(self);
         fetchSelfProfile();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -136,12 +133,12 @@ class User {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
         Profile profile = Profile.fromJson(json);
-        print("[success] fetch self profile! ");
-        print(profile);
+        if (kDebugMode) print("[success] fetch self profile! ");
+        if (kDebugMode) print(profile);
         ClientController.controller.selectedUser.value.profile = profile;
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -161,11 +158,11 @@ class User {
     if (response.statusCode == 200) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       profile = Profile.fromJson(json);
-      print("[success] fetch user profile! ");
+      if (kDebugMode) print("[success] fetch user profile! ");
       if (index != null) {
         if (!ClientController.controller.home.value) {
           ServerController.controller.setProfile(profile, index);
-          // print(ServerController
+          // if (kDebugMode) print(ServerController
           //     .controller.selected.value.users[index].profile?.background?.id);
         } else {
           ChannelController.controller.selected.value.users[index].profile =
@@ -175,7 +172,7 @@ class User {
 
       // }
       // } catch (e) {
-      //   print(e);
+      //   if (kDebugMode) print(e);
     }
     return profile;
   }
@@ -354,14 +351,14 @@ class Profile {
             'profile': {'content': content}
           }));
       if (response.statusCode == 200) {
-        print('[success] edited user content');
+        if (kDebugMode) print('[success] edited user content');
         ClientController.controller.selectedUser.value.profile?.content =
             content;
       } else {
-        print(response.body);
+        if (kDebugMode) print(response.body);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 }

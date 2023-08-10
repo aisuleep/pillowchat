@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, prefer_is_empty
+// ignore_for_file:  , no_leading_underscores_for_local_identifiers, prefer_is_empty
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -36,7 +37,7 @@ class MessageBuild extends StatelessWidget {
           .map((item) => item.index)
           .toList()
           .obs;
-      print(indices);
+      if (kDebugMode) print(indices);
       if (indices.contains(0)) {
         int? isUnread;
         // IF MESSAGE IS NEWER THAN CHANNEL LAST UNREAD MESSAGE
@@ -59,7 +60,7 @@ class MessageBuild extends StatelessWidget {
         final String channelId = ChannelController.controller.selected.value.id;
         final int index = ServerController.controller.selected.value.channels
             .indexWhere((channel) => channel.id == channelId);
-        print('at top');
+        if (kDebugMode) print('at top');
         if (index != -1) {
           Message.fetch(channelId, index,
               oldestMessage: channelMessages[channelMessages.length - 2].id);
@@ -127,7 +128,7 @@ class MessageBuild extends StatelessWidget {
               if (channelMessages[index].author ==
                   channelMessages[previousIndex].author) {
                 prevMessageAuthor = channelMessages[previousIndex].author!;
-                // print('minus 1: $prevMessageAuthor ' + messageAuthor);
+                // if (kDebugMode) print('minus 1: $prevMessageAuthor ' + messageAuthor);
               }
             }
             previousIndex = index + 1;

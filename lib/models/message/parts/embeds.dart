@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pillowchat/models/client.dart';
@@ -57,7 +58,7 @@ class Embeds {
     }
     // if (json['video'] != null) {
     //   video = Video.fromJson(json['video']);
-    //   print(video!.url);
+    //   if (kDebugMode) print(video!.url);
     // }
     // siteName = json['site_name'];
     if (special = json['special'] != null) {
@@ -137,8 +138,8 @@ class Picture {
                     Flexible(
                       child: ListTile(
                         onTap: () {
-                          // ignore: avoid_print
-                          print('todo: copy filename');
+                          // ignore:
+                          if (kDebugMode) print('todo: copy filename');
                         },
                         dense: true,
                         horizontalTitleGap: 0,

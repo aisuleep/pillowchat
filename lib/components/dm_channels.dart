@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
@@ -25,7 +26,7 @@ class DmChannels extends StatelessWidget {
         Home.dms?[index].type == 'DirectMessage') {
       int userIndex = -1;
       for (var recipient in Home.dms![index].recipients!) {
-        // print(recipient);
+        // if (kDebugMode) print(recipient);
         userIndex = Client.relations.indexWhere((user) =>
             user.id == recipient &&
             recipient != ClientController.controller.selectedUser.value.id);
@@ -111,8 +112,8 @@ class DmChannels extends StatelessWidget {
           // FETCH MESSAGES
           ChannelController.controller
               .changeChannel(context, homeChannelSelected!);
-          // ignore: avoid_print
-          print("[dm channel] change $index");
+          // ignore:
+          if (kDebugMode) print("[dm channel] change $index");
           Message.fetch(Home.dms![index].id, index);
         },
       );

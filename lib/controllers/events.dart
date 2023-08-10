@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
+import 'package:flutter/foundation.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
@@ -26,14 +27,14 @@ class Events {
         Client.channels.indexWhere((channel) => channel.id == message.channel);
 
     if (channelIndex != -1) {
-      // print(message);
-      // print(channelIndex);
+      // if (kDebugMode) print(message);
+      // if (kDebugMode) print(channelIndex);
       channel = Client.channels[channelIndex];
-      // print(channel);
+      // if (kDebugMode) print(channel);
       serverIndex = ServerController.controller.serversList
           .indexWhere((server) => server.id == channel.server);
 
-      // print(serverIndex);
+      // if (kDebugMode) print(serverIndex);
 
       // FIND USER
       if (serverIndex != -1 &&
@@ -62,7 +63,7 @@ class Events {
             .controller.serversList[serverIndex].channels
             .indexWhere((channel) => channel.id == message.channel);
         // ADD USER/MEMBER IF NEW CHATTER
-        // print(userIndex);
+        // if (kDebugMode) print(userIndex);
         if (ServerController.controller.serversList[serverIndex]
                 .channels[channelIndex].users
                 .indexWhere((users) => users.id == user?.id) ==
@@ -116,21 +117,21 @@ class Events {
     }
 
     if (channelIndex != -1) {
-      // print(json);
+      // if (kDebugMode) print(json);
 
       channel = Client.channels[channelIndex];
-      // print(channel);
+      // if (kDebugMode) print(channel);
       serverIndex = ServerController.controller.serversList
           .indexWhere((server) => server.id == channel.server);
-      // print(serverIndex);
+      // if (kDebugMode) print(serverIndex);
       channelIndex = ServerController
           .controller.serversList[serverIndex].channels
           .indexWhere((channel) => channel.id == json["channel"]);
-      // print(channelIndex);
+      // if (kDebugMode) print(channelIndex);
       messageIndex = ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages
           .indexWhere((message) => message.id == messageId);
-      // print(messageIndex);
+      // if (kDebugMode) print(messageIndex);
       if (messageIndex != -1) {
         ServerController.controller.serversList[serverIndex]
             .channels[channelIndex].messages[messageIndex].content = content;
@@ -159,13 +160,13 @@ class Events {
         Client.channels.indexWhere((channel) => channel.id == channelId);
 
     if (channelIndex != -1) {
-      // print(message);
-      // print(channelIndex);
+      // if (kDebugMode) print(message);
+      // if (kDebugMode) print(channelIndex);
       channel = Client.channels[channelIndex];
-      // print(channel);
+      // if (kDebugMode) print(channel);
       serverIndex = ServerController.controller.serversList
           .indexWhere((server) => server.id == channel.server);
-      // print(serverIndex);
+      // if (kDebugMode) print(serverIndex);
       channelIndex = ServerController
           .controller.serversList[serverIndex].channels
           .indexWhere((channel) => channel.id == channelId);
@@ -197,27 +198,27 @@ class Events {
         Client.channels.indexWhere((channel) => channel.id == channelId);
 
     if (channelIndex != -1) {
-      // print(message);
-      // print(channelIndex);
+      // if (kDebugMode) print(message);
+      // if (kDebugMode) print(channelIndex);
       channel = Client.channels[channelIndex];
-      // print(channel);
+      // if (kDebugMode) print(channel);
       serverIndex = ServerController.controller.serversList
           .indexWhere((server) => server.id == channel.server);
-      // print(serverIndex);
+      // if (kDebugMode) print(serverIndex);
 
       if (serverIndex != -1) {
         channelIndex = ServerController
             .controller.serversList[serverIndex].channels
             .indexWhere((channel) => channel.id == channelId);
       }
-      // print(
+      // if (kDebugMode) print(
       // "LAST ID: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
       if (serverIndex != -1) {
         ServerController.controller.serversList[serverIndex]
             .channels[channelIndex].unreads[0].lastId.value = messageId;
       }
-      // print("ID: $messageId");
-      // print(
+      // if (kDebugMode) print("ID: $messageId");
+      // if (kDebugMode) print(
       // "LAST ID AFTER: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
     }
   }
@@ -236,13 +237,13 @@ class Events {
         Client.channels.indexWhere((channel) => channel.id == channelId);
 
     if (channelIndex != -1) {
-      // print(message);
-      // print(channelIndex);
+      // if (kDebugMode) print(message);
+      // if (kDebugMode) print(channelIndex);
       channel = Client.channels[channelIndex];
-      // print(channel);
+      // if (kDebugMode) print(channel);
       serverIndex = ServerController.controller.serversList
           .indexWhere((server) => server.id == channel.server);
-      // print(serverIndex);
+      // if (kDebugMode) print(serverIndex);
 
       channelIndex = ServerController
           .controller.serversList[serverIndex].channels
@@ -259,9 +260,9 @@ class Events {
           .reactionMap
           .keys
           .toList();
-      print(emojiList);
+      if (kDebugMode) print(emojiList);
       final emojiIndex = emojiList.indexWhere((emote) => emote == emojiId);
-      print(emojiIndex);
+      if (kDebugMode) print(emojiIndex);
       emotes = ServerController
           .controller
           .serversList[serverIndex]
@@ -271,7 +272,7 @@ class Events {
           .reactionMap
           .values
           .toList();
-      print(emotes);
+      if (kDebugMode) print(emotes);
       final reactorIndex =
           emotes[emojiIndex].indexWhere((innerList) => innerList == userId);
       emojiList.remove(emojiId);
@@ -289,11 +290,11 @@ class Events {
           .messages[messageIndex]
           .reactions
           .reactionMap = map;
-      // print(
+      // if (kDebugMode) print(
       // "LAST ID: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
 
-      print("a: $emojiIndex & $reactorIndex");
-      // print(
+      if (kDebugMode) print("a: $emojiIndex & $reactorIndex");
+      // if (kDebugMode) print(
       // "LAST ID AFTER: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
       ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages
@@ -308,41 +309,49 @@ class Events {
     final String userId = json["user"];
     final int userIndex;
     final User? user;
-    // print(userId);
+    // if (kDebugMode) print(userId);
     final channelIndex = ServerController.controller.selected.value.channels
         .indexWhere((channel) => channel.id == channelId);
     if (channelIndex != -1) {
-      // print(channelIndex);
+      // if (kDebugMode) print(channelIndex);
       userIndex = ServerController.controller.selected.value.users
           .indexWhere((user) => user.id == userId);
       if (userIndex != -1) {
         user = ServerController.controller.selected.value.users[userIndex];
-        // print("user: $user");
+        // if (kDebugMode) print("user: $user");
         if (!ServerController
             .controller.selected.value.channels[channelIndex].typingList
             .contains(user)) {
           ServerController
               .controller.selected.value.channels[channelIndex].typingList
               .add(user);
-          print(
-              "add ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
+          if (kDebugMode) {
+            print(
+                "add ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
+          }
 
-          print(
-              "add ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+          if (kDebugMode) {
+            print(
+                "add ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+          }
         }
       } else {
         user = await User.fetch(userId);
-        print("user: ${user.name}");
+        if (kDebugMode) print("user: ${user.name}");
         if (!ServerController
             .controller.selected.value.channels[channelIndex].typingList
             .contains(user)) {
           ServerController
               .controller.selected.value.channels[channelIndex].typingList
               .add(user);
-          print(
-              "add ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
-          print(
-              "add ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+          if (kDebugMode) {
+            print(
+                "add ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
+          }
+          if (kDebugMode) {
+            print(
+                "add ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+          }
         }
       }
     }
@@ -357,10 +366,14 @@ class Events {
       ServerController
           .controller.selected.value.channels[channelIndex].typingList
           .removeWhere((person) => person.id == userId);
-      print(
-          "remove ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
-      print(
-          "remove ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+      if (kDebugMode) {
+        print(
+            "remove ${ServerController.controller.selected.value.channels[channelIndex].typingList}");
+      }
+      if (kDebugMode) {
+        print(
+            "remove ${ServerController.controller.selected.value.channels[channelIndex].typingList.length}");
+      }
       // }
     }
   }
@@ -375,13 +388,13 @@ class Events {
     final User user;
 
     user = await User.fetch(userId);
-    print(user.name);
+    if (kDebugMode) print(user.name);
     serverIndex = ServerController.controller.serversList
         .indexWhere((server) => server.id == serverId);
     if (serverIndex != -1) {
       server = ServerController.controller.serversList[serverIndex];
       server.users.add(user);
-      print('[Added] user');
+      if (kDebugMode) print('[Added] user');
     }
   }
 
@@ -390,7 +403,7 @@ class Events {
     final String userId = json['id'];
     final dynamic update = json['data'];
     final List<dynamic>? clear = json['clear'];
-    print("$userId, $update, $clear");
+    if (kDebugMode) print("$userId, $update, $clear");
     for (Server server in ServerController.controller.serversList) {
       for (User user in server.users) {
         if (user.id == userId) {
@@ -404,7 +417,7 @@ class Events {
   static revokeSession(dynamic json) async {
     final sessionId = json["session_id"];
     // final userId= json["user_id"];
-    print(sessionId + Client.currentSession.value.id);
+    if (kDebugMode) print(sessionId + Client.currentSession.value.id);
     Client.sessions.removeWhere((session) => session.id == sessionId);
     if (sessionId == Client.currentSession.value.id) {
       ClientController.controller.updateLogStatus(false);

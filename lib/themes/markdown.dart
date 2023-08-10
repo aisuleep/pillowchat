@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file:  , prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
@@ -357,7 +358,7 @@ class ChannelMentionSyntax extends md.InlineSyntax {
     parser.addNode(
       md.Element.text('channels', match[1]!),
     );
-    // print(match[1]);
+    // if (kDebugMode) print(match[1]);
     return true;
   }
 }
@@ -433,7 +434,7 @@ class SpoilerBuilder extends MarkdownElementBuilder {
 
       // late List<bool> hiddenTestList = [];
       // hiddenList.add(true.obs);
-      // print(hiddenList);
+      // if (kDebugMode) print(hiddenList);
       // int index = hiddenList.length;
       // late int index = 0;
       // late bool isHidden = true;
@@ -453,7 +454,7 @@ class SpoilerBuilder extends MarkdownElementBuilder {
                     children: [
                       InkWell(
                         onTap: () {
-                          print(hidden);
+                          if (kDebugMode) print(hidden);
                           // hiddenList[index].value = true;
                           if (SpoilerBuilder.controller.hidden.value == false) {
                             SpoilerBuilder.controller.hidden.value = true;
@@ -483,7 +484,7 @@ class SpoilerBuilder extends MarkdownElementBuilder {
                       ),
                       InkWell(
                         onTap: () {
-                          print(hidden);
+                          if (kDebugMode) print(hidden);
                           // hiddenList[index].value = false;
                           // // Get the index and number of spans
                           // List<InlineSpan> spans =
@@ -491,7 +492,7 @@ class SpoilerBuilder extends MarkdownElementBuilder {
                           //         as List<TextSpan>;
                           // int index = spans.indexOf(widgetSpan);
                           // int numberOfSpans = spans.length;
-                          // // print(
+                          // // if (kDebugMode) print(
                           // //     'Index: ${hidden.key}, Number of Spans: $numberOfSpans');
                           if (SpoilerBuilder.controller.hidden.value == true) {
                             SpoilerBuilder.controller.hidden.value = false;

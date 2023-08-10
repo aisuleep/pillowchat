@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, must_be_immutable
+// ignore_for_file:  , must_be_immutable
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -59,7 +60,7 @@ class VoiceChat extends StatelessWidget {
                                 onPressed: () {
                                   ChannelController.controller
                                       .toggleMute(muted);
-                                  print(muted);
+                                  if (kDebugMode) print(muted);
                                 },
                                 icon: Icon(
                                   Icons.mic_off,
@@ -75,7 +76,7 @@ class VoiceChat extends StatelessWidget {
                                 onTap: () {
                                   ChannelController.controller
                                       .toggleMute(!muted);
-                                  print(!muted);
+                                  if (kDebugMode) print(!muted);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
@@ -103,7 +104,7 @@ class VoiceChat extends StatelessWidget {
                                 onPressed: () {
                                   ChannelController.controller
                                       .toggleDeafen(deafened);
-                                  print(deafened);
+                                  if (kDebugMode) print(deafened);
                                 },
                                 icon: Icon(
                                   Icons.headset_off,
@@ -119,7 +120,7 @@ class VoiceChat extends StatelessWidget {
                                 onTap: () {
                                   ChannelController.controller
                                       .toggleDeafen(!deafened);
-                                  print(!deafened);
+                                  if (kDebugMode) print(!deafened);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),

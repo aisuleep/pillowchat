@@ -1,6 +1,4 @@
-// ignore_for_file: avoid_print
-
-import 'dart:io';
+// ignore_for_file:
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +35,7 @@ class ServerChannels extends StatelessWidget {
     for (int i = 0; i < channelsLength; i++) {
       channelIndices.add(i);
     }
-    // print(channelIndices);
+    // if (kDebugMode) print(channelIndices);
     // STORE ALL CHANNELS INSIDE A CATEGORY
 
     for (var i = 0;
@@ -49,19 +47,19 @@ class ServerChannels extends StatelessWidget {
               ServerController.controller.selected.value.channels[i].id) {
             catChannelIndex = i;
             catChannelIndices.add(i);
-            // print('catChanIndices: $catChannelIndices');
+            // if (kDebugMode) print('catChanIndices: $catChannelIndices');
           }
         }
         for (var index in channelIndices) {
           bool shouldAdd = true;
           if (catChannelIndices.contains(index)) {
             shouldAdd = false;
-            // print(index);
+            // if (kDebugMode) print(index);
             break;
           }
           if (shouldAdd) {
             uncatChannelIndices.add(index);
-            // print('uncatChanIndices: $uncatChannelIndices');
+            // if (kDebugMode) print('uncatChanIndices: $uncatChannelIndices');
           }
         }
       }
@@ -71,11 +69,11 @@ class ServerChannels extends StatelessWidget {
           ServerController.controller.selected.value.channels[catChannelIndex]);
     }
 
-    // print(categorizedChannels.length);
+    // if (kDebugMode) print(categorizedChannels.length);
     for (var v = 0; v < categorizedChannels.length; v++) {
       // todo: for some reason duplicates one of the channels
 
-      print('catted channels: ${categorizedChannels[v].name}');
+      if (kDebugMode) print('catted channels: ${categorizedChannels[v].name}');
     }
 
     for (var i = 0;
@@ -93,13 +91,13 @@ class ServerChannels extends StatelessWidget {
 
           // if (uncatChannelIndex != -1) {
           uncategorizedChannels.add(channel);
-          // print('non catted channels: ');
+          // if (kDebugMode) print('non catted channels: ');
           // ignore: unused_local_variable
           for (var channel in uncategorizedChannels) {
-            // print(channel.name);
+            // if (kDebugMode) print(channel.name);
           }
         }
-        // print(uncatChannelIndex);
+        // if (kDebugMode) print(uncatChannelIndex);
       }
     }
 
@@ -226,10 +224,13 @@ class ServerChannels extends StatelessWidget {
                                 onTap: () {
                                   ChannelController.controller
                                       .changeChannel(context, channel);
-                                  print('[channel] change');
+                                  if (kDebugMode) print('[channel] change');
                                   ClientController.controller.home.value =
                                       false;
-                                  print(ClientController.controller.home.value);
+                                  if (kDebugMode) {
+                                    print(
+                                        ClientController.controller.home.value);
+                                  }
                                 },
                               );
                             } else {

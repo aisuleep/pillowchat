@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pillowchat/components/message/message_options.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -59,7 +60,7 @@ class Message {
 
     if (json['edited'] != null) {
       edited = json['edited'];
-      // print(edited);
+      // if (kDebugMode) print(edited);
     }
 
     if (json['mentions'] != null) {
@@ -74,7 +75,7 @@ class Message {
 
     if (json['embeds'] != null) {
       embeds = List<Embeds>.from(json['embeds'].map((e) => Embeds.fromJson(e)));
-      // print(embeds);
+      // if (kDebugMode) print(embeds);
     }
 
     if (json['attachments'] != null) {
@@ -100,7 +101,7 @@ class Message {
     };
     if (oldestMessage != null) {
       queryParameters['before'] = oldestMessage;
-      // print(queryParameters);
+      // if (kDebugMode) print(queryParameters);
     }
     try {
       var url = Uri.https(
@@ -112,14 +113,14 @@ class Message {
         'x-session-token': Client.token,
       });
       if (response.statusCode == 200) {
-        print('[success] message fetch');
+        if (kDebugMode) print('[success] message fetch');
         var json = jsonDecode(utf8.decode(response.bodyBytes));
 
-        // print(json);
+        // if (kDebugMode) print(json);
         late List<Message> messages;
         if (json['messages'] != null) {
           List<dynamic> messageList = json['messages'];
-          // print(messageList);
+          // if (kDebugMode) print(messageList);
           messages = messageList
               .map((messages) => Message.fromJson(messages))
               .toList();
@@ -148,7 +149,7 @@ class Message {
             );
           }
         } else {
-          print("DM");
+          if (kDebugMode) print("DM");
           ChannelController.controller.updateMessageList(
             index,
             messages,
@@ -158,7 +159,7 @@ class Message {
         // }
       } else {}
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -181,14 +182,14 @@ class Message {
       );
 
       if (response.statusCode == 200) {
-        print('successful message send');
+        if (kDebugMode) print('successful message send');
         var json = jsonDecode(response.body);
-        print(json);
+        if (kDebugMode) print(json);
       } else {
-        print('some send error..');
+        if (kDebugMode) print('some send error..');
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -211,13 +212,13 @@ class Message {
 
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        print('successful edit');
-        print(json);
+        if (kDebugMode) print('successful edit');
+        if (kDebugMode) print(json);
       } else {
-        print('some edit error..');
+        if (kDebugMode) print('some edit error..');
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -235,13 +236,13 @@ class Message {
 
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        print('successful message delete');
-        print(json);
+        if (kDebugMode) print('successful message delete');
+        if (kDebugMode) print(json);
       } else {
-        print('some message delete error..');
+        if (kDebugMode) print('some message delete error..');
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -266,8 +267,8 @@ class Message {
         // }
       }
     } catch (e) {
-      print(api + '/channels/$channel/messages/$messageId');
-      print(e);
+      if (kDebugMode) print(api + '/channels/$channel/messages/$messageId');
+      if (kDebugMode) print(e);
     }
   }
 
@@ -284,10 +285,10 @@ class Message {
       });
 
       if (response.statusCode == 204) {
-        print('successful message ack');
+        if (kDebugMode) print('successful message ack');
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 

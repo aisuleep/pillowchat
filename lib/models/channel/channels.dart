@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
 import 'package:get/get.dart';
 import 'package:pillowchat/models/members.dart';

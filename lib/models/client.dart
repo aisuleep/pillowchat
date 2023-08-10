@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
 import 'dart:convert';
 import 'dart:io';
@@ -75,10 +75,10 @@ class Client {
 
   static bool get isMobile {
     if (kIsWeb) {
-      print("isWeb");
+      if (kDebugMode) print("isWeb");
       return false;
     } else {
-      print("MOBILE");
+      if (kDebugMode) print("MOBILE");
       return Platform.isIOS || Platform.isAndroid;
     }
   }
@@ -103,7 +103,7 @@ class Client {
           await http.post(url, headers: {'x-session-token': Client.token});
 
       if (response.statusCode == 204) {
-        print('[$response] successful logout ');
+        if (kDebugMode) print('[$response] successful logout ');
         ClientController.controller.updateLogStatus(false);
         // REMOVE SAVED SESSION
 
@@ -122,7 +122,7 @@ class Client {
         // TODO: CLOSE WEBSOCKET?
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -148,12 +148,12 @@ class Client {
     // String user = jsonEncode(ClientController.controller.selectedUser.value);
     // await prefs.setString("user", user);
     // if (prefs.getString("user") != null) {
-    //   print("[Saved] user");
+    //   if (kDebugMode) print("[Saved] user");
     // }
     String servers = jsonEncode(ServerController.controller.serversList);
     await prefs.setString("servers", servers);
     if (prefs.getString("servers") != null) {
-      print("[Saved] servers");
+      if (kDebugMode) print("[Saved] servers");
     }
   }
 
@@ -167,12 +167,12 @@ class Client {
         'friendly_name': 'Pillow Client'
       };
       // if (prefs.getString("token") == null) {
-      print('not null');
+      if (kDebugMode) print('not null');
       http.Response response = await http.post(url, body: jsonEncode(body));
       if (response.statusCode == 200) {
-        print('successful login');
+        if (kDebugMode) print('successful login');
         final json = jsonDecode(response.body);
-        print(json);
+        if (kDebugMode) print(json);
         final t = json['token'];
         Client.token = t;
         final i = json['_id'];
@@ -192,21 +192,21 @@ class Client {
         passController.clear();
       }
       if (response.statusCode == 0) {
-        print(response.body);
+        if (kDebugMode) print(response.body);
         emailController.clear();
         passController.clear();
       } else if (response.statusCode == 1) {
-        print(response.body);
+        if (kDebugMode) print(response.body);
         throw jsonDecode(response.body)['message'];
       }
       // }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
   static void onDone() {
-    print('socket done');
+    if (kDebugMode) print('socket done');
   }
 
   static connect() async {
@@ -235,21 +235,21 @@ class Client {
   static _handleSocket(event, socket, BuildContext context) {
     final json = jsonDecode(utf8.decode(utf8.encode(event)));
 
-    // print(json);
+    // if (kDebugMode) print(json);
     // stores onReady event into a List of Server objects
     if (ClientController.controller.logged.value == true) {
       if (pushed.value == 0) {
-        print(pushed);
+        if (kDebugMode) print(pushed);
         Navigator.popAndPushNamed(context, '/');
         pushed.value = 1;
-        print(pushed);
+        if (kDebugMode) print(pushed);
       }
     } else {
       Navigator.pushReplacementNamed(context, '/login');
     }
     if (json['type'] == 'Ready') {
-      print('servers success');
-      // print(json);
+      if (kDebugMode) print('servers success');
+      // if (kDebugMode) print(json);
 
       // GET RELATIONSHIPS
       List<dynamic> relationsList = json['users'];
@@ -263,7 +263,7 @@ class Client {
       // CLIENT SERVER LIST
 
       ServerController.controller.updateServerList(servers);
-      print(servers);
+      if (kDebugMode) print(servers);
       ServerController.controller.selected.value =
           ClientController.controller.selectedUser.value.homeServer;
 
@@ -303,7 +303,7 @@ class Client {
       // GET EMOJIS
       final emojis = json['emojis'];
       Client.emojis = List<Emoji>.from(emojis.map((e) => Emoji.fromJson(e)));
-      // print(Client.emojis);
+      // if (kDebugMode) print(Client.emojis);
       //
     } else {
       eventsHandler(json, socket);
@@ -321,14 +321,14 @@ class Client {
           await http.get(url, headers: {'x-session-token': Client.token});
       if (response.statusCode == 200) {
         List<dynamic> json = jsonDecode(response.body);
-        // print(json);
+        // if (kDebugMode) print(json);
         var dms = json.map((e) => Channel.fromJson(e)).toList();
-        // print(dms);
+        // if (kDebugMode) print(dms);
         Home.dms = dms;
         ServerController.controller.updateDmsList(dms);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
     return Home.dms;
   }
@@ -339,11 +339,11 @@ class Client {
       var response =
           await http.get(url, headers: {'x-session-token': Client.token});
       if (response.statusCode == 200) {
-        print("[success] got unreads!");
+        if (kDebugMode) print("[success] got unreads!");
         List<dynamic> json = jsonDecode(response.body);
-        // print(json);
+        // if (kDebugMode) print(json);
         List<Unread> unreads = json.map((e) => Unread.fromJson(e)).toList();
-        // print(unreads);
+        // if (kDebugMode) print(unreads);
 
         ServerController.controller.updateUnreadsList(unreads);
 
@@ -360,14 +360,14 @@ class Client {
           // ADD UNREAD TO CHANNEL'S UNREADS LIST
           Client.channels[c].unreads
               .add(ServerController.controller.unreadsList[channelIndex]);
-          // print(ServerController.controller.unreadsList[channelIndex]);
-          // print(Client.channels[c].unreads);
+          // if (kDebugMode) print(ServerController.controller.unreadsList[channelIndex]);
+          // if (kDebugMode) print(Client.channels[c].unreads);
           // Client.channels[c].lastMessage =
           //     ServerController.controller.unreadsList[channelIndex].lastId!;
         }
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 

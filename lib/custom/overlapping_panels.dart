@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors,
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/home_channels.dart';
@@ -69,7 +70,7 @@ class Panels extends StatelessWidget {
                 child: GestureDetector(
                   onHorizontalDragEnd: (details) {
                     if (details.primaryVelocity! < 0) {
-                      // print('servers right');
+                      // if (kDebugMode) print('servers right');
                       // setState(() {
                       // panelLeft = 0;
                       // selectedPanel = 1;
@@ -78,9 +79,9 @@ class Panels extends StatelessWidget {
                       PanelController.controller.changePanel(0);
                       PanelController.controller.changePanelLeft(1);
                       PanelController.controller.isFromLeft(true);
-                      print(fromLeft);
+                      if (kDebugMode) print(fromLeft);
                     } else if (details.primaryVelocity! > 0) {
-                      // print('servers left');
+                      // if (kDebugMode) print('servers left');
 
                       // do nothing if right-handed mode
                     }
@@ -113,11 +114,11 @@ class Panels extends StatelessWidget {
                   child: GestureDetector(
                     onHorizontalDragEnd: (details) {
                       if (details.primaryVelocity! < 0) {
-                        // print('right');
+                        // if (kDebugMode) print('right');
 
                         // do nothing if right-handed mode
                       } else if (details.primaryVelocity! > 0) {
-                        // print('left');
+                        // if (kDebugMode) print('left');
                         // setState(() {
                         // panelLeft = 0;
                         // selectedPanel = 1;
@@ -126,7 +127,7 @@ class Panels extends StatelessWidget {
                         PanelController.controller.changePanel(0);
                         PanelController.controller.changePanelLeft(1);
                         PanelController.controller.isFromLeft(false);
-                        print(fromLeft);
+                        if (kDebugMode) print(fromLeft);
                       }
                     },
                     child: Visibility(
@@ -182,7 +183,7 @@ class Panels extends StatelessWidget {
                     if (PanelController.controller.selectedPanel.value == 1 &&
                             ClientController.controller.home.value == false ||
                         Home.index >= 0) {
-                      // print('chat left');
+                      // if (kDebugMode) print('chat left');
                       // setState(() {
                       // panelLeft = -offSet;
                       // selectedPanel = 2;
@@ -193,7 +194,7 @@ class Panels extends StatelessWidget {
                       PanelController.controller.changePanel(2);
                       PanelController.controller.isFromLeft(true);
                     } else {
-                      // print('ucs left');
+                      // if (kDebugMode) print('ucs left');
                       // setState(() {
                       // panelLeft = 0;
                       // selectedPanel = 1;
@@ -208,7 +209,7 @@ class Panels extends StatelessWidget {
                     // if being swiped right
 
                     if (PanelController.controller.selectedPanel.value == 1) {
-                      // print('chat right');
+                      // if (kDebugMode) print('chat right');
                       // setState(() {
                       // panelLeft = offSet;
                       // selectedPanel = 0;
@@ -219,7 +220,7 @@ class Panels extends StatelessWidget {
 
                       PanelController.controller.isFromLeft(false);
                     } else {
-                      print('unfocus chat swipe right');
+                      if (kDebugMode) print('unfocus chat swipe right');
                       panelLeft = 0;
                       selectedPanel = 1;
                       fromLeft = false;

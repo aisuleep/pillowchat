@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/models/client.dart';
@@ -61,7 +62,7 @@ class Member {
       if (response.statusCode == 200) {
         final dynamic json = jsonDecode(utf8.decode(response.bodyBytes));
 
-        print('[success] members fetch');
+        if (kDebugMode) print('[success] members fetch');
         final members = json['members'];
         final users = json['users'];
 
@@ -82,11 +83,11 @@ class Member {
 
       if (response.statusCode == 0) {
       } else if (response.statusCode == 1) {
-        print(response.body);
+        if (kDebugMode) print(response.body);
         throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) print(e);
     }
   }
 
@@ -111,7 +112,7 @@ class Member {
             roleColor = role.color!;
           }
         }
-        // print(roleIndex);
+        // if (kDebugMode) print(roleIndex);
         if (roleIndex != -1) {
           member.roles.add(role);
         }

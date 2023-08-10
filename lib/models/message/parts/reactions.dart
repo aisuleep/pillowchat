@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -44,8 +43,8 @@ class Reaction {
       emote = entry.key;
       reactors = entry.value;
     }
-    // print(emote);
-    // print(reactors);
+    // if (kDebugMode) print(emote);
+    // if (kDebugMode) print(reactors);
 
     return Reaction(emote, reactors, map);
   }
@@ -63,8 +62,10 @@ class Reaction {
         // }
       }
     } catch (e) {
-      print(api + '/channels/$target/messages/$message/reactions/$emoji');
-      print(e);
+      if (kDebugMode) {
+        print(api + '/channels/$target/messages/$message/reactions/$emoji');
+      }
+      if (kDebugMode) print(e);
     }
   }
 
@@ -86,11 +87,13 @@ class Reaction {
       // TODO: FIX BUG THAT CRASHES APP WHEN REACTION IS REMOVED and doesnt acknowledge
 
       if (response.statusCode == 200) {
-        print('[Success] deleted reaction');
+        if (kDebugMode) print('[Success] deleted reaction');
       }
     } catch (e) {
-      print(api + '/channels/$target/messages/$message/reactions/$emoji');
-      print(e);
+      if (kDebugMode) {
+        print(api + '/channels/$target/messages/$message/reactions/$emoji');
+      }
+      if (kDebugMode) print(e);
     }
   }
 

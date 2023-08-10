@@ -6,6 +6,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/models/client.dart';
@@ -169,8 +170,8 @@ fetchSessions() async {
   });
   if (response.statusCode == 200) {
     List<dynamic> json = jsonDecode(response.body);
-    // ignore: avoid_print
-    print('[sessions] successful fetch!');
+    // ignore:
+    if (kDebugMode) print('[sessions] successful fetch!');
     session = json.map((e) => Session.fromJson(e)).toList();
   }
   return session;
@@ -182,8 +183,8 @@ deleteSessions() async {
     'x-session-token': Client.token,
   });
   if (response.statusCode == 204) {
-    // ignore: avoid_print
-    print('[sessions] successful deletions!');
+    // ignore:
+    if (kDebugMode) print('[sessions] successful deletions!');
   }
 }
 
@@ -193,7 +194,7 @@ deleteSession(String id) async {
     'x-session-token': Client.token,
   });
   if (response.statusCode == 204) {
-    // ignore: avoid_print
-    print('[session] successful logout!');
+    // ignore:
+    if (kDebugMode) print('[session] successful logout!');
   }
 }

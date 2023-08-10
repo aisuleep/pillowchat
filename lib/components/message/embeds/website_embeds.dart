@@ -36,7 +36,7 @@ class WebsiteEmbeds extends StatelessWidget {
         ),
       );
     }
-    // print(messageIndex.embeds[e].color);
+    // if (kDebugMode) print(messageIndex.embeds[e].color);
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 400,

@@ -1,9 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/message/message_box.dart';

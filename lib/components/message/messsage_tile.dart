@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
@@ -132,7 +133,7 @@ class MessageTile extends StatelessWidget {
                           onLongPress: () {
                             if (member != null) {
                               if (member!.roles.isNotEmpty) {
-                                print(member?.roles[0].color);
+                                if (kDebugMode) print(member?.roles[0].color);
                               }
                             }
 
@@ -395,7 +396,7 @@ class MessageContent extends StatelessWidget {
               }
 
               _launchUrl();
-              // print(href);
+              // if (kDebugMode) print(href);
             },
           ),
           // IF MESSAGE HAS ATTATCHMENTS
@@ -524,7 +525,7 @@ class MessageContent extends StatelessWidget {
                           ScrollOffsetListener.create();
                       return InkWell(
                         onTap: () {
-                          // print('$reactedTo reacted');
+                          // if (kDebugMode) print('$reactedTo reacted');
                           if (!reactedTo) {
                             Reaction.add(
                               ChannelController.controller.selected.value.id,
@@ -532,7 +533,7 @@ class MessageContent extends StatelessWidget {
                               emote,
                             );
                             Navigator.pop(context);
-                            // print('$reactedTo reacted');
+                            // if (kDebugMode) print('$reactedTo reacted');
                           } else if (reactedTo) {
                             Reaction.remove(
                               ChannelController.controller.selected.value.id,

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -17,7 +14,6 @@ class ServerSidebar extends StatelessWidget {
   const ServerSidebar({super.key});
   @override
   Widget build(BuildContext context) {
-    // ignore: avoid_print
     return Container(
       width: 68,
       padding: Client.isMobile ? const EdgeInsets.only(bottom: 64) : null,
@@ -41,7 +37,7 @@ class ServerSidebar extends StatelessWidget {
                 itemCount: ServerController.controller.serversList.length + 1,
                 itemBuilder: (context, index) {
                   if (index == ServerController.controller.serversList.length) {
-                    // ignore: avoid_print
+                    // ignore:
                     return Center(
                       child: OptionIconButton(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -149,7 +145,7 @@ class ServerIcon extends StatelessWidget {
                       server.index;
 
                   if (!ClientController.controller.home.value) {
-                    // ignore: avoid_print
+                    // ignore:
                     if (ServerController
                         .controller.selected.value.members.isEmpty) {
                       Member.fetch(server.id);

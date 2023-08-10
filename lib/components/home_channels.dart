@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file:
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/servers.dart';
@@ -31,7 +32,7 @@ class HomeChannels extends StatelessWidget {
         onTap: () {
           Home.index = -3;
           ServerController.controller.changeDm(-3);
-          print(ServerController.controller.homeIndex.value);
+          if (kDebugMode) print(ServerController.controller.homeIndex.value);
         },
       ),
       ListTile(
@@ -47,7 +48,7 @@ class HomeChannels extends StatelessWidget {
           ChannelController.controller.selected.value.name = 'Discover';
           Home.index = -2;
           ServerController.controller.changeDm(-2);
-          print(ServerController.controller.homeIndex.value);
+          if (kDebugMode) print(ServerController.controller.homeIndex.value);
         },
       ),
       ListTile(
@@ -65,7 +66,7 @@ class HomeChannels extends StatelessWidget {
 
           Home.index = -1;
           ServerController.controller.changeDm(-1);
-          print(ServerController.controller.homeIndex.value);
+          if (kDebugMode) print(ServerController.controller.homeIndex.value);
           // Message.fetch(Client.savedNotes.id);
           ChannelController.controller
               .changeChannel(context, Client.savedNotes);

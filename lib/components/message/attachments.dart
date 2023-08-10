@@ -80,7 +80,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     if (messageIndex.attachments[attachmentIndex].type == 'Video') {
-//       // print(
+//       // if (kDebugMode) print(
 //       //     '$autumn/attachments/${messageIndex.attachments[attachmentIndex].id}');
 //       _videoController.setDataSource(
 //         DataSource(
@@ -98,7 +98,7 @@
 //         messageIndex.attachments
 //             .any((attachment) => attachment.type == "Video")) {
 //       if (messageIndex.attachments[attachmentIndex].type != 'Image') {
-//         // print(
+//         // if (kDebugMode) print(
 //         //     '$autumn/attachments/${messageIndex.attachments[attachmentIndex].id}');
 //         _videoController.setDataSource(
 //           DataSource(
@@ -123,7 +123,7 @@
 //                     child: InkWell(
 //                       onTap: () {
 //                         // messageIndex.attachments
-//                         //     .forEach((attachment) => print(attachment.id));
+//                         //     .forEach((attachment) => if (kDebugMode) print(attachment.id));
 //                         Picture.view(
 //                           context,
 //                           '$autumn/attachments/${messageIndex.attachments[index].id}/${messageIndex.attachments[index].filename}',

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/models/channel/channels.dart';
 import 'package:pillowchat/models/members.dart';
@@ -22,8 +23,8 @@ class ServerController extends GetxController {
 
   updateServerList(List<Server> servers) {
     serversList.assignAll(servers);
-    // ignore: avoid_print
-    print(serversList.length);
+    // ignore:
+    if (kDebugMode) print(serversList.length);
   }
 
   updateMessageList(

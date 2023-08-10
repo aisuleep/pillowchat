@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
@@ -274,8 +275,8 @@ class ProfilePage extends StatelessWidget {
                           );
                           Navigator.pop(context);
                         } else {
-                          // ignore: avoid_print
-                          print('no changes');
+                          // ignore:
+                          if (kDebugMode) print('no changes');
                         }
                       },
                       color: Dark.accent.value,

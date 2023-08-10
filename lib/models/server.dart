@@ -56,7 +56,7 @@ class Server {
     roles.value = (convertRoleJsonToList(roleJson));
 
     // for (Role role in roles) {
-    //   print("roles: ${role.rank}, ${role.color}");
+    //   if (kDebugMode) print("roles: ${role.rank}, ${role.color}");
     // }
   }
 }
