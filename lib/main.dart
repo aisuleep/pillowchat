@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_meedu_videoplayer/meedu_player.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
-import 'package:pillowchat/pages/login.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
+import 'package:pillowchat/models/client.dart';
+import 'package:pillowchat/pages/login.dart';
 import 'package:pillowchat/pages/server/chat_page.dart';
 import 'package:pillowchat/pages/server/server_page.dart';
 import 'package:pillowchat/pages/settings/pages/profile_page.dart';
@@ -159,7 +158,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
-        '/': (context) => Platform.isAndroid || Platform.isIOS
+        '/': (context) => Client.isMobile
             ? Panels(
                 server: ServerController.controller.selected.value,
               )

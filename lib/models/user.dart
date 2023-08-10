@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pillowchat/components/user_profile.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -13,6 +14,7 @@ import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:http/http.dart' as http;
 import 'package:pillowchat/models/server.dart';
+import 'package:pillowchat/themes/ui.dart';
 
 class User {
   late String id;
@@ -201,7 +203,7 @@ class User {
     String id,
     List<Role> roles,
   ) {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Client.isMobile) {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -225,21 +227,20 @@ class User {
                     //     // horizontal: 16,
                     //     // vertical: 8,
                     //     ),
-                    child: Column(
-                      children: [
-                        UserProfile(
-                          user: user,
-                          displayName: user.displayName,
-                          username: user.name,
-                          discriminator: user.discriminator,
-                          userIndex: index ?? -1,
-                          avatar: avatar,
-                          presence: presence,
-                          text: text,
-                          id: id,
-                          roles: roles,
-                        ),
-                      ],
+                    child: Container(
+                      color: Dark.accent.value,
+                      child: UserProfile(
+                        user: user,
+                        displayName: user.displayName,
+                        username: user.name,
+                        discriminator: user.discriminator,
+                        userIndex: index ?? -1,
+                        avatar: avatar,
+                        presence: presence,
+                        text: text,
+                        id: id,
+                        roles: roles,
+                      ),
                     ),
                   ),
                 );

@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/message/message_box.dart';
@@ -158,7 +159,7 @@ class ChatHeader extends StatelessWidget {
                                     Icons.people,
                                   ),
                                   onPressed: () {
-                                    if (Platform.isAndroid || Platform.isIOS) {
+                                    if (Client.isMobile) {
                                       Panels.slideLeft(context);
                                     } else {
                                       ChannelController

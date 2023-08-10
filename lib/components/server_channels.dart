@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -103,9 +104,7 @@ class ServerChannels extends StatelessWidget {
     }
 
     return Container(
-      padding: !Platform.isAndroid && !Platform.isIOS
-          ? null
-          : const EdgeInsets.only(bottom: 70),
+      padding: Client.isDesktop ? null : const EdgeInsets.only(bottom: 70),
       child: Column(
         children: [
           if (uncategorizedChannels.isNotEmpty)

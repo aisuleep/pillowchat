@@ -156,8 +156,7 @@ class ServersPage extends StatelessWidget {
                                   //   ),
                                   child: ClientController.controller.home.value
                                       ? Container(
-                                          padding: !Platform.isAndroid &&
-                                                  !Platform.isIOS
+                                          padding: Client.isDesktop
                                               ? null
                                               : const EdgeInsets.only(
                                                   bottom: 65),

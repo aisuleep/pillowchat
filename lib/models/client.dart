@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +26,6 @@ import 'package:pillowchat/pages/settings/pages/sessions_page.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/util/events.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_socket_channel/io.dart';
 // ignore: unused_import
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -71,6 +72,27 @@ class Client {
     isUnread: false.obs,
   );
   static late List<Emoji> emojis;
+
+  static bool get isMobile {
+    if (kIsWeb) {
+      print("isWeb");
+      return false;
+    } else {
+      print("MOBILE");
+      return Platform.isIOS || Platform.isAndroid;
+    }
+  }
+
+  static bool get isDesktop {
+    if (kIsWeb) {
+      return false;
+    } else {
+      return Platform.isLinux ||
+          Platform.isFuchsia ||
+          Platform.isWindows ||
+          Platform.isMacOS;
+    }
+  }
 
   static logout(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -190,10 +212,14 @@ class Client {
   static connect() async {
     // iowebsocket does not work for flutter web
     // emojis are black and white for flutter web
-    var socket = IOWebSocketChannel.connect(
-        Uri.parse('$ws?version=1&format=json&token=${Client.token}'),
-        pingInterval: const Duration(seconds: 18),
-        headers: {'Content-Type': 'application/json; charset=utf-8'});
+
+    var socket = WebSocketChannel.connect(
+        Uri.parse('$ws?version=1&format=json&token=${Client.token}'));
+
+    // var socket = IOWebSocketChannel.connect(
+    //     Uri.parse('$ws?version=1&format=json&token=${Client.token}'),
+    //     pingInterval: const Duration(seconds: 18),
+    //     headers: {'Content-Type': 'application/json; charset=utf-8'});
     // .stream.asBroadcastStream();
 
     socket.stream.listen(

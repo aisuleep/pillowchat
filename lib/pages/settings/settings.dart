@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/headers/tab_header.dart';
@@ -21,10 +22,8 @@ class SettingsPage extends StatelessWidget {
               child: Column(
                 children: [
                   TabHeader(
-                    leading: Platform.isAndroid || Platform.isIOS
-                        ? null
-                        : Icons.close,
-                    onPressed: Platform.isAndroid || Platform.isIOS
+                    leading: Client.isMobile ? null : Icons.close,
+                    onPressed: Client.isMobile
                         ? null
                         : () {
                             Navigator.popAndPushNamed(context, '/');
@@ -266,30 +265,17 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
             ),
-            if (Platform.isAndroid || Platform.isIOS)
+            if (Client.isMobile)
               BottomNavigationBar(
                   onTap: (value) {
                     if (value == 0) {
-                      Navigator.popAndPushNamed(context, '/'
-                          // PageRouteBuilder(
-                          //   pageBuilder: (_, __, ___) => Panels(
-                          //       server: ServerController.controller.selected.value),
-                          // ),
-                          );
+                      Navigator.popAndPushNamed(context, '/');
                     }
                     if (value == 1) {
-                      Navigator.popAndPushNamed(context, '/'
-                          // PageRouteBuilder(
-                          // pageBuilder: (_, __, ___) => const NotificationsPage(),
-                          // ),
-                          );
+                      Navigator.popAndPushNamed(context, '/');
                     }
                     if (value == 2) {
-                      Navigator.popAndPushNamed(context, '/'
-                          // PageRouteBuilder(
-                          // pageBuilder: (_, __, ___) => const FriendsPage(),
-                          // ),
-                          );
+                      Navigator.popAndPushNamed(context, '/');
                     }
                     if (value == 3) {
                       // nothing

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -14,15 +15,12 @@ import 'package:pillowchat/themes/ui.dart';
 
 class ServerSidebar extends StatelessWidget {
   const ServerSidebar({super.key});
-  // String presence = Client.selectedUser!.status.presence;
   @override
   Widget build(BuildContext context) {
     // ignore: avoid_print
     return Container(
       width: 68,
-      padding: Platform.isAndroid || Platform.isIOS
-          ? const EdgeInsets.only(bottom: 64)
-          : null,
+      padding: Client.isMobile ? const EdgeInsets.only(bottom: 64) : null,
       child: Column(
         children: [
           // DIVIDER
@@ -73,7 +71,7 @@ class ServerSidebar extends StatelessWidget {
               ),
             ),
           ),
-          if (!Platform.isAndroid && !Platform.isIOS)
+          if (Client.isDesktop)
             Center(
               child: OptionIconButton(
                 padding: const EdgeInsets.symmetric(vertical: 8),

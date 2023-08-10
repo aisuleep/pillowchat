@@ -165,12 +165,12 @@ class Emote extends StatelessWidget {
     super.key,
     required this.ulid,
     required this.size,
-    required this.onTap,
+    this.onTap,
   });
   final String url = '$autumn/emojis/';
   final String ulid;
   final double size;
-  final void Function() onTap;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -180,8 +180,6 @@ class Emote extends StatelessWidget {
         url + ulid,
         width: ClientController.controller.fontSize.value * size,
         height: ClientController.controller.fontSize.value * size,
-        // width: size,
-        // height: size,
         filterQuality: FilterQuality.medium,
         fit: BoxFit.contain,
       ),

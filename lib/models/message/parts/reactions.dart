@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/components/reactions/reactor_tile.dart';
@@ -106,7 +107,7 @@ class Reaction {
         .elementAt(tabIndex.value)
         .map((e) => e)
         .toList());
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Client.isMobile) {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         showDragHandle: true,

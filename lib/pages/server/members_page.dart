@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class MembersPage extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: Container(
-                  padding: Platform.isAndroid || Platform.isIOS
+                  padding: Client.isMobile
                       ? null
                       : const EdgeInsets.only(
                           top: 50,
@@ -42,7 +43,7 @@ class MembersPage extends StatelessWidget {
                   child: Column(
                     children: [
                       // TITLE BAR
-                      if (Platform.isAndroid || Platform.isIOS)
+                      if (Client.isMobile)
                         ListTile(
                           minVerticalPadding: 0,
                           horizontalTitleGap: 0,
@@ -74,7 +75,7 @@ class MembersPage extends StatelessWidget {
                         ),
 
                       // CHANNEL DESCRIPTION
-                      if (Platform.isAndroid || Platform.isIOS)
+                      if (Client.isMobile)
                         if (ChannelController
                                 .controller.selected.value.description !=
                             '')
@@ -97,7 +98,7 @@ class MembersPage extends StatelessWidget {
                           ),
 
                       // BUTTON BAR
-                      if (Platform.isAndroid || Platform.isIOS)
+                      if (Client.isMobile)
                         ListTile(
                           minVerticalPadding: 0,
                           horizontalTitleGap: 0,

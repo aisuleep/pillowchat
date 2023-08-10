@@ -522,41 +522,51 @@ class MessageContent extends StatelessWidget {
                           ItemPositionsListener.create();
                       final ScrollOffsetListener scrollOffsetListener =
                           ScrollOffsetListener.create();
-                      return Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: InkWell(
-                          onTap: () {
-                            // print('$reactedTo reacted');
-                            if (!reactedTo) {
-                              Reaction.add(
-                                ChannelController.controller.selected.value.id,
-                                messageIndex.id!,
-                                emote,
-                              );
-                              Navigator.pop(context);
-                              // print('$reactedTo reacted');
-                            } else if (reactedTo) {
-                              Reaction.remove(
-                                ChannelController.controller.selected.value.id,
-                                messageIndex.id!,
-                                emote,
-                              );
-                            }
-                          },
-                          onLongPress: () {
-                            Reaction.showInfo(
-                              emotes!,
-                              messageIndex,
-                              index.obs,
-                              itemScrollController,
-                              itemPositionsListener,
-                              scrollOffsetListener,
+                      return InkWell(
+                        onTap: () {
+                          // print('$reactedTo reacted');
+                          if (!reactedTo) {
+                            Reaction.add(
+                              ChannelController.controller.selected.value.id,
+                              messageIndex.id!,
+                              emote,
                             );
-                            // itemScrollController.scrollTo(
-                            //   index: index,
-                            //   duration: const Duration(milliseconds: 300),
-                            // );
-                          },
+                            Navigator.pop(context);
+                            // print('$reactedTo reacted');
+                          } else if (reactedTo) {
+                            Reaction.remove(
+                              ChannelController.controller.selected.value.id,
+                              messageIndex.id!,
+                              emote,
+                            );
+                          }
+                        },
+                        onSecondaryTap: () {
+                          Reaction.showInfo(
+                            emotes!,
+                            messageIndex,
+                            index.obs,
+                            itemScrollController,
+                            itemPositionsListener,
+                            scrollOffsetListener,
+                          );
+                        },
+                        onLongPress: () {
+                          Reaction.showInfo(
+                            emotes!,
+                            messageIndex,
+                            index.obs,
+                            itemScrollController,
+                            itemPositionsListener,
+                            scrollOffsetListener,
+                          );
+                          // itemScrollController.scrollTo(
+                          //   index: index,
+                          //   duration: const Duration(milliseconds: 300),
+                          // );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(2),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -591,7 +601,6 @@ class MessageContent extends StatelessWidget {
                                   Emote(
                                     ulid: emote,
                                     size: 1.3,
-                                    onTap: () {},
                                   )
                                 else
                                   Text(
