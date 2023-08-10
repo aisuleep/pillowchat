@@ -1,5 +1,3 @@
-// ignore_for_file:
-
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -125,98 +123,6 @@ class Reaction {
             message: messageIndex,
             tabIndex: tabIndex,
           );
-          // return Obx(
-          //   () => ClipRRect(
-          //     borderRadius: const BorderRadius.vertical(
-          //       top: Radius.circular(15),
-          //     ),
-          //     child: Container(
-          //       color: Dark.background.value,
-          //       padding: const EdgeInsets.symmetric(
-          //         horizontal: 8,
-          //       ),
-          //       child: Column(
-          //         children: [
-          //           Flexible(
-          //             child: Padding(
-          //               padding: const EdgeInsets.symmetric(
-          //                 horizontal: 8,
-          //                 vertical: 16,
-          //               ),
-          //               // REACTION LIST
-          //               child: ScrollablePositionedList.builder(
-          //                 scrollDirection: Axis.horizontal,
-          //                 shrinkWrap: true,
-          //                 itemScrollController: scrollController,
-          //                 itemPositionsListener: positionsListener,
-          //                 scrollOffsetListener: offsetListener,
-          //                 itemCount: emotes.length,
-          //                 itemBuilder: (context, index) {
-          //                   return Column(
-          //                     children: [
-          //                       if (emotes[index].toString().length == 26)
-          //                         Flexible(
-          //                           child: Emote(
-          //                             ulid: emotes[index],
-          //                             size: 30,
-          //                             onTap: () {
-          //                               tabIndex.value = index;
-
-          //                               reactors = messageIndex
-          //                                   .reactions.reactionMap.values
-          //                                   .elementAt(tabIndex.value)
-          //                                   .map((e) => e)
-          //                                   .toList();
-          //                               scrollController.scrollTo(
-          //                                 index: index,
-          //                                 duration:
-          //                                     const Duration(milliseconds: 300),
-          //                               );
-          //                             },
-          //                           ),
-          //                         )
-          //                       else
-          //                         Flexible(
-          //                           child: InkWell(
-          //                             onTap: () {
-          //                               tabIndex.value = index;
-          //                               scrollController.scrollTo(
-          //                                 index: index,
-          //                                 duration:
-          //                                     const Duration(milliseconds: 300),
-          //                               );
-          //                               reactors = messageIndex
-          //                                   .reactions.reactionMap.values
-          //                                   .elementAt(tabIndex.value)
-          //                                   .map((e) => e)
-          //                                   .toList();
-          //                             },
-          //                             child: Text(
-          //                               emotes[index],
-          //                             ),
-          //                           ),
-          //                         ),
-          //                       Visibility(
-          //                         visible: index == tabIndex.value,
-          //                         child: Container(
-          //                           height: 8,
-          //                           width: 20,
-          //                           color: Dark.accent.value,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   );
-          //                 },
-          //               ),
-          //             ),
-          //           ),
-          //           // REACTORS
-          //           ReactorList(reactors: reactors),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // );
         },
       );
     } else {
@@ -261,104 +167,100 @@ class ReactorsMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Flexible(
-          child: SizedBox(
-            height: 70,
-            child: Row(
-              children: [
-                Flexible(
-                  // REACTION LIST
-                  child: ScrollConfiguration(
-                    behavior:
-                        ScrollConfiguration.of(context).copyWith(dragDevices: {
-                      PointerDeviceKind.mouse,
-                      PointerDeviceKind.touch,
-                    }),
-                    child: ScrollablePositionedList.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const ScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        itemScrollController: scrollController,
-                        itemPositionsListener: positionsListener,
-                        scrollOffsetListener: offsetListener,
-                        itemCount: emotes.length,
-                        itemBuilder: (context, index) {
-                          return Obx(
-                            () => Column(
-                              children: [
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: SizedBox(
-                                      width: 24,
-                                      child: emotes[index].length == 26
-                                          ? Emote(
-                                              size: 30,
-                                              ulid: emotes[index],
-                                              onTap: () {
-                                                tabIndex.value = index;
-                                                scrollController.scrollTo(
-                                                  index: index,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                );
-                                                reactors.assignAll(message
-                                                    .reactions
-                                                    .reactionMap
-                                                    .values
-                                                    .elementAt(tabIndex.value)
-                                                    .map((e) => e)
-                                                    .toList());
-                                              },
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                tabIndex.value = index;
-                                                scrollController.scrollTo(
-                                                  index: index,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                );
-                                                reactors.assignAll(message
-                                                    .reactions
-                                                    .reactionMap
-                                                    .values
-                                                    .elementAt(tabIndex.value)
-                                                    .map((e) => e)
-                                                    .toList());
-                                              },
-                                              child: Center(
-                                                child: Text(
-                                                  emotes[index],
-                                                  style: const TextStyle(
-                                                      fontSize: 24),
-                                                ),
+        SizedBox(
+          height: 70,
+          child: Row(
+            children: [
+              Flexible(
+                // REACTION LIST
+                child: ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.mouse,
+                    PointerDeviceKind.touch,
+                  }),
+                  child: ScrollablePositionedList.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      itemScrollController: scrollController,
+                      itemPositionsListener: positionsListener,
+                      scrollOffsetListener: offsetListener,
+                      itemCount: emotes.length,
+                      itemBuilder: (context, index) {
+                        return Obx(
+                          () => Column(
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: SizedBox(
+                                    width: 24,
+                                    child: emotes[index].length == 26
+                                        ? Emote(
+                                            size: 30,
+                                            ulid: emotes[index],
+                                            onTap: () {
+                                              tabIndex.value = index;
+                                              scrollController.scrollTo(
+                                                index: index,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                              );
+                                              reactors.assignAll(message
+                                                  .reactions.reactionMap.values
+                                                  .elementAt(tabIndex.value)
+                                                  .map((e) => e)
+                                                  .toList());
+                                            },
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              tabIndex.value = index;
+                                              scrollController.scrollTo(
+                                                index: index,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                              );
+                                              reactors.assignAll(message
+                                                  .reactions.reactionMap.values
+                                                  .elementAt(tabIndex.value)
+                                                  .map((e) => e)
+                                                  .toList());
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                emotes[index],
+                                                style: const TextStyle(
+                                                    fontSize: 24),
                                               ),
                                             ),
-                                    ),
+                                          ),
                                   ),
                                 ),
-                                Visibility(
-                                  visible: index == tabIndex.value,
-                                  child: Container(
-                                    height: 8,
-                                    width: 20,
-                                    color: Dark.accent.value,
-                                  ),
+                              ),
+                              Visibility(
+                                visible: index == tabIndex.value,
+                                child: Container(
+                                  height: 8,
+                                  width: 20,
+                                  color: Dark.accent.value,
                                 ),
-                              ],
-                            ),
-                          );
-                        }),
-                  ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        ReactorList(reactors: reactors),
+        Flexible(
+          child: ReactorList(reactors: reactors),
+        ),
       ],
     );
   }
@@ -374,10 +276,10 @@ class ReactorList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 3,
-      child: Obx(
-        () => ListView.builder(
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
           itemCount: reactors.length,
           itemBuilder: (context, index) {
             late int userIndex;
