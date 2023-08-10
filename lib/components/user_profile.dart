@@ -415,9 +415,9 @@ class RoleList extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: roles.isNotEmpty &&
-                                roles[0].color != null &&
-                                roles[0].color!.contains("gradient")
-                            ? Role.getCssGradient(roles[0].color!)
+                                roles[index].color != null &&
+                                roles[index].color!.contains("gradient")
+                            ? Role.getCssGradient(roles[index].color!)
                             : roles[index].color?.length == 7
                                 ? [
                                     Color(
@@ -451,9 +451,12 @@ class RoleList extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: roles.isNotEmpty &&
-                                            roles[0].color != null &&
-                                            roles[0].color!.contains("gradient")
-                                        ? Role.getCssGradient(roles[0].color!)
+                                            roles[index].color != null &&
+                                            roles[index]
+                                                .color!
+                                                .contains("gradient")
+                                        ? Role.getCssGradient(
+                                            roles[index].color!)
                                         : roles[index].color?.length == 7
                                             ? [
                                                 Color(
@@ -487,9 +490,9 @@ class RoleList extends StatelessWidget {
                               ),
                               GradientText(
                                 colors: roles.isNotEmpty &&
-                                        roles[0].color != null &&
-                                        roles[0].color!.contains("gradient")
-                                    ? Role.getCssGradient(roles[0].color!)
+                                        roles[index].color != null &&
+                                        roles[index].color!.contains("gradient")
+                                    ? Role.getCssGradient(roles[index].color!)
                                     : roles[index].color?.length == 7
                                         ? [
                                             Color(
