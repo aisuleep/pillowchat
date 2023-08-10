@@ -137,7 +137,7 @@ class Role {
     // Remove 'linear-gradient' and parentheses
     if (isCssGradient(cssGradient)) {
       cssGradient = cssGradient.replaceAll('linear-gradient', '');
-      cssGradient = cssGradient.replaceAll('(', '');
+      cssGradient = cssGradient.replaceFirst('(', '');
       cssGradient = cssGradient.replaceAll(')', '');
 
       // Split the gradient into components (direction and color stops)
@@ -158,17 +158,35 @@ class Role {
   }
 
   static Color parseColor(String colorValue, List<Color> gradientColors) {
+    print("COLORVALUE1: $colorValue");
     colorValue = colorValue.trim();
 
     // Check if the colorValue is an RGB format
-    if (colorValue.startsWith('rgb(') && colorValue.endsWith(')')) {
-      String rgbValues = colorValue.substring(4, colorValue.length - 1);
-      List<int> rgbComponents = rgbValues.split(',').map(int.parse).toList();
+
+    if (colorValue.startsWith('rgb(')) {
+      colorValue = colorValue.replaceAll("rgb(", '');
+
+      List<int> rgbComponents = colorValue.split(',').map(int.parse).toList();
+      print(rgbComponents);
       if (rgbComponents.length == 3) {
         return Color.fromRGBO(
             rgbComponents[0], rgbComponents[1], rgbComponents[2], 1);
       }
     }
+
+    // if (colorValue.startsWith('rgb(')) {
+    //   colorValue = colorValue.replaceAll("rgb(", '');
+    //   print(" COLORVALUE2:$colorValue");
+    //   List<int> rgb = [];
+    //   rgb.add(int.parse(colorValue));
+    //   print(rgb);
+    //   // String rgbValues = colorValue.substring(4, colorValue.length - 1);
+    //   // print(rgbValues);
+    //   // List<String> rgbComponents =
+    //   //     rgbValues.split(',').map((value) => value.trim()).toList();
+
+    //   return Color.fromRGBO(rgb[0], rgb[1], rgb[2], 1);
+    // }
 
     // Check if the colorValue is a hex value
     if (colorValue.startsWith('#')) {
@@ -182,7 +200,7 @@ class Role {
     }
 
     // If no match is found, use a default color
-    return Colors.black;
+    return Colors.cyan;
   }
 
   static Map<String, Color> colorNames = {
