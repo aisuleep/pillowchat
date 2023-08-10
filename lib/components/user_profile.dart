@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_is_empty, duplicate_ignore
+// ignore_for_file: prefer_is_empty
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -54,7 +54,6 @@ class UserProfile extends StatelessWidget {
       setProfile();
     }
 
-    String? content = profile?.content;
     return Obx(
       () => Container(
         color: Dark.background.value,
@@ -247,17 +246,17 @@ class UserProfile extends StatelessWidget {
               ),
             ),
 
-            // if (tabIndex.toInt() == 0)
-            //   Flexible(
-            //     child: ProfileTab(
-            //       user: user,
-            //       content: content,
-            //       roles: roles,
-            //     ),
-            //   ),
-            // if (tabIndex.toInt() == 1) const Flexible(child: Friends()),
-            // if (tabIndex.toInt() == 2) const Flexible(child: Groups()),
-            // if (tabIndex.toInt() == 3) const Flexible(child: Servers()),
+            if (tabIndex.toInt() == 0)
+              Flexible(
+                child: ProfileTab(
+                  user: user,
+                  content: profile?.content,
+                  roles: roles,
+                ),
+              ),
+            if (tabIndex.toInt() == 1) const Flexible(child: Friends()),
+            if (tabIndex.toInt() == 2) const Flexible(child: Groups()),
+            if (tabIndex.toInt() == 3) const Flexible(child: Servers()),
           ],
         ),
       ),
