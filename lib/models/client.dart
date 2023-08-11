@@ -160,11 +160,53 @@ class Client {
   static login(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
+      String getOS() {
+        String os = "Web";
+        if (Platform.isAndroid) {
+          os = "Android OS";
+        }
+        if (Platform.isFuchsia) {
+          os = "Fuchsia";
+        }
+        if (Platform.isIOS) {
+          os = "IOS";
+        }
+        if (Platform.isLinux) {
+          os = "Linux";
+        }
+
+        if (Platform.isMacOS) {
+          os = "MacOS";
+        }
+        if (Platform.isWindows) {
+          os = "Windows";
+        }
+        return os;
+      }
+
+      String getMode() {
+        String mode = "Web";
+        if (!kIsWeb) {
+          if (Platform.isAndroid || Platform.isFuchsia || Platform.isIOS) {
+            mode = '';
+          }
+
+          if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+            mode = "Desktop";
+          }
+        }
+
+        return mode;
+      }
+
+      String os = getOS();
+      String mode = getMode();
+
       var url = Uri.https(api, 'auth/session/login');
       Map body = {
         'email': emailController.text.trim(),
         'password': passController.text,
-        'friendly_name': 'Pillow Client'
+        'friendly_name': 'Pillow $mode on $os'
       };
       // if (prefs.getString("token") == null) {
       if (kDebugMode) print('not null');
