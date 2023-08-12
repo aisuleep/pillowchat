@@ -42,22 +42,20 @@ class Server {
     description = json['description'];
     // channels = json['channels'];
 
-    // if (json['categories'] != null) {
-    categories = List<Categories>.from(
-        (json['categories']).map((e) => Categories.fromJson(e)).toList());
-    // }
-    RoleJson roleJson;
-    roleJson = RoleJson.fromJson(json['roles']);
-    roles.value = roleJson.roles.values.toList();
-    List<Role> convertRoleJsonToList(RoleJson roleJson) {
-      return roleJson.roles.values.toList();
+    if (json['categories'] != null) {
+      categories = List<Categories>.from(
+          (json['categories']).map((e) => Categories.fromJson(e)).toList());
     }
+    if (json['roles'] != null) {
+      RoleJson roleJson;
+      roleJson = RoleJson.fromJson(json['roles']);
+      roles.value = roleJson.roles.values.toList();
+      List<Role> convertRoleJsonToList(RoleJson roleJson) {
+        return roleJson.roles.values.toList();
+      }
 
-    roles.value = (convertRoleJsonToList(roleJson));
-
-    // for (Role role in roles) {
-    //   if (kDebugMode) print("roles: ${role.rank}, ${role.color}");
-    // }
+      roles.value = (convertRoleJsonToList(roleJson));
+    }
   }
 }
 
