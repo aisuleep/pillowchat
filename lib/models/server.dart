@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/models/channel/channels.dart';
@@ -156,7 +157,7 @@ class Role {
   }
 
   static Color parseColor(String colorValue, List<Color> gradientColors) {
-    print("COLORVALUE1: $colorValue");
+    if (kDebugMode) print("COLORVALUE1: $colorValue");
     colorValue = colorValue.trim();
 
     // Check if the colorValue is an RGB format
@@ -165,7 +166,7 @@ class Role {
       colorValue = colorValue.replaceAll("rgb(", '');
 
       List<int> rgbComponents = colorValue.split(',').map(int.parse).toList();
-      print(rgbComponents);
+      if (kDebugMode) print(rgbComponents);
       if (rgbComponents.length == 3) {
         return Color.fromRGBO(
             rgbComponents[0], rgbComponents[1], rgbComponents[2], 1);
