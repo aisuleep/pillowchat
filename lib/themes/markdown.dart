@@ -127,13 +127,13 @@ class CustomEmoteBuilder extends MarkdownElementBuilder {
             WidgetSpan(
               child: InkWell(
                 onTap: () {
-                  Message.showEmote(ulid);
+                  // Message.showEmote(navigator!.context, ulid);
                 },
                 child: Emote(
                   ulid: ulid,
                   size: 1.5,
                   onTap: () {
-                    Message.showEmote(ulid);
+                    // Message.showEmote(navigator!.context, ulid);
                   },
                 ),
               ),
@@ -276,7 +276,7 @@ class UserMentionBlock extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 User.view(
-                  MyApp.navigatorKey.currentState!.context,
+                  context,
                   userIndex,
                   user,
                   avatar ?? user.avatar,
@@ -383,8 +383,8 @@ class ChannelMentionBuilder extends MarkdownElementBuilder {
                 child: InkWell(
                   onTap: () {
                     final channel = Client.channels[channelIndex];
-                    ChannelController.controller.changeChannel(
-                        MyApp.navigatorKey.currentState!.context, channel);
+                    // ChannelController.controller
+                    //     .changeChannel(context, channel);
                   },
                   child: Text(
                     '#$channelName',

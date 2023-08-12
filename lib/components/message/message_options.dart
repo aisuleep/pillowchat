@@ -109,6 +109,7 @@ class MessageOptions extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                         Message.showEmoteMenu(
+                          context,
                           messageId,
                           reactedTo,
                         );
@@ -149,6 +150,7 @@ class MessageOptions extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                       Reaction.showInfo(
+                        context,
                         emotes!.obs,
                         messageIndex,
                         tabIndex!,

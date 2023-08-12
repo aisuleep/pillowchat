@@ -426,7 +426,9 @@ class UserIcon extends StatelessWidget {
                   height: radius,
                   fit: BoxFit.cover,
                   filterQuality: FilterQuality.medium,
-                  url ?? Client.getAvatar(user!),
+                  !ClientController.controller.home.value
+                      ? url ?? Client.getAvatar(user!)
+                      : Client.getAvatar(user!),
                 ),
               ),
             ),

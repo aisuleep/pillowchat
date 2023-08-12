@@ -12,7 +12,6 @@ import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/l10n/en.dart';
-import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/channel/channels.dart';
 import 'package:pillowchat/models/emoji.dart';
 import 'package:pillowchat/models/members.dart';
@@ -227,7 +226,7 @@ class Client {
         List<Session> sesh = await fetchSessions();
         sessions.assignAll(sesh);
         // await Server.fetchMembers();
-        Client.connect();
+        Client.connect(context);
         saveInfo();
 
         emailController.clear();
@@ -251,7 +250,7 @@ class Client {
     if (kDebugMode) print('socket done');
   }
 
-  static connect() async {
+  static connect(BuildContext context) async {
     // iowebsocket does not work for flutter web
     // emojis are black and white for flutter web
 
@@ -264,12 +263,8 @@ class Client {
     //     headers: {'Content-Type': 'application/json; charset=utf-8'});
     // .stream.asBroadcastStream();
 
-    socket.stream.listen(
-        (event) => _handleSocket(
-            event, socket, MyApp.navigatorKey.currentState!.context),
-        cancelOnError: true,
-        onDone: onDone,
-        onError: (e) {});
+    socket.stream.listen((event) => _handleSocket(event, socket, context),
+        cancelOnError: true, onDone: onDone, onError: (e) {});
 
     await Future.delayed(const Duration(seconds: 0));
   }
@@ -348,7 +343,7 @@ class Client {
       // if (kDebugMode) print(Client.emojis);
       //
     } else {
-      eventsHandler(json, socket);
+      eventsHandler(context, json, socket);
     }
   }
 

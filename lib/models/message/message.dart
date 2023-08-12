@@ -8,7 +8,6 @@ import 'package:pillowchat/components/message/message_options.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
-import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
@@ -334,10 +333,10 @@ class Message {
     );
   }
 
-  static showEmote(String ulid) {
+  static showEmote(BuildContext context, String ulid) {
     showModalBottomSheet(
         backgroundColor: Dark.background.value,
-        context: MyApp.navigatorKey.currentState!.context,
+        context: context,
         builder: (context) {
           return ListTile(
             contentPadding: const EdgeInsets.symmetric(
@@ -356,11 +355,12 @@ class Message {
         });
   }
 
-  static showEmoteMenu(String messageId, bool? reactedTo) {
+  static showEmoteMenu(
+      BuildContext context, String messageId, bool? reactedTo) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       showDragHandle: true,
-      context: MyApp.navigatorKey.currentState!.context,
+      context: context,
       builder: (context) {
         return ClipRRect(
           borderRadius: const BorderRadius.vertical(

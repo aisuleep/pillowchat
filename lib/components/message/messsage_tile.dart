@@ -484,7 +484,7 @@ class MessageContent extends StatelessWidget {
                                   padding: const EdgeInsets.all(0),
                                   onPressed: () {
                                     Message.showEmoteMenu(
-                                        messageIndex.id, false);
+                                        context, messageIndex.id, false);
                                   },
                                   icon: Icon(
                                     Icons.add,
@@ -545,6 +545,7 @@ class MessageContent extends StatelessWidget {
                         },
                         onSecondaryTap: () {
                           Reaction.showInfo(
+                            context,
                             emotes!,
                             messageIndex,
                             index.obs,
@@ -555,6 +556,7 @@ class MessageContent extends StatelessWidget {
                         },
                         onLongPress: () {
                           Reaction.showInfo(
+                            context,
                             emotes!,
                             messageIndex,
                             index.obs,

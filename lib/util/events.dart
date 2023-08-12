@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/events.dart';
-import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/message/message.dart';
 
-eventsHandler(dynamic json, var socket) {
+eventsHandler(BuildContext context, dynamic json, var socket) {
   switch (json['type']) {
     // MESSAGE
 
@@ -142,8 +141,7 @@ eventsHandler(dynamic json, var socket) {
   }
   if (ClientController.controller.logged.value == false) {
     if (kDebugMode) print("[isNotLogged]");
-    Navigator.pushReplacementNamed(
-        MyApp.navigatorKey.currentState!.context, '/login');
+    Navigator.pushReplacementNamed(context, '/login');
     socket.sink.close();
   }
 }

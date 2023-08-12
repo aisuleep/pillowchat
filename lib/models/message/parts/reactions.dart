@@ -96,6 +96,7 @@ class Reaction {
   }
 
   static showInfo(
+    BuildContext context,
     RxList<dynamic> emotes,
     dynamic messageIndex,
     Rx<int> tabIndex,
@@ -112,7 +113,7 @@ class Reaction {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         showDragHandle: true,
-        context: MyApp.navigatorKey.currentState!.context,
+        context: context,
         builder: (context) {
           return ReactorsMenu(
             reactors: reactors,
@@ -127,7 +128,7 @@ class Reaction {
       );
     } else {
       MyApp.showPopup(
-        context: MyApp.navigatorKey.currentState!.context,
+        context: context,
         widget: ReactorsMenu(
           reactors: reactors,
           emotes: emotes,
