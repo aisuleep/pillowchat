@@ -74,23 +74,29 @@ class Client {
 
   static bool get isMobile {
     if (kIsWeb) {
-      if (kDebugMode) print("isWeb");
+      // if (kDebugMode) print("isWeb");
       return false;
-    } else {
-      if (kDebugMode) print("MOBILE");
+    } else if (!Platform.isLinux &&
+        !Platform.isFuchsia &&
+        !Platform.isWindows &&
+        !Platform.isMacOS) {
+      // if (kDebugMode) print("MOBILE");
       return Platform.isIOS || Platform.isAndroid;
     }
+    return false;
   }
 
   static bool get isDesktop {
     if (kIsWeb) {
       return false;
-    } else {
+    } else if (!Platform.isIOS && !Platform.isAndroid) {
+      // if (kDebugMode) print("DESKTOP");
       return Platform.isLinux ||
           Platform.isFuchsia ||
           Platform.isWindows ||
           Platform.isMacOS;
     }
+    return false;
   }
 
   static logout(BuildContext context) async {
