@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pillowchat/components/message/message_options.dart';
+import 'package:pillowchat/widgets/message/message_options.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';

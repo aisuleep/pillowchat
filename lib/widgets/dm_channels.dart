@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
-import 'package:pillowchat/components/home_channels.dart';
+import 'package:pillowchat/widgets/home_channels.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/message/message.dart';

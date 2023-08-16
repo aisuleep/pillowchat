@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillowchat/components/headers/chat_header.dart';
-import 'package:pillowchat/components/message/message_box.dart';
+import 'package:pillowchat/widgets/headers/chat_header.dart';
+import 'package:pillowchat/widgets/message/message_box.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/pages/server/members_page.dart';
 import 'package:pillowchat/util/message_build.dart';

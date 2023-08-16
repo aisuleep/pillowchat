@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillowchat/components/home_channels.dart';
+import 'package:pillowchat/widgets/home_channels.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/channel/channels.dart';
 import 'package:pillowchat/models/members.dart';

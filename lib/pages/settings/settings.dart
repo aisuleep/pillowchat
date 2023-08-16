@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillowchat/components/headers/tab_header.dart';
+import 'package:pillowchat/widgets/headers/tab_header.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';

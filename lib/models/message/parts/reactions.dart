@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillowchat/components/reactions/reactor_tile.dart';
+import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';

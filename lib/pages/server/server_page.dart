@@ -3,19 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
-import 'package:pillowchat/components/home_channels.dart';
+import 'package:pillowchat/widgets/home_channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/message/parts/embeds.dart';
 import 'package:pillowchat/models/server.dart';
-import 'package:pillowchat/components/server_sidebar.dart';
-import 'package:pillowchat/components/dm_channels.dart';
+import 'package:pillowchat/widgets/server_sidebar.dart';
+import 'package:pillowchat/widgets/dm_channels.dart';
 import 'package:pillowchat/themes/markdown.dart';
 import 'package:pillowchat/themes/ui.dart';
 
-import '../../components/server_channels.dart';
+import '../../widgets/server_channels.dart';
 
 class ServersPage extends StatelessWidget {
   const ServersPage({super.key, this.server});

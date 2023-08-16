@@ -1,4 +1,4 @@
-export 'package:pillowchat/components/message/embeds/link_embeds.dart';
+export 'package:pillowchat/widgets/message/embeds/link_embeds.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

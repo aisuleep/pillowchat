@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pillowchat/components/headers/chat_header.dart';
+import 'package:pillowchat/widgets/headers/chat_header.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

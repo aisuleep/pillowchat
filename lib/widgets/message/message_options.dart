@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:pillowchat/components/message/message_box.dart';
+import 'package:pillowchat/widgets/message/message_box.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/models/message/message.dart';
