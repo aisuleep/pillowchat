@@ -326,7 +326,7 @@ class MessageTile extends StatelessWidget {
                             messageIndex: messageIndex,
                             index: index,
                             user: user,
-                            member: member ?? Member('', ''),
+                            member: member,
                             emotes: emotes?.obs,
                             previousAuthor: previousAuthor,
                             author: author,
@@ -351,7 +351,7 @@ class MessageContent extends StatelessWidget {
     required this.messageIndex,
     required this.index,
     required this.user,
-    required this.member,
+    this.member,
     required this.previousAuthor,
     required this.author,
     this.content,
@@ -361,7 +361,7 @@ class MessageContent extends StatelessWidget {
   final dynamic messageIndex;
   final int index;
   final User user;
-  final Member member;
+  final Member? member;
   final RxList<dynamic>? emotes;
   final String previousAuthor;
   final String author;

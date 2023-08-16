@@ -141,7 +141,7 @@ eventsHandler(BuildContext context, dynamic json, var socket) {
   }
   if (ClientController.controller.logged.value == false) {
     if (kDebugMode) print("[isNotLogged]");
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.popAndPushNamed(context, '/login');
     socket.sink.close();
   }
 }

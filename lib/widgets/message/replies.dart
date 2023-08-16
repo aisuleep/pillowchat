@@ -184,6 +184,7 @@ class Replies extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: UserIcon(
                             url: url,
+                            user: user,
                             hasStatus: false,
                             radius: 15,
                           ),

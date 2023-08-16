@@ -24,7 +24,7 @@ class markdown {
       md.EmojiSyntax(),
       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
       CustomEmoteSyntax(),
-      UserMentionSyntax(),
+      // UserMentionSyntax(),
       ChannelMentionSyntax(),
       SpoilerSyntax(),
     ],
@@ -32,7 +32,7 @@ class markdown {
 
   static Map<String, MarkdownElementBuilder> builders = {
     'emote': CustomEmoteBuilder(),
-    'mentions': UserMentionBuilder(),
+    // 'mentions': UserMentionBuilder(),
     'channels': ChannelMentionBuilder(),
     'spoiler': SpoilerBuilder(hidden: true.obs),
   };
@@ -220,29 +220,37 @@ class UserMentionBuilder extends MarkdownElementBuilder {
   @override
   Widget visitElementAfter(element, preferredStyle) {
     final String ulid = element.textContent;
-    dynamic userIndex;
+    int? userIndex;
     String? url;
     User? user;
-    userIndex = ServerController.controller.selected.value.users
-        .indexWhere((user) => user.id == ulid);
-    // ignore: unused_element
     fetchId() async {
       user = await User.fetch(element.textContent);
     }
 
-    if (userIndex != -1) {
+    if (!ClientController.controller.home.value) {
+      userIndex = ServerController.controller.selected.value.users
+          .indexWhere((user) => user.id == ulid);
+    }
+    if (userIndex != -1 &&
+        userIndex != null &&
+        !ClientController.controller.home.value) {
       user = ServerController.controller.selected.value.users[userIndex];
     } else {
       fetchId();
+      print('is in dm');
     }
 
     url = Client.getAvatar(user!);
-    int memberIndex;
-    memberIndex = ServerController.controller.selected.value.members
-        .indexWhere((member) => member.userId == ulid);
     Member? member;
-    if (memberIndex != -1) {
-      member = ServerController.controller.selected.value.members[memberIndex];
+    if (!ClientController.controller.home.value) {
+      int memberIndex;
+      memberIndex = ServerController.controller.selected.value.members
+          .indexWhere((member) => member.userId == ulid);
+
+      if (memberIndex != -1) {
+        member =
+            ServerController.controller.selected.value.members[memberIndex];
+      }
     }
 
     if (element.tag == 'mentions') {
@@ -253,7 +261,7 @@ class UserMentionBuilder extends MarkdownElementBuilder {
           userIndex: userIndex,
           user: user!,
           avatar: user?.avatar,
-          member: member,
+          member: member?.avatar != '' ? member : null,
           url: url,
         );
       } else {
@@ -323,7 +331,9 @@ class UserMentionBlock extends StatelessWidget {
                           right: 4,
                         ),
                         child: Text(
-                          member == null || member?.nickname == null
+                          member == null ||
+                                  member?.avatar == '' ||
+                                  member?.nickname == null
                               ? user.displayName?.trim() ?? user.name.trim()
                               : member!.nickname!.trim(),
                           style: TextStyle(

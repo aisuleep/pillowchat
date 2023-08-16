@@ -282,7 +282,7 @@ class Client {
         if (kDebugMode) print(pushed);
       }
     } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.popAndPushNamed(context, '/login');
     }
     if (json['type'] == 'Ready') {
       if (kDebugMode) print('servers success');
