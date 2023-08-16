@@ -27,7 +27,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   static showPopup({required Widget widget, required BuildContext context}) {
     showDialog(
         context: context,
@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       title: 'A Flutter Client',
-      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         bottomSheetTheme: BottomSheetThemeData(

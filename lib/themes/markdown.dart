@@ -10,7 +10,6 @@ import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
-import 'package:pillowchat/main.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
@@ -121,26 +120,7 @@ class CustomEmoteBuilder extends MarkdownElementBuilder {
     if (element.tag == 'emote') {
       // Replace the emote tag with an image
       // is only inline when selectable test but it can cause errors :/
-      return Text.rich(
-        TextSpan(
-          children: <InlineSpan>[
-            WidgetSpan(
-              child: InkWell(
-                onTap: () {
-                  // Message.showEmote(navigator!.context, ulid);
-                },
-                child: Emote(
-                  ulid: ulid,
-                  size: 1.5,
-                  onTap: () {
-                    // Message.showEmote(navigator!.context, ulid);
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+      return CustomEmote(ulid: ulid);
     } // Return the default implementation for other elements
     return super.visitElementAfter(element, preferredStyle)!;
 
@@ -158,6 +138,39 @@ class CustomEmoteBuilder extends MarkdownElementBuilder {
     //     ),
     //   ]));
     // }
+  }
+}
+
+class CustomEmote extends StatelessWidget {
+  const CustomEmote({
+    super.key,
+    required this.ulid,
+  });
+
+  final String ulid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: <InlineSpan>[
+          WidgetSpan(
+            child: InkWell(
+              onTap: () {
+                Message.showEmote(context, ulid);
+              },
+              child: Emote(
+                ulid: ulid,
+                size: 1.5,
+                onTap: () {
+                  Message.showEmote(context, ulid);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -374,33 +387,49 @@ class ChannelMentionBuilder extends MarkdownElementBuilder {
     channelName = Client.channels[channelIndex].name!;
 
     if (element.tag == 'channels') {
-      return Text.rich(
-        TextSpan(
-          children: <InlineSpan>[
-            WidgetSpan(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: InkWell(
-                  onTap: () {
-                    final channel = Client.channels[channelIndex];
-                    // ChannelController.controller
-                    //     .changeChannel(context, channel);
-                  },
-                  child: Text(
-                    '#$channelName',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontSize: ClientController.controller.fontSize.value,
-                    ),
+      return ChannelMention(
+          channelIndex: channelIndex, channelName: channelName);
+    } // Return the default implementation for other elements
+    return super.visitElementAfter(element, preferredStyle)!;
+  }
+}
+
+class ChannelMention extends StatelessWidget {
+  const ChannelMention({
+    super.key,
+    required this.channelIndex,
+    required this.channelName,
+  });
+
+  final int channelIndex;
+  final String channelName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: <InlineSpan>[
+          WidgetSpan(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: InkWell(
+                onTap: () {
+                  final channel = Client.channels[channelIndex];
+                  ChannelController.controller.changeChannel(context, channel);
+                },
+                child: Text(
+                  '#$channelName',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: ClientController.controller.fontSize.value,
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      );
-    } // Return the default implementation for other elements
-    return super.visitElementAfter(element, preferredStyle)!;
+          ),
+        ],
+      ),
+    );
   }
 }
 
