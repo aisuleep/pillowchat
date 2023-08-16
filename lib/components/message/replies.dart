@@ -188,39 +188,27 @@ class Replies extends StatelessWidget {
                             radius: 15,
                           ),
                         ),
-                      if (messageIndex.mentions.length != 0 &&
-                          contentIndex != 0)
-                        Text(
-                          '@',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ClientController.controller.home.value ||
-                                    user.bot != null &&
-                                        replyIndex.masquerade?.name != ''
-                                ? Dark.foreground.value
-                                : member != null &&
-                                        member.roles.isNotEmpty &&
-                                        member.roles[0].color != '' &&
-                                        member.roles[0].color?.length == 7
-                                    ? Color(
-                                        int.parse(
-                                            '0xff${member.roles[0].color?.replaceAll("#", "")}'),
-                                      )
-                                    : Dark.foreground.value,
-                          ),
-                        ),
+
                       if (contentIndex != 0)
                         Padding(
                           padding: const EdgeInsets.only(right: 6),
                           child: GradientText(
                             member?.nickname != null
-                                ? member!.nickname!.trim()
+                                ? messageIndex.mentions.length != 0
+                                    ? "@${member!.nickname!.trim()}"
+                                    : member!.nickname!.trim()
                                 : user.bot == null ||
                                         replyIndex.masquerade?.name == ''
                                     ? user.displayName != null
-                                        ? user.displayName!.trim()
-                                        : user.name.trim()
-                                    : replyIndex.masquerade!.name.trim(),
+                                        ? messageIndex.mentions.length != 0
+                                            ? "@${user.displayName!.trim()}"
+                                            : user.displayName!.trim()
+                                        : messageIndex.mentions.length != 0
+                                            ? "@${user.name.trim()}"
+                                            : user.name.trim()
+                                    : messageIndex.mentions.length != 0
+                                        ? "@${replyIndex.masquerade!.name.trim()}"
+                                        : replyIndex.masquerade!.name.trim(),
                             colors: member != null &&
                                     member.roles.isNotEmpty &&
                                     member.roles[0].color != null &&
