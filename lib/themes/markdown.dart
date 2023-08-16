@@ -237,7 +237,7 @@ class UserMentionBuilder extends MarkdownElementBuilder {
       user = ServerController.controller.selected.value.users[userIndex];
     } else {
       fetchId();
-      print('is in dm');
+      if (kDebugMode) print('is in dm');
     }
 
     url = Client.getAvatar(user!);
