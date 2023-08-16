@@ -131,36 +131,9 @@ class Role {
     return color.startsWith('linear-gradient');
   }
 
-  // static List<Color> getCssGradient(String cssGradient) {
-  //   List<Color> colors = [];
-  //   // Remove 'linear-gradient' and parentheses
-  //   if (isCssGradient(cssGradient)) {
-  //     cssGradient = cssGradient.replaceAll('linear-gradient', '');
-  //     cssGradient = cssGradient.replaceFirst('(', '');
-  //     // cssGradient = cssGradient.replaceAll(')', '');
-
-  //     // Split the gradient into components (direction and color stops)
-  //     List<String> gradientComponents = cssGradient.split(',');
-
-  //     // Extract the color values
-
-  //     for (String component in gradientComponents) {
-  //       String trimmedComponent = component.trim();
-  //       if (!trimmedComponent.contains('deg')) {
-  //         // Assuming any component without 'deg' is a color stop
-  //         // Convert color stop to Color object and add to the list
-  //         colors.add(parseColor(trimmedComponent, colors));
-  //         if (trimmedComponent.contains("rgb")) {
-  //           print("TRIM: $trimmedComponent");
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return colors;
-  // }
-
   static List<Color> getCssGradient(String cssGradient) {
     List<Color> colors = [];
+    // ignore: unused_local_variable
     late String deg;
 
     if (isCssGradient(cssGradient)) {
@@ -176,14 +149,12 @@ class Role {
           String trimmedComponent = component.trim();
           if (trimmedComponent.startsWith('rgb(') &&
               trimmedComponent.endsWith(')')) {
-            if (kDebugMode) print("TRIM: $trimmedComponent");
             // If it's an rgb() value, directly add it to colors
             colors.add(parseColor(trimmedComponent));
           } else {
             if (trimmedComponent.contains("deg")) {
               deg = trimmedComponent.replaceAll("deg", '');
             } else {
-              if (kDebugMode) print(" non rgb: $trimmedComponent");
               // Otherwise, parse the color using the existing parseColor function
               colors.add(parseColor(trimmedComponent));
             }
@@ -205,7 +176,7 @@ class Role {
       colorValue = colorValue.replaceAll("rgb(", '');
       colorValue = colorValue.replaceAll(')', '');
       List<int> rgbComponents = colorValue.split(',').map(int.parse).toList();
-      if (kDebugMode) print(rgbComponents);
+
       if (rgbComponents.length == 3) {
         return Color.fromRGBO(
             rgbComponents[0], rgbComponents[1], rgbComponents[2], 1);
