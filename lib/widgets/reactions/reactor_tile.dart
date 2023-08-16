@@ -44,7 +44,7 @@ class ReactorTile extends StatelessWidget {
     }
     // GET AVATAR URL
 
-    if (member?.avatar != null) {
+    if (member?.avatar != null && member?.avatar != '') {
       // IF SERVER AVATAR
 
       url = '$autumn/avatars/${member!.avatar!}';

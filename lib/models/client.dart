@@ -45,7 +45,7 @@ class Client {
   static const String autumn = 'https://autumn.revolt.chat';
   static String getAvatar(User user, {String? id}) {
     String url;
-    if (user.avatar != null) {
+    if (user.avatar != null && user.avatar != '') {
       url = '$autumn/avatars/${user.avatar}';
     } else {
       if (id == null && user.id != '') {
