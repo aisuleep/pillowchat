@@ -22,11 +22,11 @@ import 'pages/home/welcome.dart';
 
 void main() {
   // initMeeduPlayer();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   static showPopup({required Widget widget, required BuildContext context}) {
     showDialog(
