@@ -217,29 +217,41 @@ class Replies extends StatelessWidget {
                                 ? Role.getCssGradient(member.roles[0].color!)
                                 : ClientController.controller.home.value ||
                                         user.bot != null &&
-                                            replyIndex.masquerade?.name != ''
+                                            replyIndex.masquerade?.name != '' &&
+                                            replyIndex.masquerade?.color == null
                                     ? [
                                         Dark.foreground.value,
                                         Dark.foreground.value
                                       ]
-                                    : member != null &&
-                                            member.roles.isNotEmpty &&
-                                            member.roles[0].color != '' &&
-                                            member.roles[0].color?.length == 7
+                                    : replyIndex.masquerade?.color != null &&
+                                            replyIndex.masquerade?.color!
+                                                    .length ==
+                                                7
                                         ? [
-                                            Color(
-                                              int.parse(
-                                                  '0xff${member.roles[0].color?.replaceAll("#", "")}'),
-                                            ),
-                                            Color(
-                                              int.parse(
-                                                  '0xff${member.roles[0].color?.replaceAll("#", "")}'),
-                                            )
+                                            Color(int.parse(
+                                                "0xff${replyIndex.masquerade!.color!.replaceAll('#', '')}")),
+                                            Color(int.parse(
+                                                "0xff${replyIndex.masquerade!.color!.replaceAll('#', '')}"))
                                           ]
-                                        : [
-                                            Dark.foreground.value,
-                                            Dark.foreground.value
-                                          ],
+                                        : member != null &&
+                                                member.roles.isNotEmpty &&
+                                                member.roles[0].color != '' &&
+                                                member.roles[0].color?.length ==
+                                                    7
+                                            ? [
+                                                Color(
+                                                  int.parse(
+                                                      '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                                ),
+                                                Color(
+                                                  int.parse(
+                                                      '0xff${member.roles[0].color?.replaceAll("#", "")}'),
+                                                )
+                                              ]
+                                            : [
+                                                Dark.foreground.value,
+                                                Dark.foreground.value
+                                              ],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,

@@ -266,7 +266,12 @@ class MessageTile extends StatelessWidget {
                                                                 )
                                                               ]
                                                             : messageIndex.masquerade.color != null && messageIndex.masquerade.color.length == 7
-                                                                ? [Color(int.parse('0xff${messageIndex.masquerade.color?.replaceAll("#", "")}'))]
+                                                                ? [
+                                                                    Color(int.parse(
+                                                                        '0xff${messageIndex.masquerade.color?.replaceAll("#", "")}')),
+                                                                    Color(int.parse(
+                                                                        '0xff${messageIndex.masquerade.color?.replaceAll("#", "")}'))
+                                                                  ]
                                                                 : [
                                                                     Dark.foreground
                                                                         .value,
