@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
+import 'package:pillowchat/widgets/message/attachments.dart';
 // import 'package:pillowchat/components/message/attachments.dart';
 import 'package:pillowchat/widgets/message/embeds/index.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
@@ -408,10 +409,10 @@ class MessageContent extends StatelessWidget {
           // IF MESSAGE HAS ATTATCHMENTS
 
           // IMAGE & VIDEO ATTACHMENTS
-          // if (messageIndex.attachments?.length != 0)
-          //   for (int e = 0; e < messageIndex.attachments!.length; e++)
-          //     if (messageIndex.attachments?[e].type == 'Image')
-          //       Attachments(messageIndex, e),
+          if (messageIndex.attachments?.length != 0)
+            for (int e = 0; e < messageIndex.attachments!.length; e++)
+              if (messageIndex.attachments?[e].type == 'Image')
+                Attachments(messageIndex, e),
           // TODO: AUDIO/FILE/VIDEO ATTACHMENTS
 
           // FILE ATTACHMENTS
