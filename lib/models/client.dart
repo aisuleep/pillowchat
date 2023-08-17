@@ -69,6 +69,7 @@ class Client {
     users: <User>[].obs,
     messages: <Message>[].obs,
     isUnread: false.obs,
+    recipients: <User>[].obs,
   );
   static late List<Emoji> emojis;
 

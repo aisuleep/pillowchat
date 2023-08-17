@@ -196,6 +196,7 @@ class ServerChannels extends StatelessWidget {
                               members: <Member>[].obs,
                               messages: <Message>[].obs,
                               isUnread: false.obs,
+                              recipients: <User>[].obs,
                             );
                             if (channelIndex != -1) {
                               channel = Client.channels[channelIndex];

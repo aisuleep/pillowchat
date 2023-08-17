@@ -16,6 +16,7 @@ class ChannelController extends GetxController {
     users: <User>[].obs,
     messages: <Message>[].obs,
     isUnread: false.obs,
+    recipients: <User>[].obs,
   ).obs;
   RxString avatar = "".obs;
   RxList<Message> messageList = <Message>[].obs;

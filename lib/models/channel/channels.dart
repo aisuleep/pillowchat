@@ -20,7 +20,7 @@ class Channel {
   RxList<Member> members = <Member>[].obs;
   String? type;
   late String owner;
-  late List<dynamic>? recipients;
+  List<dynamic>? recipients;
   String lastMessage = '';
   late int permissions;
   RxList<Message> messages = <Message>[].obs;
@@ -36,6 +36,7 @@ class Channel {
     required this.members,
     required this.messages,
     required this.isUnread,
+    this.recipients,
   });
 
   Channel.fromJson(Map<String, dynamic> json) {
@@ -50,8 +51,6 @@ class Channel {
     if (json['icon'] != null) {
       icon = json['icon']['_id'];
     }
-
-    // user = json['user'];
 
     type = json['channel_type'];
 

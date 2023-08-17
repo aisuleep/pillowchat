@@ -24,7 +24,7 @@ class markdown {
       md.EmojiSyntax(),
       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
       CustomEmoteSyntax(),
-      // UserMentionSyntax(),
+      UserMentionSyntax(),
       ChannelMentionSyntax(),
       SpoilerSyntax(),
     ],
@@ -32,7 +32,7 @@ class markdown {
 
   static Map<String, MarkdownElementBuilder> builders = {
     'emote': CustomEmoteBuilder(),
-    // 'mentions': UserMentionBuilder(),
+    'mentions': UserMentionBuilder(),
     'channels': ChannelMentionBuilder(),
     'spoiler': SpoilerBuilder(hidden: true.obs),
   };
@@ -223,8 +223,25 @@ class UserMentionBuilder extends MarkdownElementBuilder {
     int? userIndex;
     String? url;
     User? user;
+    // ignore: unused_element
     fetchId() async {
-      user = await User.fetch(element.textContent);
+      user = await User.fetch(ulid);
+    }
+// TODO: MAKE FETCH AND USE USER IF USER NULL
+
+    // if (user == null) {
+    //   fetchId();
+    // }
+
+    if (user != null) {
+      url = Client.getAvatar(user!);
+    } else if (ClientController.controller.home.value) {
+      userIndex = ChannelController.controller.selected.value.users
+          .indexWhere((user) => user.id == element.textContent);
+
+      if (userIndex != -1) {
+        user = ChannelController.controller.selected.value.users[userIndex];
+      }
     }
 
     if (!ClientController.controller.home.value) {
@@ -235,12 +252,7 @@ class UserMentionBuilder extends MarkdownElementBuilder {
         userIndex != null &&
         !ClientController.controller.home.value) {
       user = ServerController.controller.selected.value.users[userIndex];
-    } else {
-      fetchId();
-      if (kDebugMode) print('is in dm');
     }
-
-    url = Client.getAvatar(user!);
     Member? member;
     if (!ClientController.controller.home.value) {
       int memberIndex;
