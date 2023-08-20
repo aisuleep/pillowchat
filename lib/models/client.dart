@@ -61,7 +61,7 @@ class Client {
   static RxInt pushed = 0.obs;
 
   static late Channel dms;
-  static Channel savedNotes = Channel(
+  static Rx<Channel> savedNotes = Channel(
     id: 'SavedNotes',
     name: En.savedNotes,
     type: 'SavedMessages',
@@ -70,7 +70,7 @@ class Client {
     messages: <Message>[].obs,
     isUnread: false.obs,
     recipients: <User>[].obs,
-  );
+  ).obs;
   static late List<Emoji> emojis;
 
   static bool get isMobile {
@@ -337,7 +337,7 @@ class Client {
 
       // GET SAVED NOTES
 
-      Client.savedNotes = Client.channels[0];
+      Client.savedNotes.value = Client.channels[0];
 
       getChannels();
       getDms();

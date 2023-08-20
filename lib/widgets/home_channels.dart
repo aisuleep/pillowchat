@@ -7,6 +7,7 @@ import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/l10n/en.dart';
 import 'package:pillowchat/models/channel/channels.dart';
 import 'package:pillowchat/models/client.dart';
+import 'package:pillowchat/models/message/message.dart';
 import 'package:pillowchat/themes/ui.dart';
 
 class Home {
@@ -78,15 +79,17 @@ class HomeChannels extends StatelessWidget {
         ),
         title: const Text('Saved Notes'),
         onTap: () {
-          // ChannelController.controller.selected.value = Client.savedNotes;
+          ChannelController.controller.selected.value = Client.savedNotes.value;
           ChannelController.controller.selected.value.name = En.savedNotes;
 
           Home.index = -1;
           ServerController.controller.changeDm(-1);
           if (kDebugMode) print(ServerController.controller.homeIndex.value);
-          // Message.fetch(Client.savedNotes.id);
           ChannelController.controller
-              .changeChannel(context, Client.savedNotes);
+              .changeChannel(context, Client.savedNotes.value);
+          if (Client.savedNotes.value.messages.isEmpty) {
+            Message.fetch(Client.savedNotes.value.id, 0);
+          }
         },
       ),
       ListTile(

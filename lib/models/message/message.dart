@@ -119,7 +119,7 @@ class Message {
         late List<Message> messages;
         if (json['messages'] != null) {
           List<dynamic> messageList = json['messages'];
-          // if (kDebugMode) print(messageList);
+          if (kDebugMode) print(messageList);
           messages = messageList
               .map((messages) => Message.fromJson(messages))
               .toList();
@@ -233,12 +233,8 @@ class Message {
         'x-session-token': Client.token,
       });
 
-      if (response.statusCode == 200) {
-        var json = jsonDecode(response.body);
+      if (response.statusCode == 204) {
         if (kDebugMode) print('successful message delete');
-        if (kDebugMode) print(json);
-      } else {
-        if (kDebugMode) print('some message delete error..');
       }
     } catch (e) {
       if (kDebugMode) print(e);

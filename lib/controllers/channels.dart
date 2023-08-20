@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/widgets/home_channels.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/channel/channels.dart';
@@ -43,11 +44,18 @@ class ChannelController extends GetxController {
     List<Message> messages,
     List<User> users,
   ) {
-    Home.dms![index].messages.assignAll(messages);
-    Home.dms![index].messages.refresh();
+    if (index != 0) {
+      Home.dms![index].messages.assignAll(messages);
+      Home.dms![index].messages.refresh();
 
-    Home.dms![index].users.addAll(users);
-    Home.dms![index].users.refresh();
+      Home.dms![index].users.addAll(users);
+      Home.dms![index].users.refresh();
+    } else {
+      Client.savedNotes.value.messages.assignAll(messages);
+      Client.savedNotes.value.messages.refresh();
+      Client.savedNotes.value.users.assignAll(users);
+      Client.savedNotes.value.users.refresh();
+    }
   }
 
   void addMessage(Message message) {

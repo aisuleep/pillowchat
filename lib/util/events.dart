@@ -31,7 +31,7 @@ eventsHandler(BuildContext context, dynamic json, var socket) {
 
     case 'MessageDelete':
       Events.deleteMessage(json);
-      // if (kDebugMode) print('[events]: Message Delete');
+      if (kDebugMode) print('[events]: Message Delete');
 
       break;
 
