@@ -57,53 +57,47 @@ class FriendsPage extends StatelessWidget {
               ],
             ),
           ),
-          BottomNavigationBar(
-              onTap: (value) {
-                if (value == 0) {
-                  // Navigator.popAndPushNamed(context, '/');
-                }
-                if (value == 1) {
-                  // Navigator.popAndPushNamed(context, '/');
-                }
-                if (value == 2) {
-                  // Navigator.popAndPushNamed(context, '/');
-                }
-                if (value == 3) {
-                  // Navigator.popAndPushNamed(context, '/');
-                }
-              },
-              currentIndex: 2,
-              items: [
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
-                  label: 'chat',
-                  tooltip: '',
-                ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications),
-                  label: 'mentions',
-                  tooltip: '',
-                ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.emoji_people),
-                  label: 'friends',
-                  tooltip: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Visibility(
-                    visible: ClientController.controller.logged.value &&
-                        ClientController.controller.selectedUser.value.avatar !=
-                            null,
-                    child: UserIcon(
-                      user: ClientController.controller.selectedUser.value,
-                      radius: 36,
-                      hasStatus: true,
-                    ),
+          if (Client.isMobile)
+            BottomNavigationBar(
+                onTap: (value) {
+                  if (value == 0) {}
+                  if (value == 1) {}
+                  if (value == 2) {}
+                  if (value == 3) {}
+                },
+                currentIndex: 2,
+                items: [
+                  const BottomNavigationBarItem(
+                    icon: Icon(Icons.chat),
+                    label: 'chat',
+                    tooltip: '',
                   ),
-                  label: 'settings',
-                  tooltip: '',
-                ),
-              ]),
+                  const BottomNavigationBarItem(
+                    icon: Icon(Icons.notifications),
+                    label: 'mentions',
+                    tooltip: '',
+                  ),
+                  const BottomNavigationBarItem(
+                    icon: Icon(Icons.emoji_people),
+                    label: 'friends',
+                    tooltip: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Visibility(
+                      visible: ClientController.controller.logged.value &&
+                          ClientController
+                                  .controller.selectedUser.value.avatar !=
+                              null,
+                      child: UserIcon(
+                        user: ClientController.controller.selectedUser.value,
+                        radius: 36,
+                        hasStatus: true,
+                      ),
+                    ),
+                    label: 'settings',
+                    tooltip: '',
+                  ),
+                ]),
         ],
       ),
     );
