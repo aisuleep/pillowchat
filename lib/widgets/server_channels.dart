@@ -24,6 +24,7 @@ class ServerChannels extends StatelessWidget {
       ServerController.controller.selected.value.channels.obs;
   int channelsLength =
       ServerController.controller.selected.value.channels.length;
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     // STORE ALL CHANNELS INSIDE A CATEGORY
@@ -43,146 +44,141 @@ class ServerChannels extends StatelessWidget {
         }
       }
     }
-    return Container(
-        padding: Client.isDesktop ? null : const EdgeInsets.only(bottom: 70),
-        child: Column(
-          children: [
-            if (uncategorizedChannels.isNotEmpty)
-              Obx(
-                () => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: uncategorizedChannels.length,
-                    itemBuilder: (context, index) {
-                      String? channelIcon;
-                      if (channelIcon != '') {
-                        channelIcon = uncategorizedChannels[index].icon!;
-                      }
-                      return ChannelTile(
-                        icon: channelIcon != ''
-                            ? SizedBox(
-                                height: 25,
-                                width: 25,
-                                child: Image.network(
-                                  '$autumn/icons/$channelIcon?',
-                                  filterQuality: FilterQuality.medium,
-                                ),
-                              )
-                            : Icon(
-                                uncategorizedChannels[index].type ==
-                                        'VoiceChannel'
-                                    ? Icons.mic
-                                    : Icons.numbers_rounded,
-                                color: Dark.foreground.value,
-                              ),
-                        channel: uncategorizedChannels[index],
-                        onTap: () {
-                          ChannelController.controller.changeChannel(
-                              context, uncategorizedChannels[index]);
-                        },
-                      );
-                    }),
-              ),
-            Obx(
-              () => Expanded(
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ServerController
-                      .controller.selected.value.categories.length,
-                  itemBuilder: (context, index) {
-                    final categories = ServerController
-                        .controller.selected.value.categories[index];
-                    final channelsId = ServerController
-                        .controller.selected.value.categories[index].channelId;
-                    {
-                      return ExpansionTile(
-                        // controlAffinity: ListTileControlAffinity.leading,
-                        tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-                        initiallyExpanded: true,
-                        textColor: Dark.accent.value,
-                        iconColor: Dark.accent.value,
-                        collapsedTextColor: Dark.secondaryForeground.value,
-                        collapsedIconColor: Dark.secondaryForeground.value,
-                        title: Text(
-                          categories.title.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+    return ListView(
+      padding: Client.isDesktop ? null : const EdgeInsets.only(bottom: 70),
+      controller: _controller,
+      children: [
+        if (uncategorizedChannels.isNotEmpty)
+          Obx(
+            () => ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: uncategorizedChannels.length,
+                itemBuilder: (context, index) {
+                  String? channelIcon;
+                  if (channelIcon != '') {
+                    channelIcon = uncategorizedChannels[index].icon!;
+                  }
+                  return ChannelTile(
+                    icon: channelIcon != ''
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: Image.network(
+                              '$autumn/icons/$channelIcon?',
+                              filterQuality: FilterQuality.medium,
+                            ),
+                          )
+                        : Icon(
+                            uncategorizedChannels[index].type == 'VoiceChannel'
+                                ? Icons.mic
+                                : Icons.numbers_rounded,
+                            color: Dark.foreground.value,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        children: [
-                          // CHANNELS
+                    channel: uncategorizedChannels[index],
+                    onTap: () {
+                      ChannelController.controller
+                          .changeChannel(context, uncategorizedChannels[index]);
+                    },
+                  );
+                }),
+          ),
+        Obx(
+          () => ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount:
+                ServerController.controller.selected.value.categories.length,
+            itemBuilder: (context, index) {
+              final categories =
+                  ServerController.controller.selected.value.categories[index];
+              final channelsId = ServerController
+                  .controller.selected.value.categories[index].channelId;
+              {
+                return ExpansionTile(
+                  // controlAffinity: ListTileControlAffinity.leading,
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                  initiallyExpanded: true,
+                  textColor: Dark.accent.value,
+                  iconColor: Dark.accent.value,
+                  collapsedTextColor: Dark.secondaryForeground.value,
+                  collapsedIconColor: Dark.secondaryForeground.value,
+                  title: Text(
+                    categories.title.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  children: [
+                    // CHANNELS
 
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: categories.channelId.length,
-                            itemBuilder: (context, index) {
-                              final channelIndex = Client.channels.indexWhere(
-                                  (channel) => channel.id == channelsId[index]);
-                              String channelsIcon = '';
-                              Channel channel = Channel(
-                                id: '',
-                                name: '',
-                                type: '',
-                                users: <User>[].obs,
-                                members: <Member>[].obs,
-                                messages: <Message>[].obs,
-                                isUnread: false.obs,
-                                recipients: <User>[].obs,
-                              );
-                              if (channelIndex != -1) {
-                                channel = Client.channels[channelIndex];
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: categories.channelId.length,
+                      itemBuilder: (context, index) {
+                        final channelIndex = Client.channels.indexWhere(
+                            (channel) => channel.id == channelsId[index]);
+                        String channelsIcon = '';
+                        Channel channel = Channel(
+                          id: '',
+                          name: '',
+                          type: '',
+                          users: <User>[].obs,
+                          members: <Member>[].obs,
+                          messages: <Message>[].obs,
+                          isUnread: false.obs,
+                          recipients: <User>[].obs,
+                        );
+                        if (channelIndex != -1) {
+                          channel = Client.channels[channelIndex];
 
-                                channelsIcon =
-                                    Client.channels[channelIndex].icon!;
+                          channelsIcon = Client.channels[channelIndex].icon!;
+                        }
+                        if (channelIndex != -1) {
+                          return ChannelTile(
+                            icon: channelsIcon != ''
+                                ? SizedBox(
+                                    height: 25,
+                                    width: 25,
+                                    child: Image.network(
+                                      '$autumn/icons/$channelsIcon',
+                                      filterQuality: FilterQuality.medium,
+                                    ),
+                                  )
+                                : Icon(
+                                    Client.channels[channelIndex].type ==
+                                            'VoiceChannel'
+                                        ? Icons.mic
+                                        : Icons.numbers_rounded,
+                                  ),
+                            channel: channel,
+                            onTap: () {
+                              ChannelController.controller
+                                  .changeChannel(context, channel);
+                              if (kDebugMode) print('[channel] change');
+                              ClientController.controller.home.value = false;
+                              if (kDebugMode) {
+                                print(ClientController.controller.home.value);
                               }
-                              if (channelIndex != -1) {
-                                return ChannelTile(
-                                  icon: channelsIcon != ''
-                                      ? SizedBox(
-                                          height: 25,
-                                          width: 25,
-                                          child: Image.network(
-                                            '$autumn/icons/$channelsIcon',
-                                            filterQuality: FilterQuality.medium,
-                                          ),
-                                        )
-                                      : Icon(
-                                          Client.channels[channelIndex].type ==
-                                                  'VoiceChannel'
-                                              ? Icons.mic
-                                              : Icons.numbers_rounded,
-                                        ),
-                                  channel: channel,
-                                  onTap: () {
-                                    ChannelController.controller
-                                        .changeChannel(context, channel);
-                                    if (kDebugMode) print('[channel] change');
-                                    ClientController.controller.home.value =
-                                        false;
-                                    if (kDebugMode) {
-                                      print(ClientController
-                                          .controller.home.value);
-                                    }
-                                  },
-                                );
-                              } else {
-                                const SizedBox();
-                              }
-                              return null;
                             },
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-          ],
-        ));
+                          );
+                        } else {
+                          const SizedBox();
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 
