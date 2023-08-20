@@ -239,14 +239,18 @@ class Panels extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ClientController.controller.home.value == false
                         ? ChatPage()
-                        : ServerController.controller.homeIndex.value == -3
-                            ? WelcomePage()
-                            : ServerController.controller.homeIndex.value == -2
-                                ? DiscoverPage()
-                                : ServerController.controller.homeIndex.value >=
-                                        -1
-                                    ? ChatPage()
-                                    : ChatPage(),
+                        : ServerController.controller.homeIndex.value == -4
+                            ? FriendsPage()
+                            : ServerController.controller.homeIndex.value == -3
+                                ? WelcomePage()
+                                : ServerController.controller.homeIndex.value ==
+                                        -2
+                                    ? DiscoverPage()
+                                    : ServerController
+                                                .controller.homeIndex.value >=
+                                            -1
+                                        ? ChatPage()
+                                        : ChatPage(),
 
                     // animations to panels
                     //  switch (Home.index) {case 0 : WelcomePage() break; case 1: FriendsPage() break; }

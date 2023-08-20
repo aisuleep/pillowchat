@@ -35,6 +35,23 @@ class HomeChannels extends StatelessWidget {
           if (kDebugMode) print(ServerController.controller.homeIndex.value);
         },
       ),
+      if (Client.isDesktop || kIsWeb)
+        ListTile(
+          minLeadingWidth: 0,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+          leading: Icon(
+            Icons.emoji_people,
+            color: Dark.foreground.value,
+            size: 25,
+          ),
+          title: const Text('Friends'),
+          onTap: () {
+            ChannelController.controller.selected.value.name = 'Friends';
+            Home.index = -2;
+            ServerController.controller.changeDm(-4);
+            if (kDebugMode) print(ServerController.controller.homeIndex.value);
+          },
+        ),
       ListTile(
         minLeadingWidth: 0,
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),

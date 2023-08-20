@@ -8,6 +8,7 @@ import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
+import 'package:pillowchat/pages/friends.dart';
 import 'package:pillowchat/pages/login.dart';
 import 'package:pillowchat/pages/server/chat_page.dart';
 import 'package:pillowchat/pages/server/server_page.dart';
@@ -211,9 +212,11 @@ class Panel extends StatelessWidget {
             child: Obx(() => ClientController.controller.home.value == false ||
                     ServerController.controller.homeIndex.value >= -1
                 ? const ChatPage()
-                : ServerController.controller.homeIndex.value == -3
-                    ? const WelcomePage()
-                    : const DiscoverPage()),
+                : ServerController.controller.homeIndex.value == -4
+                    ? const FriendsPage()
+                    : ServerController.controller.homeIndex.value == -3
+                        ? const WelcomePage()
+                        : const DiscoverPage()),
           ),
         ],
       ),
