@@ -30,165 +30,169 @@ class ServersPage extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(15)),
-                      child: Stack(
-                        children: [
-                          if (ServerController
-                                      .controller.selected.value.banner !=
-                                  null &&
-                              !ClientController.controller.home.value)
-                            Positioned.fill(
-                              child: Image.network(
-                                '$autumn/banners/${ServerController.controller.selected.value.banner}',
-                                filterQuality: FilterQuality.medium,
-                                fit: BoxFit.cover,
+              Obx(
+                () => Expanded(
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(15)),
+                        child: Stack(
+                          children: [
+                            if (ServerController
+                                        .controller.selected.value.banner !=
+                                    null &&
+                                !ClientController.controller.home.value)
+                              Positioned.fill(
+                                child: Image.network(
+                                  '$autumn/banners/${ServerController.controller.selected.value.banner}',
+                                  filterQuality: FilterQuality.medium,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          if (ServerController
-                                      .controller.selected.value.banner !=
-                                  null &&
-                              !ClientController.controller.home.value)
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      Colors.black.withOpacity(0.5),
-                                      Colors.transparent,
-                                    ],
+                            if (ServerController
+                                        .controller.selected.value.banner !=
+                                    null &&
+                                !ClientController.controller.home.value)
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black.withOpacity(0.5),
+                                        Colors.transparent,
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Visibility(
-                                  visible:
-                                      ClientController.controller.logged.value,
-                                  child: const HomeIcon()),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          child: Text(
-                                            ServerController
-                                                .controller.selected.value.name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    if (!ClientController.controller.home.value)
-                                      IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
-                                          Icons.more_horiz,
-                                          size: 24,
-                                        ),
-                                        onPressed: () {
-                                          showModalBottomSheet(
-                                            backgroundColor:
-                                                Dark.background.value,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            isScrollControlled: true,
-                                            showDragHandle: true,
-                                            context: context,
-                                            builder: (context) {
-                                              return DraggableScrollableSheet(
-                                                  initialChildSize: 0.6,
-                                                  // minChildSize: 0.4,
-                                                  // maxChildSize: 0.8,
-                                                  expand: false,
-                                                  builder: (context,
-                                                      ScrollController
-                                                          scrollController) {
-                                                    return SingleChildScrollView(
-                                                        child: ServerInfo());
-                                                  });
-                                            },
-                                          );
-                                        },
-                                      ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          const ServerSidebar(),
-                          Expanded(
-                            child: Row(
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
+                                Visibility(
+                                    visible: ClientController
+                                        .controller.logged.value,
+                                    child: const HomeIcon()),
                                 Expanded(
-                                  // child: ClipRRect(
-                                  //   borderRadius: const BorderRadius.horizontal(
-                                  //     left: Radius.circular(15),
-                                  //     right: Radius.circular(15),
-                                  //   ),
-                                  child: ClientController.controller.home.value
-                                      ? Container(
-                                          padding: Client.isDesktop
-                                              ? null
-                                              : const EdgeInsets.only(
-                                                  bottom: 65),
-                                          child: Column(
-                                            children: [
-                                              const HomeChannels(),
-                                              // DM CHANNELS
-                                              Obx(
-                                                () => Expanded(
-                                                  child: ListView.builder(
-                                                      itemCount:
-                                                          ServerController
-                                                              .controller
-                                                              .dmsList
-                                                              .length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return DmChannels(
-                                                            index);
-                                                      }),
-                                                ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {},
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              ServerController.controller
+                                                  .selected.value.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        )
-                                      : ServerChannels(),
-                                ),
+                                        ),
+                                      ),
+                                      if (!ClientController
+                                          .controller.home.value)
+                                        IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          icon: const Icon(
+                                            Icons.more_horiz,
+                                            size: 24,
+                                          ),
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              backgroundColor:
+                                                  Dark.background.value,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              isScrollControlled: true,
+                                              showDragHandle: true,
+                                              context: context,
+                                              builder: (context) {
+                                                return DraggableScrollableSheet(
+                                                    initialChildSize: 0.6,
+                                                    // minChildSize: 0.4,
+                                                    // maxChildSize: 0.8,
+                                                    expand: false,
+                                                    builder: (context,
+                                                        ScrollController
+                                                            scrollController) {
+                                                      return SingleChildScrollView(
+                                                          child: ServerInfo());
+                                                    });
+                                              },
+                                            );
+                                          },
+                                        ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const ServerSidebar(),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    // child: ClipRRect(
+                                    //   borderRadius: const BorderRadius.horizontal(
+                                    //     left: Radius.circular(15),
+                                    //     right: Radius.circular(15),
+                                    //   ),
+                                    child: ClientController
+                                            .controller.home.value
+                                        ? Container(
+                                            padding: Client.isDesktop
+                                                ? null
+                                                : const EdgeInsets.only(
+                                                    bottom: 65),
+                                            child: Column(
+                                              children: [
+                                                const HomeChannels(),
+                                                // DM CHANNELS
+                                                Obx(
+                                                  () => Expanded(
+                                                    child: ListView.builder(
+                                                        itemCount:
+                                                            ServerController
+                                                                .controller
+                                                                .dmsList
+                                                                .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return DmChannels(
+                                                              index);
+                                                        }),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : ServerChannels(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(

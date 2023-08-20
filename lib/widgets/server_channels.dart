@@ -44,13 +44,13 @@ class ServerChannels extends StatelessWidget {
         }
       }
     }
-    return ListView(
-      padding: Client.isDesktop ? null : const EdgeInsets.only(bottom: 70),
-      controller: _controller,
-      children: [
-        if (uncategorizedChannels.isNotEmpty)
-          Obx(
-            () => ListView.builder(
+    return Obx(
+      () => ListView(
+        padding: Client.isDesktop ? null : const EdgeInsets.only(bottom: 70),
+        controller: _controller,
+        children: [
+          if (uncategorizedChannels.isNotEmpty)
+            ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: uncategorizedChannels.length,
@@ -82,9 +82,7 @@ class ServerChannels extends StatelessWidget {
                     },
                   );
                 }),
-          ),
-        Obx(
-          () => ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount:
@@ -176,8 +174,8 @@ class ServerChannels extends StatelessWidget {
               }
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -199,12 +197,16 @@ class ChannelTile extends StatelessWidget {
         .indexWhere((server) => server.id == channel.server);
     int result = 2;
     bool unread = false;
-    int channelIndex = ServerController
-        .controller.serversList[serverIndex].channels
-        .indexWhere((c) => c.id == channel.id);
+    int channelIndex = -1;
+    if (serverIndex != -1) {
+      channelIndex = ServerController
+          .controller.serversList[serverIndex].channels
+          .indexWhere((c) => c.id == channel.id);
+    }
     RxString lastId = ''.obs;
     RxString lastMessage = ''.obs;
     if (channelIndex != -1 &&
+        serverIndex != -1 &&
         ServerController.controller.serversList[serverIndex]
                 .channels[channelIndex].unreads[0].lastId.value !=
             '') {
@@ -227,59 +229,63 @@ class ChannelTile extends StatelessWidget {
 
     isUnread();
 
-    return Obx(
-      () => Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 2,
-          horizontal: 8,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Material(
-            type: MaterialType.transparency,
-            child: ListTile(
-              hoverColor: Dark.primaryBackground.value,
-              selected: ChannelController.controller.selected.value.id ==
+    if (serverIndex != -1) {
+      return Obx(
+        () => Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 2,
+            horizontal: 8,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Material(
+              type: MaterialType.transparency,
+              child: ListTile(
+                hoverColor: Dark.primaryBackground.value,
+                selected: serverIndex != -1 && channelIndex != -1
+                    ? ChannelController.controller.selected.value.id ==
+                        ServerController.controller.serversList[serverIndex]
+                            .channels[channelIndex].id
+                    : false,
+                // selectedColor: Dark.secondaryForeground.value.withOpacity(0.5),
+                selectedColor: Dark.accent.value,
+                selectedTileColor: Dark.primaryBackground.value,
+                tileColor: Dark.background.value,
+                iconColor: isUnread().value
+                    ? Dark.foreground.value
+                    : Dark.secondaryForeground.value,
+                textColor: Dark.secondaryForeground.value,
+                horizontalTitleGap: 0,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                leading: icon,
+                title: Text(
                   ServerController.controller.serversList[serverIndex]
-                      .channels[channelIndex].id,
-              // selected: isUnread().value,
-              // selectedColor: Dark.secondaryForeground.value.withOpacity(0.5),
-              selectedColor: Dark.accent.value,
-              selectedTileColor: Dark.primaryBackground.value,
-              tileColor: Dark.background.value,
-              iconColor: isUnread().value
-                  ? Dark.foreground.value
-                  : Dark.secondaryForeground.value,
-              textColor: Dark.secondaryForeground.value,
-              horizontalTitleGap: 0,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              leading: icon,
-              title: Text(
-                ServerController.controller.serversList[serverIndex]
-                    .channels[channelIndex].name!,
-                style: TextStyle(
-                    color: isUnread().value
-                        ? Dark.secondaryForeground.value.withOpacity(0.5)
-                        : Dark.foreground.value),
-                overflow: TextOverflow.ellipsis,
+                      .channels[channelIndex].name!,
+                  style: TextStyle(
+                      color: isUnread().value
+                          ? Dark.secondaryForeground.value.withOpacity(0.5)
+                          : Dark.foreground.value),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: !isUnread().value
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: CircleAvatar(
+                          backgroundColor: Dark.foreground.value,
+                          radius: 4,
+                        ),
+                      )
+                    : null,
+                onTap: onTap,
+                // onLongPress: () {
+                //   // TODO: CONTEXT MENU
+                // },
               ),
-              trailing: !isUnread().value
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: CircleAvatar(
-                        backgroundColor: Dark.foreground.value,
-                        radius: 4,
-                      ),
-                    )
-                  : null,
-              onTap: onTap,
-              // onLongPress: () {
-              //   // TODO: CONTEXT MENU
-              // },
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
+    return const SizedBox();
   }
 }

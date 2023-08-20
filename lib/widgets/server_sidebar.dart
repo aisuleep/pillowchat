@@ -163,7 +163,7 @@ class ServerIcon extends StatelessWidget {
                           server.channels[channelIndex].id, channelIndex);
                       ChannelController.controller.selected.value =
                           server.channels[channelIndex];
-                      Navigator.popAndPushNamed(context, '/');
+                      // Navigator.popAndPushNamed(context, '/');
                       ClientController.controller.home.value = false;
                     }
                   }
