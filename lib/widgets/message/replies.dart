@@ -315,7 +315,7 @@ class Replies extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              if (content != '' && !content.contains("[]"))
+                              if (!content.contains("[]"))
                                 Expanded(
                                   flex: 4,
                                   child: CustomMarkdownBody(
@@ -329,7 +329,7 @@ class Replies extends StatelessWidget {
                                     },
                                     data: contentIndex != 0
                                         ? content.replaceAll("\n", ' ')
-                                        : "*Couldn't load message*",
+                                        : "  *Couldn't load message*",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     styleSheet: markdown.styleSheet,
