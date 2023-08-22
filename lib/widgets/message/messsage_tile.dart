@@ -335,7 +335,6 @@ class MessageTile extends StatelessWidget {
                             index: index,
                             user: user,
                             member: member,
-                            reactions: reactions,
                             previousAuthor: previousAuthor,
                             author: author,
                           ),
@@ -363,14 +362,12 @@ class MessageContent extends StatelessWidget {
     required this.previousAuthor,
     required this.author,
     this.content,
-    this.reactions,
   });
   final String? content;
   final dynamic messageIndex;
   final int index;
   final User user;
   final Member? member;
-  final RxList<Reaction>? reactions;
   final String previousAuthor;
   final String author;
   @override
@@ -511,6 +508,9 @@ class MessageContent extends StatelessWidget {
                       // REACTIONS
                       String emote = messageIndex.reactions[index].emote;
 
+                      List<String> reactors =
+                          messageIndex.reactions[index].reactors;
+
                       // REACTION COUNT
 
                       int reactCount =
@@ -554,7 +554,8 @@ class MessageContent extends StatelessWidget {
                         onSecondaryTap: () {
                           Reaction.showInfo(
                             context,
-                            reactions!,
+                            reactors.obs,
+                            messageIndex.reactions!,
                             messageIndex,
                             index.obs,
                             itemScrollController,
@@ -565,7 +566,8 @@ class MessageContent extends StatelessWidget {
                         onLongPress: () {
                           Reaction.showInfo(
                             context,
-                            reactions!,
+                            reactors.obs,
+                            messageIndex.reactions!,
                             messageIndex,
                             index.obs,
                             itemScrollController,

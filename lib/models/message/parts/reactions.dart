@@ -84,6 +84,7 @@ class Reaction {
 
   static showInfo(
     BuildContext context,
+    RxList<String> reactorsList,
     RxList<Reaction> reactions,
     dynamic messageIndex,
     Rx<int> tabIndex,
@@ -98,6 +99,7 @@ class Reaction {
         context: context,
         builder: (context) {
           return ReactorsMenu(
+            reactors: reactorsList,
             reactions: reactions,
             offsetListener: offsetListener,
             positionsListener: positionsListener,
@@ -111,6 +113,7 @@ class Reaction {
       MyApp.showPopup(
         context: context,
         widget: ReactorsMenu(
+          reactors: reactorsList,
           reactions: reactions,
           scrollController: scrollController,
           offsetListener: offsetListener,
@@ -126,6 +129,7 @@ class Reaction {
 class ReactorsMenu extends StatelessWidget {
   const ReactorsMenu({
     super.key,
+    required this.reactors,
     required this.reactions,
     required this.offsetListener,
     required this.positionsListener,
@@ -135,6 +139,7 @@ class ReactorsMenu extends StatelessWidget {
   });
 
   final RxList<Reaction> reactions;
+  final RxList<String> reactors;
   final ScrollOffsetListener offsetListener;
   final ItemPositionsListener positionsListener;
   final ItemScrollController scrollController;
@@ -187,13 +192,9 @@ class ReactorsMenu extends StatelessWidget {
                                                 duration: const Duration(
                                                     milliseconds: 300),
                                               );
-                                              // reactors.assignAll(message
-                                              //     .reactions!
-                                              //     .reactionMap!
-                                              //     .values
-                                              //     .elementAt(tabIndex.value)
-                                              //     .map((e) => e)
-                                              //     .toList());
+                                              reactors.assignAll(message
+                                                  .reactions![tabIndex.value]
+                                                  .reactors);
                                             },
                                           )
                                         : InkWell(
@@ -204,13 +205,9 @@ class ReactorsMenu extends StatelessWidget {
                                                 duration: const Duration(
                                                     milliseconds: 300),
                                               );
-                                              // reactors.assignAll(message
-                                              //     .reactions!
-                                              //     .reactionMap!
-                                              //     .values
-                                              //     .elementAt(tabIndex.value)
-                                              //     .map((e) => e)
-                                              //     .toList());
+                                              reactors.assignAll(message
+                                                  .reactions![tabIndex.value]
+                                                  .reactors);
                                             },
                                             child: Center(
                                               child: Text(
@@ -240,9 +237,9 @@ class ReactorsMenu extends StatelessWidget {
             ],
           ),
         ),
-        // Flexible(
-        //   child: ReactorList(reactors: reactors),
-        // ),
+        Flexible(
+          child: ReactorList(reactors: reactors),
+        ),
       ],
     );
   }
