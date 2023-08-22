@@ -381,6 +381,18 @@ class Events {
           .reactions![reactionIndex]
           .reactors
           .removeAt(reactorIndex);
+      if (ServerController
+          .controller
+          .serversList[serverIndex]
+          .channels[channelIndex]
+          .messages[messageIndex]
+          .reactions![reactionIndex]
+          .reactors
+          .isEmpty) {
+        ServerController.controller.serversList[serverIndex]
+            .channels[channelIndex].messages[messageIndex].reactions!
+            .removeAt(reactionIndex);
+      }
 
       ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages

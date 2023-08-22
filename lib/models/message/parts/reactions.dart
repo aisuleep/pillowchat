@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -44,7 +45,7 @@ class Reaction {
         },
       );
       if (response.statusCode == 200) {
-        // }
+        if (kDebugMode) print('[Success] added reaction');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -58,8 +59,11 @@ class Reaction {
     final queryParameters = {
       'user_id': ClientController.controller.selectedUser.value.id,
     };
+    if (kDebugMode) {
+      print(queryParameters);
+    }
     try {
-      var url = Uri.https(
+      Uri url = Uri.https(
           api,
           '/channels/$target/messages/$message/reactions/$emoji',
           queryParameters);
@@ -69,10 +73,15 @@ class Reaction {
           'x-session-token': Client.token,
         },
       );
-      // TODO: FIX BUG THAT CRASHES APP WHEN REACTION IS REMOVED and doesnt acknowledge
-
-      if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print(url);
+      }
+      if (response.statusCode == 204) {
         if (kDebugMode) print('[Success] deleted reaction');
+      } else {
+        if (kDebugMode) {
+          print('[FAIL] did not delete reaction, ${jsonDecode(response.body)}');
+        }
       }
     } catch (e) {
       if (kDebugMode) {

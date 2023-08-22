@@ -183,7 +183,6 @@ deleteSessions() async {
     'x-session-token': Client.token,
   });
   if (response.statusCode == 204) {
-    // ignore:
     if (kDebugMode) print('[sessions] successful deletions!');
   }
 }
@@ -194,7 +193,6 @@ deleteSession(String id) async {
     'x-session-token': Client.token,
   });
   if (response.statusCode == 204) {
-    // ignore:
     if (kDebugMode) print('[session] successful logout!');
   }
 }
