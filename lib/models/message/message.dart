@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pillowchat/widgets/message/message_options.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
@@ -21,20 +22,19 @@ import 'package:pillowchat/models/message/parts/embeds.dart';
 import 'parts/reactions.dart';
 
 class Message {
-  late String? id;
+  String? id;
   late String channel;
-  late String? author;
-  late String? content;
-  late System? system;
+  String? author;
+  String? content;
+  System? system;
   List<Attachment>? attachments = [];
   String? edited = '';
-  late List<dynamic>? embeds = [];
-  late List<dynamic>? mentions = [];
-  static late List<dynamic>? replies;
-  late List<dynamic>? repliesId = [];
-  late Masquerade? masquerade = Masquerade('', '', '');
-  dynamic reactions;
-  // late String time;
+  List<dynamic>? embeds = [];
+  List<dynamic>? mentions = [];
+  static List<dynamic>? replies;
+  List<dynamic>? repliesId = [];
+  Masquerade? masquerade = Masquerade('', '', '');
+  RxList<Reaction>? reactions = <Reaction>[].obs;
   late List<Member> channelMembers;
 
   Message(
@@ -87,7 +87,13 @@ class Message {
     }
 
     if (json['reactions'] != null) {
-      reactions = Reaction.fromJson(json['reactions']);
+      // reactions?.value = Reaction.fromJson(json['reactions']);
+
+      reactions = (json['reactions'] as Map<String, dynamic>)
+          .entries
+          .map((entry) => Reaction.fromJson(entry.key, entry.value))
+          .toList()
+          .obs;
     }
   }
 
@@ -119,7 +125,7 @@ class Message {
         late List<Message> messages;
         if (json['messages'] != null) {
           List<dynamic> messageList = json['messages'];
-          if (kDebugMode) print(messageList);
+          // if (kDebugMode) print(messageList);
           messages = messageList
               .map((messages) => Message.fromJson(messages))
               .toList();
@@ -293,7 +299,7 @@ class Message {
     BuildContext context,
     String author,
     String? editTime,
-    Reaction? reactions,
+    RxList<Reaction>? reactions,
     bool? reactedTo,
     List<dynamic>? emotes,
     dynamic messageIndex,
@@ -321,7 +327,6 @@ class Message {
                 editTime: editTime ?? '',
                 reactions: reactions,
                 reactedTo: reactedTo ?? false,
-                emotes: emotes,
                 messageIndex: messageIndex,
               );
             }),

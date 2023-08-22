@@ -17,7 +17,7 @@ class MessageOptions extends StatelessWidget {
     required this.reactedTo,
     this.editTime,
     this.reactions,
-    this.emotes,
+    // this.reactors,
     this.messageIndex,
   });
   final dynamic messageIndex;
@@ -26,9 +26,8 @@ class MessageOptions extends StatelessWidget {
   final String author;
   final bool reactedTo;
   final String? editTime;
-  final Reaction? reactions;
-  final List<dynamic>? emotes;
-
+  final RxList<Reaction>? reactions;
+  // final RxList<String>? reactors;
   final Rx<int>? tabIndex = 0.obs;
   final ItemScrollController? scrollController = ItemScrollController();
   final ItemPositionsListener? positionsListener =
@@ -149,15 +148,16 @@ class MessageOptions extends StatelessWidget {
                     dense: true,
                     onTap: () {
                       Navigator.pop(context);
-                      Reaction.showInfo(
-                        context,
-                        emotes!.obs,
-                        messageIndex,
-                        tabIndex!,
-                        scrollController!,
-                        positionsListener!,
-                        offsetListener!,
-                      );
+                      // Reaction.showInfo(
+                      //   context,
+                      //   reactors!,
+                      //   reactions!,
+                      //   messageIndex,
+                      //   tabIndex!,
+                      //   scrollController!,
+                      //   positionsListener!,
+                      //   offsetListener!,
+                      // );
                     },
                     leading: const Icon(
                       Icons.emoji_emotions,

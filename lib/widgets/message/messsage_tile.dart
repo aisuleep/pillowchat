@@ -38,7 +38,8 @@ class MessageTile extends StatelessWidget {
     required this.user,
     this.content,
     this.member,
-    this.emotes,
+    // this.emotes,
+    this.reactions,
     // required this.fiveMinutes,
     // required this.fromSentTime,
   });
@@ -55,7 +56,8 @@ class MessageTile extends StatelessWidget {
   final User user;
   final Member? member;
   final String? content;
-  late List<dynamic>? emotes;
+  // late List<dynamic>? emotes;
+  RxList<Reaction>? reactions;
   // final bool fromSentTime;
   // final bool fiveMinutes;
 
@@ -63,7 +65,7 @@ class MessageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     // LIST OF EMOTE REACTIONS ON MESSAGE
     if (messageIndex.reactions != null) {
-      emotes = messageIndex.reactions.reactionMap.keys.map((l) => l).toList();
+      // emotes = messageIndex.reactions.reactionMap.keys.map((l) => l).toList();
     }
 
     if (author == '00000000000000000000000000') {
@@ -107,7 +109,7 @@ class MessageTile extends StatelessWidget {
                     messageIndex.edited,
                     messageIndex.reactions,
                     reactedTo,
-                    emotes,
+                    reactions,
                     messageIndex,
                   );
                 },
@@ -333,7 +335,7 @@ class MessageTile extends StatelessWidget {
                             index: index,
                             user: user,
                             member: member,
-                            emotes: emotes?.obs,
+                            reactions: reactions,
                             previousAuthor: previousAuthor,
                             author: author,
                           ),
@@ -361,14 +363,14 @@ class MessageContent extends StatelessWidget {
     required this.previousAuthor,
     required this.author,
     this.content,
-    this.emotes,
+    this.reactions,
   });
   final String? content;
   final dynamic messageIndex;
   final int index;
   final User user;
   final Member? member;
-  final RxList<dynamic>? emotes;
+  final RxList<Reaction>? reactions;
   final String previousAuthor;
   final String author;
   @override
@@ -454,7 +456,7 @@ class MessageContent extends StatelessWidget {
                 WebsiteEmbeds(messageIndex, e, index),
 
           // IF MESSAGE HAS REACTIONS
-          if (messageIndex.reactions != null && emotes != null)
+          if (messageIndex.reactions.length != 0)
 
             // REACTION LIST BUILDER
 
@@ -462,10 +464,9 @@ class MessageContent extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4),
               child: Wrap(
                 children: List.generate(
-                  messageIndex.reactions.reactionMap.keys.length + 1,
+                  messageIndex.reactions.length + 1,
                   (index) {
-                    if (index ==
-                        messageIndex.reactions.reactionMap.keys.length) {
+                    if (index == messageIndex.reactions.length) {
                       // ADD EMOTE BUTTON
 
                       return Padding(
@@ -490,7 +491,10 @@ class MessageContent extends StatelessWidget {
                                   padding: const EdgeInsets.all(0),
                                   onPressed: () {
                                     Message.showEmoteMenu(
-                                        context, messageIndex.id, false);
+                                      context,
+                                      messageIndex.id,
+                                      false,
+                                    );
                                   },
                                   icon: Icon(
                                     Icons.add,
@@ -505,23 +509,21 @@ class MessageContent extends StatelessWidget {
                       );
                     } else {
                       // REACTIONS
-
-                      String emote = messageIndex.reactions.reactionMap.keys
-                          .elementAt(index);
+                      String emote = messageIndex.reactions[index].emote;
 
                       // REACTION COUNT
 
-                      int reactCount = messageIndex.reactions.reactionMap.values
-                          .elementAt(index)
-                          .length;
+                      int reactCount =
+                          messageIndex.reactions[index].reactors.length;
+
                       // IF CLIENT IS ONE OF REACTORS AT REACTION INDEX
 
-                      bool reactedTo = messageIndex.reactions.reactionMap.values
-                          .elementAt(index)
-                          .any((value) =>
-                              value ==
+                      bool reactedTo = messageIndex.reactions[index].reactors
+                          .any((reactor) =>
+                              reactor ==
                               ClientController
                                   .controller.selectedUser.value.id);
+
                       // CONTROLLERS
 
                       final ItemScrollController itemScrollController =
@@ -540,7 +542,7 @@ class MessageContent extends StatelessWidget {
                               emote,
                             );
                             Navigator.pop(context);
-                            // if (kDebugMode) print('$reactedTo reacted');
+                            if (kDebugMode) print('$reactedTo reacted');
                           } else if (reactedTo) {
                             Reaction.remove(
                               ChannelController.controller.selected.value.id,
@@ -552,7 +554,7 @@ class MessageContent extends StatelessWidget {
                         onSecondaryTap: () {
                           Reaction.showInfo(
                             context,
-                            emotes!,
+                            reactions!,
                             messageIndex,
                             index.obs,
                             itemScrollController,
@@ -563,7 +565,7 @@ class MessageContent extends StatelessWidget {
                         onLongPress: () {
                           Reaction.showInfo(
                             context,
-                            emotes!,
+                            reactions!,
                             messageIndex,
                             index.obs,
                             itemScrollController,
@@ -580,22 +582,11 @@ class MessageContent extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: messageIndex.reactions.reactionMap.values
-                                      .elementAt(index)
-                                      .any((value) =>
-                                          value ==
-                                          ClientController
-                                              .controller.selectedUser.value.id)
+                              color: reactedTo
                                   ? Dark.accent.value.withOpacity(0.5)
                                   : Dark.secondaryHeader.value,
                               border: Border.all(
-                                  color: messageIndex
-                                          .reactions.reactionMap.values
-                                          .elementAt(index)
-                                          .any((value) =>
-                                              value ==
-                                              ClientController.controller
-                                                  .selectedUser.value.id)
+                                  color: reactedTo
                                       ? Dark.accent.value
                                       : Dark.primaryBackground.value),
                             ),

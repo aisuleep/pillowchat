@@ -18,34 +18,21 @@ import 'package:pillowchat/themes/ui.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Reaction {
-  Map<String, List<String>>? reactionMap;
-  String emote;
-  List<String> reactors;
+  final Map<String, List<String>>? reactionMap;
+  final String emote;
+  final List<String> reactors;
 
-  Reaction(
-    this.emote,
-    this.reactors,
+  Reaction({
+    required this.emote,
+    required this.reactors,
     this.reactionMap,
-  );
+  });
 
-  factory Reaction.fromJson(Map<String, dynamic> json) {
-    Map<String, List<String>> map = {};
-
-    json.forEach((key, value) {
-      List<String> ulidList = List<String>.from(value.map((e) => e as String));
-      map.putIfAbsent(key, () => ulidList);
-    });
-    late String emote;
-    late List<String> reactors;
-    for (var entry in map.entries) {
-      emote = entry.key;
-      reactors = entry.value;
-    }
-    // if (kDebugMode) print(emote);
-    // if (kDebugMode) print(reactors);
-
-    return Reaction(emote, reactors, map);
+  factory Reaction.fromJson(String emote, List<dynamic> reactorsMap) {
+    final reactors = reactorsMap.cast<String>().toList();
+    return Reaction(emote: emote, reactors: reactors);
   }
+
   static add(String target, String message, String emoji) async {
     try {
       var url = Uri.https(
@@ -97,18 +84,13 @@ class Reaction {
 
   static showInfo(
     BuildContext context,
-    RxList<dynamic> emotes,
+    RxList<Reaction> reactions,
     dynamic messageIndex,
     Rx<int> tabIndex,
     ItemScrollController scrollController,
     ItemPositionsListener positionsListener,
     ScrollOffsetListener offsetListener,
   ) {
-    RxList<dynamic> reactors = [].obs;
-    reactors.value = (messageIndex.reactions.reactionMap.values
-        .elementAt(tabIndex.value)
-        .map((e) => e)
-        .toList());
     if (Client.isMobile) {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -116,8 +98,7 @@ class Reaction {
         context: context,
         builder: (context) {
           return ReactorsMenu(
-            reactors: reactors,
-            emotes: emotes,
+            reactions: reactions,
             offsetListener: offsetListener,
             positionsListener: positionsListener,
             scrollController: scrollController,
@@ -130,8 +111,7 @@ class Reaction {
       MyApp.showPopup(
         context: context,
         widget: ReactorsMenu(
-          reactors: reactors,
-          emotes: emotes,
+          reactions: reactions,
           scrollController: scrollController,
           offsetListener: offsetListener,
           positionsListener: positionsListener,
@@ -146,8 +126,7 @@ class Reaction {
 class ReactorsMenu extends StatelessWidget {
   const ReactorsMenu({
     super.key,
-    required this.reactors,
-    required this.emotes,
+    required this.reactions,
     required this.offsetListener,
     required this.positionsListener,
     required this.scrollController,
@@ -155,9 +134,7 @@ class ReactorsMenu extends StatelessWidget {
     required this.tabIndex,
   });
 
-  final RxList<dynamic> reactors;
-  final List emotes;
-
+  final RxList<Reaction> reactions;
   final ScrollOffsetListener offsetListener;
   final ItemPositionsListener positionsListener;
   final ItemScrollController scrollController;
@@ -188,7 +165,7 @@ class ReactorsMenu extends StatelessWidget {
                       itemScrollController: scrollController,
                       itemPositionsListener: positionsListener,
                       scrollOffsetListener: offsetListener,
-                      itemCount: emotes.length,
+                      itemCount: reactions.length,
                       itemBuilder: (context, index) {
                         return Obx(
                           () => Column(
@@ -199,10 +176,10 @@ class ReactorsMenu extends StatelessWidget {
                                       const EdgeInsets.symmetric(horizontal: 8),
                                   child: SizedBox(
                                     width: 24,
-                                    child: emotes[index].length == 26
+                                    child: reactions[index].emote.length == 26
                                         ? Emote(
                                             size: 30,
-                                            ulid: emotes[index],
+                                            ulid: reactions[index].emote,
                                             onTap: () {
                                               tabIndex.value = index;
                                               scrollController.scrollTo(
@@ -210,11 +187,13 @@ class ReactorsMenu extends StatelessWidget {
                                                 duration: const Duration(
                                                     milliseconds: 300),
                                               );
-                                              reactors.assignAll(message
-                                                  .reactions.reactionMap.values
-                                                  .elementAt(tabIndex.value)
-                                                  .map((e) => e)
-                                                  .toList());
+                                              // reactors.assignAll(message
+                                              //     .reactions!
+                                              //     .reactionMap!
+                                              //     .values
+                                              //     .elementAt(tabIndex.value)
+                                              //     .map((e) => e)
+                                              //     .toList());
                                             },
                                           )
                                         : InkWell(
@@ -225,15 +204,17 @@ class ReactorsMenu extends StatelessWidget {
                                                 duration: const Duration(
                                                     milliseconds: 300),
                                               );
-                                              reactors.assignAll(message
-                                                  .reactions.reactionMap.values
-                                                  .elementAt(tabIndex.value)
-                                                  .map((e) => e)
-                                                  .toList());
+                                              // reactors.assignAll(message
+                                              //     .reactions!
+                                              //     .reactionMap!
+                                              //     .values
+                                              //     .elementAt(tabIndex.value)
+                                              //     .map((e) => e)
+                                              //     .toList());
                                             },
                                             child: Center(
                                               child: Text(
-                                                emotes[index],
+                                                reactions[index].emote,
                                                 style: const TextStyle(
                                                     fontSize: 24),
                                               ),
@@ -259,9 +240,9 @@ class ReactorsMenu extends StatelessWidget {
             ],
           ),
         ),
-        Flexible(
-          child: ReactorList(reactors: reactors),
-        ),
+        // Flexible(
+        //   child: ReactorList(reactors: reactors),
+        // ),
       ],
     );
   }
@@ -273,7 +254,7 @@ class ReactorList extends StatelessWidget {
     required this.reactors,
   });
 
-  final RxList reactors;
+  final RxList<String> reactors;
 
   @override
   Widget build(BuildContext context) {

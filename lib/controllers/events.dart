@@ -275,7 +275,10 @@ class Events {
     Channel channel;
     int messageIndex;
     int serverIndex;
-    List<List<String>> emotes;
+    // List<List<String>> emotes;
+    // ignore: unused_local_variable
+    List<String> emote;
+
     channelIndex =
         Client.channels.indexWhere((channel) => channel.id == channelId);
 
@@ -294,49 +297,79 @@ class Events {
       messageIndex = ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages
           .indexWhere((message) => message.id == messageId);
-      final emojiList = ServerController
+
+      // TEST
+      final int reactionIndex = ServerController
           .controller
           .serversList[serverIndex]
           .channels[channelIndex]
           .messages[messageIndex]
-          .reactions
-          .reactionMap
-          .keys
-          .toList();
-      if (kDebugMode) print(emojiList);
-      final emojiIndex = emojiList.indexWhere((emote) => emote == emojiId);
-      if (kDebugMode) print(emojiIndex);
-      emotes = ServerController
+          .reactions!
+          .indexWhere((reaction) => reaction.emote == emojiId);
+      final int reactorIndex = ServerController
           .controller
           .serversList[serverIndex]
           .channels[channelIndex]
           .messages[messageIndex]
-          .reactions
-          .reactionMap
-          .values
-          .toList();
-      if (kDebugMode) print(emotes);
-      final reactorIndex =
-          emotes[emojiIndex].indexWhere((innerList) => innerList == userId);
-      emojiList.remove(emojiId);
-      emotes[emojiIndex].removeAt(reactorIndex);
-      Map<String, List<String>> map = {};
-      for (var emojis in emojiList) {
-        String key = emojis[0];
-        List<String> values = emojis.length > 1 ? emojis.sublist(1) : [];
-        map[key] = values;
-      }
+          .reactions![reactionIndex]
+          .reactors
+          .indexWhere((reaction) => reaction == userId);
+
       ServerController
           .controller
           .serversList[serverIndex]
           .channels[channelIndex]
           .messages[messageIndex]
-          .reactions
-          .reactionMap = map;
+          .reactions![reactionIndex]
+          .reactors
+          .removeAt(reactorIndex);
+
+      //  TEST
+      // final emojiList = ServerController
+      //     .controller
+      //     .serversList[serverIndex]
+      //     .channels[channelIndex]
+      //     .messages[messageIndex]
+      //     .reactions!
+      //     .reactionMap!
+      //     .keys
+      //     .toList();
+      // if (kDebugMode) print(emojiList);
+      // final emojiIndex = emojiList.indexWhere((emote) => emote == emojiId);
+      // if (kDebugMode) print(emojiIndex);
+      // emotes = ServerController
+      //     .controller
+      //     .serversList[serverIndex]
+      //     .channels[channelIndex]
+      //     .messages[messageIndex]
+      //     .reactions!
+      //     .reactionMap!
+      //     .values
+      //     .toList();
+
+      // emotes = ServerController.controller.serversList[serverIndex].channels[channelIndex].messages[messageIndex].reactions?[0].emote;
+      // if (kDebugMode) print(emotes);
+      // final reactorIndex =
+      //     emotes[emojiIndex].indexWhere((innerList) => innerList == userId);
+      // emojiList.remove(emojiId);
+      // emotes[emojiIndex].removeAt(reactorIndex);
+      // Map<String, List<String>> map = {};
+      // for (var emojis in emojiList) {
+      //   String key = emojis[0];
+      //   List<String> values = emojis.length > 1 ? emojis.sublist(1) : [];
+      //   map[key] = values;
+      // }
+      // ServerController
+      //     .controller
+      //     .serversList[serverIndex]
+      //     .channels[channelIndex]
+      //     .messages[messageIndex]
+      //     .reactions!
+      //     .reactionMap = map;
       // if (kDebugMode) print(
       // "LAST ID: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
 
-      if (kDebugMode) print("a: $emojiIndex & $reactorIndex");
+      // if (kDebugMode) print("a: $emojiIndex & $reactorIndex");
       // if (kDebugMode) print(
       // "LAST ID AFTER: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
       ServerController

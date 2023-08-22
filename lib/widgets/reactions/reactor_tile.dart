@@ -23,7 +23,7 @@ class ReactorTile extends StatelessWidget {
   final int index;
   final User user;
   final Member? member;
-  final RxList reactors;
+  final RxList<String> reactors;
   static String getUrl(bool isMessage, User user,
       {Member? serverMember, Message? messageIndex, String? reactor}) {
     Member? member;

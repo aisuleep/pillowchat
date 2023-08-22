@@ -27,8 +27,6 @@ class Replies extends StatelessWidget {
     late int contentIndex;
     late int userIndex;
     late int memberIndex;
-    // late int nicknameIndex;
-    // late int masqueradeIndex;
     late String author;
     late bool hasAttachment = false;
     late Message replyIndex;
@@ -64,10 +62,8 @@ class Replies extends StatelessWidget {
                   message.id == messageIndex.repliesId[index] &&
                   message.attachments?.length == 0,
             )) {
-              // if (content != '') {
               content = ChannelController
                   .controller.selected.value.messages[contentIndex].content!;
-              // }
             }
             // IF MESSAGE HAS ATTACHMENTS
 
@@ -315,7 +311,7 @@ class Replies extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              if (!content.contains("[]"))
+                              if (!content.contains("[]") || content != '')
                                 Expanded(
                                   flex: 4,
                                   child: CustomMarkdownBody(
