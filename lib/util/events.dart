@@ -36,10 +36,9 @@ eventsHandler(BuildContext context, dynamic json, var socket) {
       break;
 
     case 'MessageReact':
-      if (json['channel_id'] ==
-          ChannelController.controller.selected.value.id) {
-        if (kDebugMode) print('[events]: Message React');
-      }
+      if (kDebugMode) print('[events]: Message React');
+      Events.react(json);
+
       break;
 
     case 'MessageUnreact':

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
+import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/widgets/message/attachments.dart';
 // import 'package:pillowchat/components/message/attachments.dart';
 import 'package:pillowchat/widgets/message/embeds/index.dart';
@@ -518,7 +519,8 @@ class MessageContent extends StatelessWidget {
 
                       // IF CLIENT IS ONE OF REACTORS AT REACTION INDEX
 
-                      bool reactedTo = messageIndex.reactions[index].reactors
+                      RxBool reactedTo = false.obs;
+                      reactedTo.value = messageIndex.reactions[index].reactors
                           .any((reactor) =>
                               reactor ==
                               ClientController
@@ -532,95 +534,102 @@ class MessageContent extends StatelessWidget {
                           ItemPositionsListener.create();
                       final ScrollOffsetListener scrollOffsetListener =
                           ScrollOffsetListener.create();
-                      return InkWell(
-                        onTap: () {
-                          // if (kDebugMode) print('$reactedTo reacted');
-                          if (!reactedTo) {
-                            Reaction.add(
-                              ChannelController.controller.selected.value.id,
-                              messageIndex.id!,
-                              emote,
+                      return Obx(
+                        () => InkWell(
+                          onTap: () {
+                            // if (kDebugMode) print('$reactedTo reacted');
+                            if (!reactedTo.value) {
+                              Reaction.add(
+                                ChannelController.controller.selected.value.id,
+                                messageIndex.id!,
+                                emote,
+                              );
+                              reactedTo.value = true;
+
+                              if (Client.isMobile) {
+                                Navigator.pop(context);
+                              }
+                              if (kDebugMode) print('$reactedTo reacted');
+                            } else if (reactedTo.value) {
+                              Reaction.remove(
+                                ChannelController.controller.selected.value.id,
+                                messageIndex.id!,
+                                emote,
+                              );
+                              reactedTo.value = false;
+                            }
+                          },
+                          onSecondaryTap: () {
+                            Reaction.showInfo(
+                              context,
+                              reactors.obs,
+                              messageIndex.reactions!,
+                              messageIndex,
+                              index.obs,
+                              itemScrollController,
+                              itemPositionsListener,
+                              scrollOffsetListener,
                             );
-                            Navigator.pop(context);
-                            if (kDebugMode) print('$reactedTo reacted');
-                          } else if (reactedTo) {
-                            Reaction.remove(
-                              ChannelController.controller.selected.value.id,
-                              messageIndex.id!,
-                              emote,
+                          },
+                          onLongPress: () {
+                            Reaction.showInfo(
+                              context,
+                              reactors.obs,
+                              messageIndex.reactions!,
+                              messageIndex,
+                              index.obs,
+                              itemScrollController,
+                              itemPositionsListener,
+                              scrollOffsetListener,
                             );
-                          }
-                        },
-                        onSecondaryTap: () {
-                          Reaction.showInfo(
-                            context,
-                            reactors.obs,
-                            messageIndex.reactions!,
-                            messageIndex,
-                            index.obs,
-                            itemScrollController,
-                            itemPositionsListener,
-                            scrollOffsetListener,
-                          );
-                        },
-                        onLongPress: () {
-                          Reaction.showInfo(
-                            context,
-                            reactors.obs,
-                            messageIndex.reactions!,
-                            messageIndex,
-                            index.obs,
-                            itemScrollController,
-                            itemPositionsListener,
-                            scrollOffsetListener,
-                          );
-                          // itemScrollController.scrollTo(
-                          //   index: index,
-                          //   duration: const Duration(milliseconds: 300),
-                          // );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: reactedTo
-                                  ? Dark.accent.value.withOpacity(0.5)
-                                  : Dark.secondaryHeader.value,
-                              border: Border.all(
-                                  color: reactedTo
-                                      ? Dark.accent.value
-                                      : Dark.primaryBackground.value),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 4,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (emote.length == 26)
-                                  Emote(
-                                    ulid: emote,
-                                    size: 1.3,
-                                  )
-                                else
-                                  Text(
-                                    emote,
-                                    style: const TextStyle(fontSize: 16),
+                            // itemScrollController.scrollTo(
+                            //   index: index,
+                            //   duration: const Duration(milliseconds: 300),
+                            // );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: reactedTo.value
+                                    ? Dark.accent.value.withOpacity(0.5)
+                                    : Dark.secondaryHeader.value,
+                                border: Border.all(
+                                    color: reactedTo.value
+                                        ? Dark.accent.value
+                                        : Dark.primaryBackground.value),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 4,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (emote.length == 26)
+                                    Emote(
+                                      ulid: emote,
+                                      size: 1.3,
+                                    )
+                                  else
+                                    Text(
+                                      emote,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: Text(
+                                      reactCount.toString(),
+                                      style: TextStyle(
+                                          fontSize: ClientController
+                                                  .controller.fontSize.value *
+                                              0.8),
+                                    ),
                                   ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4),
-                                  child: Text(
-                                    reactCount.toString(),
-                                    style: TextStyle(
-                                        fontSize: ClientController
-                                                .controller.fontSize.value *
-                                            0.8),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

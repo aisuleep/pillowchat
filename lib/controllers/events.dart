@@ -9,6 +9,7 @@ import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/parts/embeds.dart';
 import 'package:pillowchat/models/message/message.dart';
+import 'package:pillowchat/models/message/parts/reactions.dart';
 import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/widgets/home_channels.dart';
@@ -266,7 +267,7 @@ class Events {
     }
   }
 
-  static unreact(dynamic json) {
+  static react(dynamic json) {
     String messageId = json["id"];
     String channelId = json["channel_id"];
     String userId = json["user_id"];
@@ -275,9 +276,6 @@ class Events {
     Channel channel;
     int messageIndex;
     int serverIndex;
-    // List<List<String>> emotes;
-    // ignore: unused_local_variable
-    List<String> emote;
 
     channelIndex =
         Client.channels.indexWhere((channel) => channel.id == channelId);
@@ -298,7 +296,67 @@ class Events {
           .controller.serversList[serverIndex].channels[channelIndex].messages
           .indexWhere((message) => message.id == messageId);
 
-      // TEST
+      final int reactionIndex = ServerController
+          .controller
+          .serversList[serverIndex]
+          .channels[channelIndex]
+          .messages[messageIndex]
+          .reactions!
+          .indexWhere((reaction) => reaction.emote == emojiId);
+
+      if (reactionIndex != -1) {
+        ServerController
+            .controller
+            .serversList[serverIndex]
+            .channels[channelIndex]
+            .messages[messageIndex]
+            .reactions![reactionIndex]
+            .reactors
+            .add(userId);
+
+        ServerController
+            .controller.serversList[serverIndex].channels[channelIndex].messages
+            .refresh();
+      } else {
+        ServerController.controller.serversList[serverIndex]
+            .channels[channelIndex].messages[messageIndex].reactions
+            ?.add(Reaction(emote: emojiId, reactors: [userId]));
+        ServerController
+            .controller.serversList[serverIndex].channels[channelIndex].messages
+            .refresh();
+      }
+    }
+  }
+
+  static unreact(dynamic json) {
+    String messageId = json["id"];
+    String channelId = json["channel_id"];
+    String userId = json["user_id"];
+    String emojiId = json["emoji_id"];
+    int channelIndex;
+    Channel channel;
+    int messageIndex;
+    int serverIndex;
+
+    channelIndex =
+        Client.channels.indexWhere((channel) => channel.id == channelId);
+
+    if (channelIndex != -1) {
+      // if (kDebugMode) print(message);
+      // if (kDebugMode) print(channelIndex);
+      channel = Client.channels[channelIndex];
+      // if (kDebugMode) print(channel);
+      serverIndex = ServerController.controller.serversList
+          .indexWhere((server) => server.id == channel.server);
+      // if (kDebugMode) print(serverIndex);
+
+      channelIndex = ServerController
+          .controller.serversList[serverIndex].channels
+          .indexWhere((channel) => channel.id == channelId);
+      messageIndex = ServerController
+          .controller.serversList[serverIndex].channels[channelIndex].messages
+          .indexWhere((message) => message.id == messageId);
+
       final int reactionIndex = ServerController
           .controller
           .serversList[serverIndex]
@@ -324,54 +382,6 @@ class Events {
           .reactors
           .removeAt(reactorIndex);
 
-      //  TEST
-      // final emojiList = ServerController
-      //     .controller
-      //     .serversList[serverIndex]
-      //     .channels[channelIndex]
-      //     .messages[messageIndex]
-      //     .reactions!
-      //     .reactionMap!
-      //     .keys
-      //     .toList();
-      // if (kDebugMode) print(emojiList);
-      // final emojiIndex = emojiList.indexWhere((emote) => emote == emojiId);
-      // if (kDebugMode) print(emojiIndex);
-      // emotes = ServerController
-      //     .controller
-      //     .serversList[serverIndex]
-      //     .channels[channelIndex]
-      //     .messages[messageIndex]
-      //     .reactions!
-      //     .reactionMap!
-      //     .values
-      //     .toList();
-
-      // emotes = ServerController.controller.serversList[serverIndex].channels[channelIndex].messages[messageIndex].reactions?[0].emote;
-      // if (kDebugMode) print(emotes);
-      // final reactorIndex =
-      //     emotes[emojiIndex].indexWhere((innerList) => innerList == userId);
-      // emojiList.remove(emojiId);
-      // emotes[emojiIndex].removeAt(reactorIndex);
-      // Map<String, List<String>> map = {};
-      // for (var emojis in emojiList) {
-      //   String key = emojis[0];
-      //   List<String> values = emojis.length > 1 ? emojis.sublist(1) : [];
-      //   map[key] = values;
-      // }
-      // ServerController
-      //     .controller
-      //     .serversList[serverIndex]
-      //     .channels[channelIndex]
-      //     .messages[messageIndex]
-      //     .reactions!
-      //     .reactionMap = map;
-      // if (kDebugMode) print(
-      // "LAST ID: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
-
-      // if (kDebugMode) print("a: $emojiIndex & $reactorIndex");
-      // if (kDebugMode) print(
-      // "LAST ID AFTER: ${ServerController.controller.serversList[serverIndex].channels[channelIndex].unreads[0].lastId}");
       ServerController
           .controller.serversList[serverIndex].channels[channelIndex].messages
           .refresh();
