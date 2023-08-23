@@ -366,6 +366,7 @@ class UserMentionBlock extends StatelessWidget {
       TextSpan(
         children: <InlineSpan>[
           WidgetSpan(
+            alignment: PlaceholderAlignment.top,
             child: InkWell(
               onTap: () {
                 User.view(
@@ -380,76 +381,76 @@ class UserMentionBlock extends StatelessWidget {
                 );
               },
               onHover: (color) {},
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
                   color: Dark.background.value,
-                  padding: EdgeInsets.all(2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: UserIcon(
-                          user: user,
-                          hasStatus: false,
-                          radius: 18,
-                          url: url?.obs,
+                ),
+                padding: EdgeInsets.all(2),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: UserIcon(
+                        user: user,
+                        hasStatus: false,
+                        radius: 18,
+                        url: url?.obs,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 2,
+                        right: 4,
+                      ),
+                      child: GradientText(
+                        member == null ||
+                                member?.avatar.value?.id == '' ||
+                                member?.nickname?.value == ''
+                            ? user.displayName?.trim() ?? user.name.trim()
+                            : member!.nickname!.trim(),
+                        colors: member != null &&
+                                member!.roles.isNotEmpty &&
+                                member!.roles[0].color != null &&
+                                member!.roles[0].color!.contains("gradient")
+                            ? Role.getCssGradient(member!.roles[0].color!)
+                            : member != null &&
+                                    member!.roles.isNotEmpty &&
+                                    member!.roles[0].color != null &&
+                                    member!.roles[0].color!.length == 7
+                                ? [
+                                    Color(
+                                      int.parse(
+                                          '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
+                                    ),
+                                    Color(
+                                      int.parse(
+                                          '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
+                                    )
+                                  ]
+                                : [
+                                    Dark.foreground.value,
+                                    Dark.foreground.value,
+                                  ],
+                        style: TextStyle(
+                          fontSize: ClientController.controller.fontSize.value,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.fade,
                         ),
                       ),
+                    ),
+                    if (user.bot != null)
                       Padding(
-                        padding: const EdgeInsets.only(
-                          left: 2,
-                          right: 4,
-                        ),
-                        child: GradientText(
-                          member == null ||
-                                  member?.avatar.value?.id == '' ||
-                                  member?.nickname?.value == ''
-                              ? user.displayName?.trim() ?? user.name.trim()
-                              : member!.nickname!.trim(),
-                          colors: member != null &&
-                                  member!.roles.isNotEmpty &&
-                                  member!.roles[0].color != null &&
-                                  member!.roles[0].color!.contains("gradient")
-                              ? Role.getCssGradient(member!.roles[0].color!)
-                              : member != null &&
-                                      member!.roles.isNotEmpty &&
-                                      member!.roles[0].color != null &&
-                                      member!.roles[0].color!.length == 7
-                                  ? [
-                                      Color(
-                                        int.parse(
-                                            '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
-                                      ),
-                                      Color(
-                                        int.parse(
-                                            '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
-                                      )
-                                    ]
-                                  : [
-                                      Dark.foreground.value,
-                                      Dark.foreground.value,
-                                    ],
-                          style: TextStyle(
-                            fontSize:
-                                ClientController.controller.fontSize.value,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.fade,
-                          ),
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.smart_toy,
+                          color: Dark.accent.value,
+                          size: 15,
                         ),
                       ),
-                      if (user.bot != null)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 4),
-                          child: Icon(
-                            Icons.smart_toy,
-                            color: Dark.accent.value,
-                            size: 15,
-                          ),
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
