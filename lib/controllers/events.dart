@@ -497,7 +497,7 @@ class Events {
       if (memberIndex != -1) {
         member = ServerController
             .controller.serversList[serverIndex].members[memberIndex];
-        if (kDebugMode) print(member.nickname?.value ?? member.userId);
+        // if (kDebugMode) print(member.nickname?.value ?? member.userId);
       }
       server = ServerController.controller.serversList[serverIndex];
       if (data["nickname"] != null) {
@@ -514,7 +514,7 @@ class Events {
 
         if (clear != []) {
           if (clear.contains("nickname")) {
-            server.members[memberIndex].nickname?.value = '';
+            // server.members[memberIndex].nickname?.value = '';
           }
           if (clear.contains("avatar")) {
             server.members[memberIndex].avatar.value = null;

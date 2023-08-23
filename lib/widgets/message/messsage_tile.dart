@@ -208,8 +208,9 @@ class MessageTile extends StatelessWidget {
                                                 const EdgeInsets.only(right: 8),
                                             child: Obx(
                                               () => GradientText(
-                                                member?.nickname != null
-                                                    ? member?.nickname!.trim()
+                                                member?.nickname?.value != ''
+                                                    ? member?.nickname?.value
+                                                        .trim()
                                                     : user.bot == null ||
                                                             messageIndex
                                                                     .masquerade

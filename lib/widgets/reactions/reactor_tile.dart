@@ -115,7 +115,7 @@ class ReactorTile extends StatelessWidget {
               member != null &&
               !ClientController.controller.home.value)
             Text(
-              member!.nickname?.trim() ??
+              member!.nickname?.value.trim() ??
                   user.displayName?.trim() ??
                   user.name.trim(),
               style: TextStyle(

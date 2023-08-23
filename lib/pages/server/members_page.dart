@@ -234,9 +234,11 @@ class MembersPage extends StatelessWidget {
                                                       Flexible(
                                                         child: GradientText(
                                                           // IF USER HAS NICKNAME
-                                                          member.nickname !=
-                                                                  null
+                                                          member.nickname
+                                                                      ?.value !=
+                                                                  ''
                                                               ? member.nickname!
+                                                                  .value
                                                                   .trim()
                                                               : user.displayName !=
                                                                       null

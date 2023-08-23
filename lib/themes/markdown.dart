@@ -403,7 +403,7 @@ class UserMentionBlock extends StatelessWidget {
                         child: Text(
                           member == null ||
                                   member?.avatar.value?.id == '' ||
-                                  member?.nickname == null
+                                  member?.nickname?.value == ''
                               ? user.displayName?.trim() ?? user.name.trim()
                               : member!.nickname!.trim(),
                           style: TextStyle(

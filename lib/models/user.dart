@@ -65,7 +65,7 @@ class User {
     // need for all avatars including defualt to work
 
     if (json['avatar'] != null) {
-      if (kDebugMode) print(json['avatar']);
+      // if (kDebugMode) print(json['avatar']);
       avatar?.value = Avatar.fromJson(json['avatar']);
     }
     // need for pfps
@@ -316,7 +316,7 @@ class Metadata {
   );
 
   late Map map;
-  late String type;
+  late String? type;
   late int width;
   late int height;
 

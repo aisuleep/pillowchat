@@ -32,9 +32,10 @@ class Member {
 
     // joinedAt = json['joined_at'];
 
-    // if (json['nickname'] != null) {
-    nickname?.value = json['nickname'];
-    // }
+    if (json['nickname'] != null) {
+      nickname?.value = json['nickname'];
+    }
+
     if (json['avatar'] != null) {
       if (kDebugMode) print(json['avatar']);
       avatar.value = Avatar.fromJson(json['avatar']);

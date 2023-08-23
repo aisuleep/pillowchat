@@ -191,7 +191,7 @@ class Replies extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 6),
                           child: GradientText(
-                            member?.nickname != null
+                            member?.nickname?.value != ''
                                 ? messageIndex.mentions.length != 0
                                     ? "@${member!.nickname!.value.trim()}"
                                     : member!.nickname!.value.trim()
