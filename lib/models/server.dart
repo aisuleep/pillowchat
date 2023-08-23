@@ -157,7 +157,8 @@ class Role {
           } else {
             if (trimmedComponent.contains("deg")) {
               deg = trimmedComponent.replaceAll("deg", '');
-            } else {
+            } else if (!trimmedComponent.contains('to right') &&
+                !trimmedComponent.contains('to left')) {
               // Otherwise, parse the color using the existing parseColor function
               colors.add(parseColor(trimmedComponent));
             }
@@ -188,17 +189,33 @@ class Role {
 
     // Check if the colorValue is a hex value
     if (colorValue.startsWith('#')) {
-      return Color(int.parse(colorValue.replaceAll('#', ''), radix: 16));
+      String percentage = colorValue.replaceRange(0, 7, '').replaceAll('%', '');
+      double? opacity;
+      if (percentage != '') {
+        opacity = double.parse(percentage) / 100;
+      }
+      return Color(int.parse(
+              colorValue.replaceRange(7, null, '').replaceAll('#', ''),
+              radix: 16))
+          .withOpacity(1
+              //  opacity ?? 1
+              );
     }
 
     // Check if the colorValue is a color name
-    if (colorNames.containsKey(colorValue)) {
+    if (colorNames.containsKey(colorValue
+        .replaceAll('%', '')
+        .replaceAll(RegExp(r'[0-9]'), '')
+        .trim())) {
       // Use the color mapping
-      return colorNames[colorValue]!;
+      return colorNames[colorValue
+          .replaceAll('%', '')
+          .replaceAll(RegExp(r'[0-9]'), '')
+          .trim()]!;
     }
 
     // If no match is found, use a default color
-    return Colors.cyan;
+    return Colors.transparent;
   }
 
   static Map<String, Color> colorNames = {

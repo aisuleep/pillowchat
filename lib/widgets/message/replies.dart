@@ -137,21 +137,21 @@ class Replies extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 14,
+                      width: 12,
                       height: 2,
-                      decoration: BoxDecoration(
-                        color: Dark.primaryHeader.value,
-                        borderRadius: const BorderRadius.only(
+                      decoration: const BoxDecoration(
+                        // color: Dark.primaryHeader.value,
+                        borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(25),
                             topRight: Radius.circular(25),
                             bottomRight: Radius.circular(25)),
                       ),
                     ),
-                    Container(
-                      width: 2,
-                      height: 8,
-                      color: Dark.primaryHeader.value,
-                    )
+                    // Container(
+                    //   width: 2,
+                    //   height: 8,
+                    //   color: Dark.primaryHeader.value,
+                    // )
                   ],
                 ),
               ),
