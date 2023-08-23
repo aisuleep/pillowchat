@@ -113,7 +113,7 @@ class UserProfile extends StatelessWidget {
                                   hasStatus: true,
                                   radius: 60,
                                   user: user,
-                                  url: Client.getAvatar(user),
+                                  url: Client.getAvatar(user).obs,
                                 ),
                               ),
                             ],

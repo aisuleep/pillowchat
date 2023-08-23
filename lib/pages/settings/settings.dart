@@ -298,8 +298,8 @@ class SettingsPage extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: Visibility(
                         visible: ClientController.controller.logged.value &&
-                            ClientController
-                                    .controller.selectedUser.value.avatar !=
+                            ClientController.controller.selectedUser.value
+                                    .avatar?.value !=
                                 null,
                         child: UserIcon(
                           user: ClientController.controller.selectedUser.value,
@@ -342,7 +342,7 @@ class UserCard extends StatelessWidget {
                       borderRadius:
                           BorderRadius.circular(IconBorder.radius.value),
                       child: Image.network(
-                        '$autumn/avatars/${ClientController.controller.selectedUser.value.avatar}',
+                        '$autumn/avatars/${ClientController.controller.selectedUser.value.avatar?.value.id}',
                         height: 54,
                         width: 54,
                         filterQuality: FilterQuality.medium,

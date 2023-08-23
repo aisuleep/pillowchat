@@ -478,6 +478,52 @@ class Events {
 
 // SERVER EVENTS
 
+  static memberUpdate(dynamic json) async {
+    final Map id = json["id"];
+    final String serverId = id["server"];
+    final String userId = id["user"];
+    final Map data = json["data"];
+    final List<dynamic> clear = json["clear"];
+    final int serverIndex;
+    final Server? server;
+    final int memberIndex;
+    late final Member member;
+
+    serverIndex = ServerController.controller.serversList
+        .indexWhere((server) => server.id == serverId);
+    if (serverIndex != -1) {
+      memberIndex = ServerController.controller.serversList[serverIndex].members
+          .indexWhere((member) => member.userId == userId);
+      if (memberIndex != -1) {
+        member = ServerController
+            .controller.serversList[serverIndex].members[memberIndex];
+        if (kDebugMode) print(member.nickname?.value ?? member.userId);
+      }
+      server = ServerController.controller.serversList[serverIndex];
+      if (data["nickname"] != null) {
+        server.members[memberIndex].nickname?.value = data["nickname"];
+        if (kDebugMode) print('[Updated] member nickname');
+      }
+      if (data["avatar"] != null) {
+        server.members[memberIndex].avatar.value =
+            Avatar.fromJson(data["avatar"]);
+        if (kDebugMode) print('[Updated] member avatar');
+
+        // }if (data["roles"]!= null) {
+        //   server.members[memberIndex].roles = data["roles"];
+
+        if (clear != []) {
+          if (clear.contains("nickname")) {
+            server.members[memberIndex].nickname?.value = '';
+          }
+          if (clear.contains("avatar")) {
+            server.members[memberIndex].avatar.value = null;
+          }
+        }
+      }
+    }
+  }
+
   static memberJoin(dynamic json) async {
     final String serverId = json["id"];
     final String userId = json["user"];

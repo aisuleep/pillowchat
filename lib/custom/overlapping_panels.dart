@@ -398,7 +398,7 @@ class UserIcon extends StatelessWidget {
   });
   final User? user;
   final double radius;
-  final String? url;
+  final RxString? url;
   final bool hasStatus;
   final VoidCallback? onPressed;
   final RxBool? isHovered = false.obs;
@@ -431,7 +431,7 @@ class UserIcon extends StatelessWidget {
                   fit: BoxFit.cover,
                   filterQuality: FilterQuality.medium,
                   !ClientController.controller.home.value
-                      ? url ?? Client.getAvatar(user!)
+                      ? url?.value ?? Client.getAvatar(user!)
                       : Client.getAvatar(user!),
                 ),
               ),

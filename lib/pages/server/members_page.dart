@@ -204,7 +204,7 @@ class MembersPage extends StatelessWidget {
                                             context,
                                             userIndex,
                                             user!,
-                                            user.avatar,
+                                            user.avatar?.value.id,
                                             user.status.presence,
                                             user.status.text!,
                                             user.id,
@@ -218,7 +218,7 @@ class MembersPage extends StatelessWidget {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 8),
                                               child: UserIcon(
-                                                url: url,
+                                                url: url.obs,
                                                 user: user,
                                                 hasStatus: true,
                                                 radius: 36,
@@ -380,9 +380,11 @@ class MembersPage extends StatelessWidget {
                                                                 .selected
                                                                 .value
                                                                 .users[index]
-                                                                .avatar !=
+                                                                .avatar
+                                                                ?.value
+                                                                .id !=
                                                             ''
-                                                        ? '$autumn/avatars/${ChannelController.controller.selected.value.users[index].avatar}'
+                                                        ? '$autumn/avatars/${ChannelController.controller.selected.value.users[index].avatar?.value.id}'
                                                         : 'https://$api/users/${ChannelController.controller.selected.value.users[index].id}/default_avatar',
                                                     filterQuality:
                                                         FilterQuality.medium,
@@ -474,7 +476,7 @@ class MembersPage extends StatelessWidget {
                                       ChannelController.controller.selected
                                           .value.users[index],
                                       ChannelController.controller.selected
-                                          .value.users[index].avatar,
+                                          .value.users[index].avatar?.value.id,
                                       ChannelController.controller.selected
                                           .value.users[index].status.presence,
                                       ChannelController.controller.selected

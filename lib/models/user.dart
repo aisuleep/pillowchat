@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pillowchat/widgets/user_profile.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
@@ -18,7 +19,7 @@ class User {
   late String name;
   late String discriminator;
   String? displayName;
-  String? avatar;
+  Rx<Avatar>? avatar = Avatar(id: '').obs;
   late List<Relations> relations;
   String? relationship;
   late List<String> roles;
@@ -64,7 +65,8 @@ class User {
     // need for all avatars including defualt to work
 
     if (json['avatar'] != null) {
-      avatar = json['avatar']['_id'];
+      if (kDebugMode) print(json['avatar']);
+      avatar?.value = Avatar.fromJson(json['avatar']);
     }
     // need for pfps
 
@@ -264,23 +266,36 @@ class User {
 
 class Avatar {
   late String id;
-  late String tag;
-  late String filename;
-  late String metadata;
-  late String contentType;
-  late int size;
-  late bool deleted;
-  late bool reported;
-  late String messageId;
-  late String userId;
-  late String serverId;
-  late String objectId;
+  late String? tag;
+  late String? filename;
+  Metadata? metadata;
+  late String? contentType;
+  late int? size;
+  late bool? deleted;
+  late bool? reported;
+  late String? messageId;
+  late String? userId;
+  late String? serverId;
+  late String? objectId;
+
+  Avatar({
+    required this.id,
+    this.tag,
+    this.filename,
+    this.metadata,
+    this.contentType,
+    this.size,
+    this.deleted,
+    this.reported,
+    this.messageId,
+    this.userId,
+  });
 
   Avatar.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     tag = json['tag'];
     filename = json['filename'];
-    metadata = json['metadata']['type'];
+    metadata?.map = json['metadata'];
     contentType = json['content_type'];
     size = json['size'];
     deleted = json['deleted'];
@@ -289,6 +304,26 @@ class Avatar {
     userId = json['user_id'];
     serverId = json['server_id'];
     objectId = json['object_id'];
+  }
+}
+
+class Metadata {
+  Metadata(
+    this.map,
+    this.type,
+    this.width,
+    this.height,
+  );
+
+  late Map map;
+  late String type;
+  late int width;
+  late int height;
+
+  Metadata.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    width = json['width'];
+    height = json['height'];
   }
 }
 

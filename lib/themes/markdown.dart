@@ -330,8 +330,8 @@ class UserMentionBuilder extends MarkdownElementBuilder {
         return UserMentionBlock(
           userIndex: userIndex,
           user: user!,
-          avatar: user?.avatar,
-          member: member?.avatar != '' ? member : null,
+          avatar: user?.avatar?.value.id,
+          member: member?.avatar.value?.id != '' ? member : null,
           url: url,
         );
       } else {
@@ -370,7 +370,7 @@ class UserMentionBlock extends StatelessWidget {
                   context,
                   userIndex,
                   user,
-                  avatar ?? user.avatar,
+                  avatar ?? user.avatar?.value.id,
                   user.status.presence,
                   user.status.text ?? '',
                   user.id,
@@ -392,7 +392,7 @@ class UserMentionBlock extends StatelessWidget {
                           user: user,
                           hasStatus: false,
                           radius: 18,
-                          url: url,
+                          url: url?.obs,
                         ),
                       ),
                       Padding(
@@ -402,7 +402,7 @@ class UserMentionBlock extends StatelessWidget {
                         ),
                         child: Text(
                           member == null ||
-                                  member?.avatar == '' ||
+                                  member?.avatar.value?.id == '' ||
                                   member?.nickname == null
                               ? user.displayName?.trim() ?? user.name.trim()
                               : member!.nickname!.trim(),

@@ -165,7 +165,7 @@ class ProfilePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(
                                     IconBorder.radius.value),
                                 child: Image.network(
-                                  "$autumn/avatars/${ClientController.controller.selectedUser.value.avatar}",
+                                  "$autumn/avatars/${ClientController.controller.selectedUser.value.avatar?.value}",
                                   height: 60,
                                   filterQuality: FilterQuality.medium,
                                 ),

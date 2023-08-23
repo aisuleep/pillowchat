@@ -72,7 +72,8 @@ class NotificationsPage extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Visibility(
                     visible: ClientController.controller.logged.value &&
-                        ClientController.controller.selectedUser.value.avatar !=
+                        ClientController
+                                .controller.selectedUser.value.avatar?.value !=
                             null,
                     child: UserIcon(
                       user: ClientController.controller.selectedUser.value,

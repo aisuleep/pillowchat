@@ -28,7 +28,7 @@ class ReactorTile extends StatelessWidget {
       {Member? serverMember, Message? messageIndex, String? reactor}) {
     Member? member;
     int memberIndex;
-    String url = Client.getAvatar(user, id: reactor);
+    RxString url = Client.getAvatar(user, id: reactor).obs;
 
     if (serverMember == null) {
       memberIndex = ServerController.controller.selected.value.members
@@ -44,18 +44,18 @@ class ReactorTile extends StatelessWidget {
     }
     // GET AVATAR URL
 
-    if (member?.avatar != null && member?.avatar != '') {
+    if (member?.avatar.value != null && member?.avatar.value?.id != '') {
       // IF SERVER AVATAR
 
-      url = '$autumn/avatars/${member!.avatar!}';
+      url.value = '$autumn/avatars/${member?.avatar.value?.id}';
     } else if (isMessage) {
       if (user.bot != null && messageIndex?.masquerade?.avatar != '') {
         // IF IS A MASQUERADE
 
-        url = messageIndex!.masquerade!.avatar.toString();
+        url.value = messageIndex!.masquerade!.avatar.toString();
       }
     }
-    return url;
+    return url.value;
   }
 
   @override
@@ -70,7 +70,7 @@ class ReactorTile extends StatelessWidget {
           context,
           userIndex,
           user,
-          user.avatar,
+          user.avatar?.value.id,
           user.status.presence,
           user.status.text!,
           user.id,
@@ -83,7 +83,8 @@ class ReactorTile extends StatelessWidget {
           width: 50,
           child: UserIcon(
               url: getUrl(false, user,
-                  reactor: user.id == '' ? reactors[index] : null),
+                      reactor: user.id == '' ? reactors[index] : null)
+                  .obs,
               hasStatus: false,
               radius: 32)),
       // NAMES

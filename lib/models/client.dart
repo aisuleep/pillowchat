@@ -45,8 +45,8 @@ class Client {
   static const String autumn = 'https://autumn.revolt.chat';
   static String getAvatar(User user, {String? id}) {
     String url;
-    if (user.avatar != null && user.avatar != '') {
-      url = '$autumn/avatars/${user.avatar}';
+    if (user.avatar?.value.id != null && user.avatar?.value.id != '') {
+      url = '$autumn/avatars/${user.avatar?.value.id}';
     } else {
       if (id == null && user.id != '') {
         url = 'https://$api/users/${user.id}/default_avatar';
@@ -341,21 +341,21 @@ class Client {
                 if (kDebugMode) print(server.name);
                 for (Categories category in server.categories) {
                   for (String channel in category.channels) {
-                    if (kDebugMode) print(server.channels);
-                    if (kDebugMode) print(category.channels);
+                    // if (kDebugMode) print(server.channels);
+                    // if (kDebugMode) print(category.channels);
                     int channelIndex = server.channels
                         .indexWhere((channels) => channels.id == channel);
-                    if (kDebugMode) print(channelIndex);
+                    // if (kDebugMode) print(channelIndex);
 
                     if (channelIndex != -1) {
-                      if (kDebugMode) print(server.uncategorizedChannels);
+                      // if (kDebugMode) print(server.uncategorizedChannels);
 
                       server.categorizedChannels
                           ?.add(server.channels[channelIndex]);
 
                       server.uncategorizedChannels?.removeWhere((channel) =>
                           channel == server?.channels[channelIndex]);
-                      if (kDebugMode) print(server.uncategorizedChannels);
+                      // if (kDebugMode) print(server.uncategorizedChannels);
                       server.categorizedChannels?.refresh();
                       server.uncategorizedChannels?.refresh();
                     }

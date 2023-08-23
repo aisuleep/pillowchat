@@ -14,15 +14,14 @@ class Member {
   late String serverId;
   late String userId = '';
   late String joinedAt;
-  String? nickname;
-  String? avatar;
+  RxString? nickname = ''.obs;
+  Rx<Avatar?> avatar = Avatar(id: '').obs;
   List<dynamic> roleIds = [];
   RxList<Role> roles = <Role>[].obs;
   // late String timeout;
 
   Member(
     this.joinedAt,
-    this.avatar,
   );
   Member.fromJson(Map<String, dynamic> json) {
     // dynamic id;
@@ -34,11 +33,11 @@ class Member {
     // joinedAt = json['joined_at'];
 
     // if (json['nickname'] != null) {
-    nickname = json['nickname'];
+    nickname?.value = json['nickname'];
     // }
     if (json['avatar'] != null) {
-      final avatars = json['avatar'];
-      avatar = avatars['_id'];
+      if (kDebugMode) print(json['avatar']);
+      avatar.value = Avatar.fromJson(json['avatar']);
     }
 
     if (json['roles'] != null) {

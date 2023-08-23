@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_is_empty
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
@@ -164,7 +165,7 @@ class Replies extends StatelessWidget {
                       context,
                       userIndex,
                       user,
-                      user.avatar,
+                      user.avatar?.value.id,
                       user.status.presence,
                       user.status.text ?? '',
                       user.id,
@@ -179,7 +180,7 @@ class Replies extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: UserIcon(
-                            url: url,
+                            url: url.obs,
                             user: user,
                             hasStatus: false,
                             radius: 15,
@@ -192,8 +193,8 @@ class Replies extends StatelessWidget {
                           child: GradientText(
                             member?.nickname != null
                                 ? messageIndex.mentions.length != 0
-                                    ? "@${member!.nickname!.trim()}"
-                                    : member!.nickname!.trim()
+                                    ? "@${member!.nickname!.value.trim()}"
+                                    : member!.nickname!.value.trim()
                                 : user.bot == null ||
                                         replyIndex.masquerade?.name == ''
                                     ? user.displayName != null

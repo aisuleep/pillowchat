@@ -112,7 +112,9 @@ class MessageBuild extends StatelessWidget {
             final memberIndex = ServerController
                 .controller.selected.value.members
                 .indexWhere((member) => member.userId == messageAuthor);
-            Member? member = Member('', '');
+            Member? member = Member(
+              '',
+            );
             if (memberIndex != -1) {
               member = ServerController
                   .controller.selected.value.members[memberIndex];

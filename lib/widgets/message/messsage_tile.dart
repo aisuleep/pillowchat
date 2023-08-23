@@ -127,7 +127,7 @@ class MessageTile extends StatelessWidget {
                               context,
                               userIndex,
                               user,
-                              user.avatar,
+                              user.avatar?.value.id,
                               user.status.presence,
                               user.status.text ?? '',
                               user.id,
@@ -149,7 +149,7 @@ class MessageTile extends StatelessWidget {
                             );
                           },
                           child: UserIcon(
-                            url: url,
+                            url: url.obs,
                             user: user,
                             hasStatus: false,
                             radius: 36,
@@ -192,7 +192,7 @@ class MessageTile extends StatelessWidget {
                                         context,
                                         userIndex,
                                         user,
-                                        user.avatar,
+                                        user.avatar?.value.id,
                                         user.status.presence,
                                         user.status.text!,
                                         user.id,
