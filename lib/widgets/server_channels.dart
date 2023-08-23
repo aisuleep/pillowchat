@@ -217,51 +217,54 @@ class ChannelTile extends StatelessWidget {
 
     isUnread();
     if (channel.name != null) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 2,
-          horizontal: 8,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Material(
-            type: MaterialType.transparency,
-            child: ListTile(
-              hoverColor: Dark.primaryBackground.value,
-              selected: serverIndex != -1 && channelIndex != -1
-                  ? ChannelController.controller.selected.value.id == channel.id
-                  : false,
-              selectedColor: Dark.accent.value,
-              selectedTileColor: Dark.primaryBackground.value,
-              tileColor: Dark.background.value,
-              iconColor: isUnread().value
-                  ? Dark.foreground.value
-                  : Dark.secondaryForeground.value,
-              textColor: Dark.secondaryForeground.value,
-              horizontalTitleGap: 0,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              leading: icon,
-              title: Text(
-                channel.name!,
-                style: TextStyle(
-                    color: isUnread().value
-                        ? Dark.secondaryForeground.value.withOpacity(0.5)
-                        : Dark.foreground.value),
-                overflow: TextOverflow.ellipsis,
+      return Obx(
+        () => Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 2,
+            horizontal: 8,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Material(
+              type: MaterialType.transparency,
+              child: ListTile(
+                hoverColor: Dark.primaryBackground.value,
+                selected: serverIndex != -1 && channelIndex != -1
+                    ? ChannelController.controller.selected.value.id ==
+                        channel.id
+                    : false,
+                selectedColor: Dark.accent.value,
+                selectedTileColor: Dark.primaryBackground.value,
+                tileColor: Dark.background.value,
+                iconColor: isUnread().value
+                    ? Dark.foreground.value
+                    : Dark.secondaryForeground.value,
+                textColor: Dark.secondaryForeground.value,
+                horizontalTitleGap: 0,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                leading: icon,
+                title: Text(
+                  channel.name!,
+                  style: TextStyle(
+                      color: isUnread().value
+                          ? Dark.secondaryForeground.value.withOpacity(0.5)
+                          : Dark.foreground.value),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: !isUnread().value
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: CircleAvatar(
+                          backgroundColor: Dark.foreground.value,
+                          radius: 4,
+                        ),
+                      )
+                    : null,
+                onTap: onTap,
+                // onLongPress: () {
+                //   // TODO: CONTEXT MENU
+                // },
               ),
-              trailing: !isUnread().value
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: CircleAvatar(
-                        backgroundColor: Dark.foreground.value,
-                        radius: 4,
-                      ),
-                    )
-                  : null,
-              onTap: onTap,
-              // onLongPress: () {
-              //   // TODO: CONTEXT MENU
-              // },
             ),
           ),
         ),
