@@ -318,7 +318,9 @@ class Replies extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              if (!content.contains("[]") || content != '')
+                              if (!content.contains("[]") && content != '' ||
+                                  content != '' ||
+                                  contentIndex == 0)
                                 Expanded(
                                   flex: 4,
                                   child: CustomMarkdownBody(
