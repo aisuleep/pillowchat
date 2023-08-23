@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
@@ -169,8 +170,8 @@ class ServerIcon extends StatelessWidget {
                       ClientController.controller.home.value = false;
                     }
                   }
-
-                  // CHANGE ROUTE
+                  if (kDebugMode) print(server.channels);
+                  if (kDebugMode) print(server.uncategorizedChannels);
                 },
               ),
             ),

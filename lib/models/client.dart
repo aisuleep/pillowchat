@@ -325,16 +325,46 @@ class Client {
         late int serverIndex = 0;
         for (int c = 0; c < Client.channels.length; c++) {
           // IF SERVER ID MATCHES CHANNEL'S SERVER
-          if (ServerController.controller.serversList
-              .any((server) => server.id == Client.channels[c].server)) {
-            serverIndex = ServerController.controller.serversList
-                .indexWhere((server) => server.id == Client.channels[c].server);
+          for (Server server in ServerController.controller.serversList) {
+            if (server.id == Client.channels[c].server) {
+              serverIndex = ServerController.controller.serversList.indexWhere(
+                  (server) => server.id == Client.channels[c].server);
+
+              if (serverIndex != -1) {
+                Server? server;
+                server = ServerController.controller.serversList[serverIndex];
+                server.channels.add(Client.channels[c]);
+
+                // SORT CHANNELS TO THEIR CATEGORIES
+
+                if (kDebugMode) print(server.name);
+                for (Categories category in server.categories) {
+                  for (String channel in category.channels) {
+                    if (kDebugMode) print(server.channels);
+                    if (kDebugMode) print(category.channels);
+                    int channelIndex = server.channels
+                        .indexWhere((channels) => channels.id == channel);
+                    if (kDebugMode) print(channelIndex);
+                    if (channelIndex != -1) {
+                      server.uncategorizedChannels?.value = server.channels;
+                      if (kDebugMode) print(server.uncategorizedChannels);
+
+                      server.categorizedChannels
+                          ?.add(server.channels[channelIndex]);
+
+                      server.uncategorizedChannels?.removeWhere((channel) =>
+                          channel == server?.channels[channelIndex]);
+                      if (kDebugMode) print(server.uncategorizedChannels);
+                      server.categorizedChannels?.refresh();
+                      server.uncategorizedChannels?.refresh();
+                    }
+                  }
+                }
+              }
+            }
           }
-          ServerController.controller.serversList[serverIndex].channels
-              .add(Client.channels[c]);
         }
       }
-
       // GET SAVED NOTES
 
       Client.savedNotes.value = Client.channels[0];

@@ -248,9 +248,11 @@ class Replies extends StatelessWidget {
                                                 Dark.foreground.value,
                                                 Dark.foreground.value
                                               ],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize:
+                                  ClientController.controller.fontSize.value *
+                                      .9,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -266,7 +268,8 @@ class Replies extends StatelessWidget {
                           child: Icon(
                             Icons.smart_toy,
                             color: Dark.accent.value,
-                            size: 15,
+                            size:
+                                ClientController.controller.fontSize.value * .9,
                           ),
                         )
                       else if (user.bot != null &&
@@ -277,7 +280,8 @@ class Replies extends StatelessWidget {
                           child: Icon(
                             Icons.link,
                             color: Dark.accent.value,
-                            size: 15,
+                            size:
+                                ClientController.controller.fontSize.value * .9,
                           ),
                         ),
                       Flexible(
@@ -294,20 +298,23 @@ class Replies extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (hasAttachment && contentIndex != 0)
-                                const Flexible(
+                                Flexible(
                                   child: Icon(
                                     Icons.sticky_note_2_rounded,
-                                    size: 15,
+                                    size: ClientController
+                                            .controller.fontSize.value *
+                                        .9,
                                   ),
                                 ),
                               if (hasAttachment && contentIndex != 0)
-                                const Flexible(
+                                Flexible(
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
                                     child: CustomMarkdownBody(
                                       data: '*Sent an attachment*',
                                       overflow: TextOverflow.ellipsis,
+                                      styleSheet: markdown.replyStyleSheet,
                                     ),
                                   ),
                                 ),
@@ -328,7 +335,7 @@ class Replies extends StatelessWidget {
                                         : "  *Couldn't load message*",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    styleSheet: markdown.styleSheet,
+                                    styleSheet: markdown.replyStyleSheet,
                                     builders: markdown.builders,
                                     extensionSet: markdown.extensionSet,
                                   ),

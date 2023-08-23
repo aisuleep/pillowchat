@@ -95,6 +95,64 @@ class markdown {
       decorationStyle: TextDecorationStyle.solid,
     ),
   );
+  static MarkdownStyleSheet replyStyleSheet = MarkdownStyleSheet(
+    p: TextStyle(
+      color: Dark.foreground.value,
+      fontSize: ClientController.controller.fontSize.value * .9,
+      decorationColor: Dark.foreground.value,
+    ),
+    h1: TextStyle(
+      color: Dark.accent.value,
+      fontWeight: FontWeight.bold,
+    ),
+    h2: TextStyle(
+      color: Dark.foreground.value,
+      fontWeight: FontWeight.bold,
+    ),
+    h3: TextStyle(
+      color: Dark.foreground.value,
+      fontWeight: FontWeight.bold,
+    ),
+    h4: TextStyle(
+      color: Dark.foreground.value,
+      fontWeight: FontWeight.bold,
+    ),
+    h5: TextStyle(
+      color: Dark.foreground.value,
+      fontWeight: FontWeight.bold,
+    ),
+    h6: TextStyle(
+      color: Dark.foreground.value,
+      fontWeight: FontWeight.bold,
+    ),
+    checkbox: TextStyle(
+      color: Dark.accent.value,
+    ),
+    codeblockDecoration: BoxDecoration(
+      color: Dark.background.value,
+    ),
+    blockquoteDecoration: BoxDecoration(
+      color: Dark.secondaryForeground.value.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(
+        8,
+      ),
+      gradient: LinearGradient(
+        stops: const [0.02, 0.02],
+        colors: [Dark.foreground.value.withOpacity(0.2), Dark.background.value],
+      ),
+    ),
+    code: TextStyle(
+      color: Dark.foreground.value,
+      backgroundColor: Dark.secondaryHeader.value,
+    ),
+    a: TextStyle(
+      color: Dark.accent.value,
+      decoration: TextDecoration.underline,
+      decorationColor: Dark.accent.value,
+      decorationThickness: 2,
+      decorationStyle: TextDecorationStyle.solid,
+    ),
+  );
 }
 
 class CustomEmoteSyntax extends md.InlineSyntax {

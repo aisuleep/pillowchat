@@ -14,6 +14,8 @@ class Server {
   String? banner;
   String? description;
   List<Channel> channels = [];
+  RxList<Channel>? uncategorizedChannels = <Channel>[].obs;
+  RxList<Channel>? categorizedChannels = <Channel>[].obs;
   RoleJson? roleJson;
   RxList<Role> roles = <Role>[].obs;
   RxList<Member> members = <Member>[].obs;
@@ -57,6 +59,8 @@ class Server {
 
       roles.value = (convertRoleJsonToList(roleJson));
     }
+
+    // STORE ALL CHANNELS INSIDE A CATEGORY
   }
 }
 
@@ -71,14 +75,13 @@ class Categories {
   late List<dynamic> channels = [];
   late List<String> channelIcons;
   late List<String> channelsName = [];
-  late List<dynamic> channelId = [];
   late List<String> channelType = [];
   // late List<String> channelDescription = [];
 
   Categories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
-    channelId = json['channels'];
+    channels = json['channels'];
   }
 }
 
