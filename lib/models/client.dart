@@ -334,6 +334,7 @@ class Client {
                 Server? server;
                 server = ServerController.controller.serversList[serverIndex];
                 server.channels.add(Client.channels[c]);
+                server.uncategorizedChannels?.assignAll(server.channels);
 
                 // SORT CHANNELS TO THEIR CATEGORIES
 
@@ -345,8 +346,8 @@ class Client {
                     int channelIndex = server.channels
                         .indexWhere((channels) => channels.id == channel);
                     if (kDebugMode) print(channelIndex);
+
                     if (channelIndex != -1) {
-                      server.uncategorizedChannels?.value = server.channels;
                       if (kDebugMode) print(server.uncategorizedChannels);
 
                       server.categorizedChannels
