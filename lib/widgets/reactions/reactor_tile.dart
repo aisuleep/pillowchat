@@ -44,7 +44,7 @@ class ReactorTile extends StatelessWidget {
     }
     // GET AVATAR URL
 
-    if (member?.avatar.value != null && member?.avatar.value?.id != '') {
+    if (member?.avatar.value?.id != null && member?.avatar.value?.id != '') {
       // IF SERVER AVATAR
 
       url.value = '$autumn/avatars/${member?.avatar.value?.id}';
@@ -91,33 +91,24 @@ class ReactorTile extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // NICKNAME OR DISPLAYNAME
+          // DISPLAYNAME OR USERNAME
           if (user.id == reactors[index] && member == null)
             Text(
               user.displayName != null
                   ? user.displayName!.trim()
                   : user.name.trim(),
               style: TextStyle(
-                color: ClientController.controller.home.value ||
-                        member!.roles.isEmpty
-                    ? Dark.foreground.value
-                    : member?.roles.length != null &&
-                            member?.roles[0].color != null &&
-                            member?.roles[0].color?.length == 7
-                        ? Color(
-                            int.parse(
-                                '0xff${member?.roles[0].color?.replaceAll("#", "")}'),
-                          )
-                        : Dark.foreground.value,
+                color: Dark.foreground.value,
               ),
             ),
+          // NICKNAME OR DISPLAYNAME OR USERNAME
           if (user.id == reactors[index] &&
               member != null &&
               !ClientController.controller.home.value)
             Text(
-              member!.nickname?.value.trim() ??
-                  user.displayName?.trim() ??
-                  user.name.trim(),
+              member!.nickname?.value != ''
+                  ? member!.nickname!.value.trim()
+                  : user.displayName?.trim() ?? user.name.trim(),
               style: TextStyle(
                 color: ClientController.controller.home.value ||
                         member!.roles.isEmpty
