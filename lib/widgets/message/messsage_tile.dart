@@ -382,12 +382,11 @@ class MessageContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MarkdownBody(
-            data: content ?? '',
-            // data: content != null
-            //     ? content!.contains('https://gifbox.me/view/')
-            //         ? ''
-            //         : content!
-            //     : '',
+            data: content != null
+                ? content!.contains('https://gifbox.me/view/')
+                    ? ''
+                    : content!
+                : '',
             softLineBreak: true,
             selectable: true,
             extensionSet: markdown.extensionSet,
