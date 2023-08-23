@@ -166,8 +166,8 @@ class ServerIcon extends StatelessWidget {
                       if (ClientController.controller.home.value) {
                         Navigator.popAndPushNamed(context, '/');
                       }
-                      ClientController.controller.home.value = false;
                     }
+                    ClientController.controller.home.value = false;
                     ChannelController.controller.selected.value =
                         server.channels[channelIndex];
                   }
