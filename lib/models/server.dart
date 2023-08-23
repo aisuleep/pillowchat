@@ -190,6 +190,7 @@ class Role {
     // Check if the colorValue is a hex value
     if (colorValue.startsWith('#')) {
       String percentage = colorValue.replaceRange(0, 7, '').replaceAll('%', '');
+      // ignore: unused_local_variable
       double? opacity;
       if (percentage != '') {
         opacity = double.parse(percentage) / 100;
@@ -197,9 +198,7 @@ class Role {
       return Color(int.parse(
               colorValue.replaceRange(7, null, '').replaceAll('#', ''),
               radix: 16))
-          .withOpacity(1
-              //  opacity ?? 1
-              );
+          .withOpacity(1);
     }
 
     // Check if the colorValue is a color name
