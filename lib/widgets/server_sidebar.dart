@@ -162,16 +162,17 @@ class ServerIcon extends StatelessWidget {
                             .controller.selected.value.members.isEmpty) {
                       Message.fetch(
                           server.channels[channelIndex].id, channelIndex);
-                      ChannelController.controller.selected.value =
-                          server.channels[channelIndex];
+
                       if (ClientController.controller.home.value) {
                         Navigator.popAndPushNamed(context, '/');
                       }
                       ClientController.controller.home.value = false;
                     }
+                    ChannelController.controller.selected.value =
+                        server.channels[channelIndex];
                   }
-                  if (kDebugMode) print(server.channels);
-                  if (kDebugMode) print(server.uncategorizedChannels);
+                  // if (kDebugMode) print(server.channels);
+                  // if (kDebugMode) print(server.uncategorizedChannels);
                 },
               ),
             ),
