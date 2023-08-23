@@ -39,7 +39,7 @@ class UserProfile extends StatelessWidget {
   final String text;
   final String id;
   final double dimension = 30;
-  List<Role> roles;
+  List<Role>? roles;
   Rx<int> tabIndex = 0.obs;
   Profile? profile;
   final User user;
@@ -331,7 +331,7 @@ class ProfileTab extends StatelessWidget {
   });
   User user = User(id: '', name: '');
   final String? content;
-  List<Role> roles;
+  List<Role>? roles;
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +343,7 @@ class ProfileTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (roles.length != 0)
+              if (roles?.length != 0)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -352,7 +352,7 @@ class ProfileTab extends StatelessWidget {
                   ),
                 ),
 
-              if (roles.length != 0)
+              if (roles?.length != 0)
                 RoleList(
                   roles: roles,
                 ),
@@ -396,12 +396,12 @@ class RoleList extends StatelessWidget {
     super.key,
     required this.roles,
   });
-  final List<Role> roles;
+  final List<Role>? roles;
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: List.generate(
-        roles.length,
+        roles != null ? roles!.length : 0,
         (index) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -414,19 +414,19 @@ class RoleList extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: roles.isNotEmpty &&
-                                roles[index].color != null &&
-                                roles[index].color!.contains("gradient")
-                            ? Role.getCssGradient(roles[index].color!)
-                            : roles[index].color?.length == 7
+                        colors: roles!.isNotEmpty &&
+                                roles![index].color != null &&
+                                roles![index].color!.contains("gradient")
+                            ? Role.getCssGradient(roles![index].color!)
+                            : roles![index].color?.length == 7
                                 ? [
                                     Color(
                                       int.parse(
-                                          '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                          '0xff${roles![index].color!.replaceAll("#", "")}'),
                                     ),
                                     Color(
                                       int.parse(
-                                          '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                          '0xff${roles![index].color!.replaceAll("#", "")}'),
                                     )
                                   ]
                                 : [
@@ -450,22 +450,22 @@ class RoleList extends StatelessWidget {
                                 width: 15,
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: roles.isNotEmpty &&
-                                            roles[index].color != null &&
-                                            roles[index]
+                                    colors: roles!.isNotEmpty &&
+                                            roles![index].color != null &&
+                                            roles![index]
                                                 .color!
                                                 .contains("gradient")
                                         ? Role.getCssGradient(
-                                            roles[index].color!)
-                                        : roles[index].color?.length == 7
+                                            roles![index].color!)
+                                        : roles![index].color?.length == 7
                                             ? [
                                                 Color(
                                                   int.parse(
-                                                      '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                      '0xff${roles![index].color!.replaceAll("#", "")}'),
                                                 ),
                                                 Color(
                                                   int.parse(
-                                                      '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                      '0xff${roles![index].color!.replaceAll("#", "")}'),
                                                 )
                                               ]
                                             : [
@@ -480,7 +480,7 @@ class RoleList extends StatelessWidget {
                           Stack(
                             children: [
                               Text(
-                                roles[index].name,
+                                roles![index].name,
                                 style: TextStyle(
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
@@ -489,26 +489,28 @@ class RoleList extends StatelessWidget {
                                 ),
                               ),
                               GradientText(
-                                colors: roles.isNotEmpty &&
-                                        roles[index].color != null &&
-                                        roles[index].color!.contains("gradient")
-                                    ? Role.getCssGradient(roles[index].color!)
-                                    : roles[index].color?.length == 7
+                                colors: roles!.isNotEmpty &&
+                                        roles![index].color != null &&
+                                        roles![index]
+                                            .color!
+                                            .contains("gradient")
+                                    ? Role.getCssGradient(roles![index].color!)
+                                    : roles![index].color?.length == 7
                                         ? [
                                             Color(
                                               int.parse(
-                                                  '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                  '0xff${roles![index].color!.replaceAll("#", "")}'),
                                             ),
                                             Color(
                                               int.parse(
-                                                  '0xff${roles[index].color!.replaceAll("#", "")}'),
+                                                  '0xff${roles![index].color!.replaceAll("#", "")}'),
                                             )
                                           ]
                                         : [
                                             Dark.foreground.value,
                                             Dark.foreground.value
                                           ],
-                                roles[index].name,
+                                roles![index].name,
                                 style: TextStyle(
                                   color: Dark.foreground.value,
                                 ),

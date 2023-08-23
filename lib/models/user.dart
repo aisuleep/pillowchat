@@ -200,7 +200,7 @@ class User {
     String presence,
     String text,
     String id,
-    List<Role> roles,
+    List<Role>? roles,
   ) {
     if (Client.isMobile) {
       showModalBottomSheet(

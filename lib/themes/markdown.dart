@@ -13,8 +13,10 @@ import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
+import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 // ignore: camel_case_types
 class markdown {
@@ -331,7 +333,7 @@ class UserMentionBuilder extends MarkdownElementBuilder {
           userIndex: userIndex,
           user: user!,
           avatar: user?.avatar?.value.id,
-          member: member?.avatar.value?.id != '' ? member : null,
+          member: member,
           url: url,
         );
       } else {
@@ -374,7 +376,7 @@ class UserMentionBlock extends StatelessWidget {
                   user.status.presence,
                   user.status.text ?? '',
                   user.id,
-                  member?.roles ?? [],
+                  member?.roles,
                 );
               },
               onHover: (color) {},
@@ -400,21 +402,38 @@ class UserMentionBlock extends StatelessWidget {
                           left: 2,
                           right: 4,
                         ),
-                        child: Text(
+                        child: GradientText(
                           member == null ||
                                   member?.avatar.value?.id == '' ||
                                   member?.nickname?.value == ''
                               ? user.displayName?.trim() ?? user.name.trim()
                               : member!.nickname!.trim(),
+                          colors: member != null &&
+                                  member!.roles.isNotEmpty &&
+                                  member!.roles[0].color != null &&
+                                  member!.roles[0].color!.contains("gradient")
+                              ? Role.getCssGradient(member!.roles[0].color!)
+                              : member != null &&
+                                      member!.roles.isNotEmpty &&
+                                      member!.roles[0].color != null &&
+                                      member!.roles[0].color!.length == 7
+                                  ? [
+                                      Color(
+                                        int.parse(
+                                            '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
+                                      ),
+                                      Color(
+                                        int.parse(
+                                            '0xff${member!.roles[0].color?.replaceAll("#", "")}'),
+                                      )
+                                    ]
+                                  : [
+                                      Dark.foreground.value,
+                                      Dark.foreground.value,
+                                    ],
                           style: TextStyle(
                             fontSize:
                                 ClientController.controller.fontSize.value,
-                            color: member != null &&
-                                    member!.roles.isNotEmpty &&
-                                    member?.roles[0].color?.length == 7
-                                ? Color(int.parse(
-                                    '0xff${member?.roles[0].color?.replaceAll("#", "")}'))
-                                : Dark.foreground.value,
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.fade,
                           ),

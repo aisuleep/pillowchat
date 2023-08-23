@@ -39,7 +39,6 @@ class MessageTile extends StatelessWidget {
     required this.user,
     this.content,
     this.member,
-    // this.emotes,
     this.reactions,
     // required this.fiveMinutes,
     // required this.fromSentTime,
@@ -57,7 +56,6 @@ class MessageTile extends StatelessWidget {
   final User user;
   final Member? member;
   final String? content;
-  // late List<dynamic>? emotes;
   RxList<Reaction>? reactions;
   // final bool fromSentTime;
   // final bool fiveMinutes;
