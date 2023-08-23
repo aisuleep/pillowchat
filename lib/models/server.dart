@@ -202,11 +202,11 @@ class Role {
     }
 
     // Check if the colorValue is a color name
-    if (colorNames.containsKey(colorValue
-        .replaceAll('%', '')
-        .replaceAll(RegExp(r'[0-9]'), '')
-        .trim())) {
-      // Use the color mapping
+
+    // Use the color mapping
+    if (colorNames.containsKey(colorValue)) {
+      return colorNames[colorValue]!;
+    } else if (colorValue.contains('%')) {
       return colorNames[colorValue
           .replaceAll('%', '')
           .replaceAll(RegExp(r'[0-9]'), '')

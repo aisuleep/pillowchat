@@ -94,7 +94,7 @@ eventsHandler(BuildContext context, dynamic json, var socket) {
       break;
 
     case 'ServerMemberUpdate':
-      if (kDebugMode) print('[events]: Server Member Update, $json');
+      if (kDebugMode) print('[events]: Server Member Update');
       Events.memberUpdate(json);
       break;
     case 'ServerMemberJoin':
