@@ -11,7 +11,6 @@ import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/widgets/message/replies.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MessageBox extends StatelessWidget {
   const MessageBox({super.key});
