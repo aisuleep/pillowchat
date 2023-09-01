@@ -5,8 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
+import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
+import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
+import 'package:pillowchat/widgets/message/replies.dart';
+import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MessageBox extends StatelessWidget {
@@ -15,7 +19,6 @@ class MessageBox extends StatelessWidget {
   static TextEditingController messageController = TextEditingController();
   static bool unlocked = true;
   static bool editing = false;
-
   static late String id;
   static late String initialContent;
 
@@ -29,9 +32,8 @@ class MessageBox extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Dark.secondaryHeader.value,
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
           ),
         ),
         child: Obx(
@@ -56,6 +58,57 @@ class MessageBox extends StatelessWidget {
                             ChannelController.controller.toggleEditing(editing);
                             messageController.clear();
                           })),
+                ),
+
+              if (ChannelController.controller.replyList.isNotEmpty)
+
+                // REPLYING BANNER
+
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: ChannelController.controller.replyList.length,
+                    itemBuilder: (context, index) {
+                      Message message =
+                          ChannelController.controller.replyList[index];
+                      User? user;
+                      int userIndex = ChannelController
+                          .controller.selected.value.users
+                          .indexWhere((users) => users.id == message.author);
+                      if (userIndex != -1) {
+                        user = ChannelController
+                            .controller.selected.value.users[userIndex];
+                      }
+                      Member? member;
+                      int memberIndex = ChannelController
+                          .controller.selected.value.members
+                          .indexWhere(
+                              (members) => members.userId == message.author);
+                      if (memberIndex != -1) {
+                        member = ChannelController
+                            .controller.selected.value.members[memberIndex];
+                      }
+                      return MessageBanner(
+                        icon: Icons.reply_rounded,
+                        hasTrailing: true,
+                        trailingColor: Dark.secondaryForeground.value,
+                        message: message,
+                        url: ReactorTile.getUrl(
+                          true,
+                          user!,
+                          messageIndex: message,
+                          serverMember: member,
+                        ),
+                        user: user,
+                        member: member,
+                        messages: ChannelController.controller.replyList,
+                        onPressed: () {
+                          ChannelController.controller.removeReply(message);
+                        },
+                      );
+                    },
+                  ),
                 ),
               // BOX
               ListTile(
@@ -174,6 +227,77 @@ class MessageBox extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class MessageBanner extends StatelessWidget {
+  const MessageBanner({
+    super.key,
+    this.title,
+    this.icon,
+    required this.trailingColor,
+    required this.hasTrailing,
+    required this.onPressed,
+    this.message,
+    this.url,
+    this.user,
+    this.member,
+    this.messages,
+  });
+  final String? title;
+  final IconData? icon;
+  final Color trailingColor;
+  final bool hasTrailing;
+  final dynamic onPressed;
+  final Message? message;
+  final String? url;
+  final User? user;
+  final Member? member;
+  final dynamic messages;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+          dense: message != null ? true : false,
+          minLeadingWidth: 0,
+          horizontalTitleGap: 4,
+          textColor: Dark.secondaryHeader.value,
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon),
+              if (message != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: IconButton(
+                    icon: const Icon(Icons.alternate_email),
+                    onPressed: () {},
+                  ),
+                ),
+            ],
+          ),
+          title: title != null
+              ? Text(title!)
+              : ReplyTile(
+                  url: url!,
+                  user: user!,
+                  member: member,
+                  messages: message!,
+                  reply: message!,
+                  // ignore: prefer_is_empty
+                  hasAttachment: message?.attachments?.length != 0,
+                ),
+          trailing: hasTrailing
+              ? IconButton(
+                  icon: Icon(
+                    Icons.cancel,
+                    color: trailingColor,
+                  ),
+                  onPressed: onPressed)
+              : null),
     );
   }
 }

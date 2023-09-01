@@ -24,6 +24,8 @@ class ChannelController extends GetxController {
   RxBool unlocked = true.obs;
   RxBool showMembers = true.obs;
   RxBool editing = false.obs;
+  RxBool replying = false.obs;
+  RxList<Message> replyList = <Message>[].obs;
   RxBool typing = false.obs;
   RxList<String> typingList = <String>[].obs;
   RxBool inCall = false.obs;
@@ -68,6 +70,14 @@ class ChannelController extends GetxController {
 
   void toggleEditing(bool bool) {
     editing.value = bool;
+  }
+
+  void addReply(Message reply) {
+    replyList.add(reply);
+  }
+
+  void removeReply(Message reply) {
+    replyList.remove(reply);
   }
 
   void triggerTyping(bool bool) {

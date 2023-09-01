@@ -130,7 +130,21 @@ class MessageOptions extends StatelessWidget {
                   tileColor: Colors.transparent,
                   minLeadingWidth: 8,
                   dense: true,
-                  onTap: () {},
+                  onTap: () {
+                    if (MessageBox.editing) {
+                      MessageBox.messageController.text = '';
+                      MessageBox.editing = false;
+                      ChannelController.controller
+                          .toggleEditing(MessageBox.editing);
+                    }
+
+                    if (ChannelController.controller.replyList.length <= 5 &&
+                        !ChannelController.controller.replyList
+                            .contains(messageIndex)) {
+                      ChannelController.controller.replyList.add(messageIndex);
+                      Navigator.pop(context);
+                    }
+                  },
                   leading: const Icon(
                     Icons.reply,
                     size: 22,
@@ -190,6 +204,9 @@ class MessageOptions extends StatelessWidget {
                     minLeadingWidth: 8,
                     dense: true,
                     onTap: () {
+                      if (ChannelController.controller.replyList.isNotEmpty) {
+                        ChannelController.controller.replyList.clear();
+                      }
                       MessageBox.initialContent = content;
                       MessageBox.messageController.text =
                           MessageBox.initialContent;

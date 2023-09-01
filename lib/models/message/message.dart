@@ -168,10 +168,11 @@ class Message {
     }
   }
 
-  static send(String content) async {
+  static send(String content, {List<Reply>? replies}) async {
     final channel = ChannelController.controller.selected.value.id;
     Map body = {
       'content': content,
+      'replies': replies,
     };
     try {
       var url = Uri.https(
@@ -247,9 +248,6 @@ class Message {
     }
   }
 
-  //
-  static reply(String messageId) async {}
-  //
   static getReplies(String channel, String messageId) async {
     try {
       var url = Uri.https(api, '/channels/$channel/messages/$messageId');

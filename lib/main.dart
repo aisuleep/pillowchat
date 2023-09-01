@@ -107,7 +107,14 @@ class MyApp extends StatelessWidget {
             color: Dark.foreground.value,
           ),
         ),
-        buttonTheme: const ButtonThemeData(splashColor: Colors.transparent),
+        buttonTheme: const ButtonThemeData(
+          splashColor: Colors.transparent,
+        ),
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+          ),
+        ),
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(

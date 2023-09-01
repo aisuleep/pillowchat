@@ -26,20 +26,14 @@ class Mentions {
 
 class Reply {
   late String id;
-  // late String nonce;
-  late String author;
-  late String content;
+  late bool mention;
   Reply(
     this.id,
-    this.author,
-    this.content,
   );
 
   Reply.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    // nonce = json['nonce'];
-    author = json['author'];
-    content = json['content'];
+    id = json['id'];
+    mention = json['content'];
   }
 }
 
