@@ -282,11 +282,12 @@ class MessageBanner extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
                     child: IconButton(
+                      padding: const EdgeInsets.all(0),
                       icon: Icon(
                         Icons.alternate_email,
                         color: mentionList![index!]
                             ? Dark.accent.value
-                            : Dark.foreground.value,
+                            : Dark.secondaryForeground.value,
                       ),
                       onPressed: () {
                         mentionList![index!] = !mentionList![index!];
