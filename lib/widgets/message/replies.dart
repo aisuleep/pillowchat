@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_is_empty
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
@@ -194,6 +193,7 @@ class Replies extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ReplyTile extends StatelessWidget {
   ReplyTile({
     super.key,
@@ -205,7 +205,6 @@ class ReplyTile extends StatelessWidget {
     required this.messages,
     required this.reply,
     required this.hasAttachment,
-    // required this.content,
   });
 
   final int? contentIndex;
@@ -217,7 +216,6 @@ class ReplyTile extends StatelessWidget {
   final ItemScrollController? itemScrollController;
   final bool hasAttachment;
   bool mentions = false;
-  // final String content;
 
   @override
   Widget build(BuildContext context) {
@@ -356,10 +354,15 @@ class ReplyTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (reply.content != null &&
+                if (contentIndex != 0 &&
+                        reply.content != null &&
                         !reply.content!.contains("[]") &&
-                        reply.content != ' ' ||
-                    reply.content != ' ' ||
+                        reply.content != ' ' &&
+                        reply.content != '' ||
+                    contentIndex != 0 &&
+                        reply.content != null &&
+                        reply.content != ' ' &&
+                        reply.content != '' ||
                     contentIndex == 0)
                   Expanded(
                     flex: 4,
