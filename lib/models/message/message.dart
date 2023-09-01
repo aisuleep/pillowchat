@@ -168,11 +168,39 @@ class Message {
     }
   }
 
-  static send(String content, {List<Reply>? replies}) async {
+  static send(String content, {List<Message>? replyList}) async {
     final channel = ChannelController.controller.selected.value.id;
+    RxList<Map> repliesList = <Map>[].obs;
+
+    if (replyList != null) {
+      for (Message reply in replyList) {
+        Map<String, dynamic> replyMap = {};
+
+        replyMap['id'] = reply.id!;
+
+        // ignore: prefer_is_empty
+
+        for (bool mention
+            in ChannelController.controller.selected.value.mentionList!) {
+          if (kDebugMode) {
+            print(mention);
+          }
+          replyMap['mention'] = mention;
+        }
+        repliesList.add(replyMap);
+        repliesList.refresh();
+
+        if (kDebugMode) {
+          print(repliesList[0]['mention']);
+        }
+      }
+
+      // ignore: prefer_is_empty
+    }
+
     Map body = {
       'content': content,
-      'replies': replies,
+      'replies': repliesList.isEmpty ? null : repliesList,
     };
     try {
       var url = Uri.https(

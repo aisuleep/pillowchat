@@ -139,15 +139,16 @@ class MessageOptions extends StatelessWidget {
                     }
 
                     if (ChannelController
-                                .controller.selected.value.replyList.length <=
+                                .controller.selected.value.replyList.length <
                             5 &&
                         !ChannelController.controller.selected.value.replyList
                             .contains(messageIndex)) {
                       ChannelController.controller.selected.value.replyList
                           .add(messageIndex);
-                      MessageBanner.mentionList?.add(false);
-                      Navigator.pop(context);
+                      ChannelController.controller.selected.value.mentionList
+                          ?.add(false);
                     }
+                    Navigator.pop(context);
                   },
                   leading: const Icon(
                     Icons.reply,

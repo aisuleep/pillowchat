@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_is_empty
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
@@ -28,7 +29,8 @@ class Replies extends StatelessWidget {
     late int userIndex;
     late int memberIndex;
     late String author;
-    late bool hasAttachment = false;
+    bool hasAttachment = false;
+
     late Message reply;
 
     return ListView.builder(
@@ -193,7 +195,7 @@ class Replies extends StatelessWidget {
 }
 
 class ReplyTile extends StatelessWidget {
-  const ReplyTile({
+  ReplyTile({
     super.key,
     this.contentIndex,
     this.itemScrollController,
@@ -214,10 +216,14 @@ class ReplyTile extends StatelessWidget {
   final Message reply;
   final ItemScrollController? itemScrollController;
   final bool hasAttachment;
+  bool mentions = false;
   // final String content;
 
   @override
   Widget build(BuildContext context) {
+    if (messages.mentions?.length != 0) {
+      mentions = messages.mentions!.contains(reply.author);
+    }
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -238,18 +244,18 @@ class ReplyTile extends StatelessWidget {
             padding: const EdgeInsets.only(right: 6),
             child: GradientText(
               member?.nickname?.value != '' && member?.nickname?.value != null
-                  ? messages.mentions?.length != 0
+                  ? mentions
                       ? "@${member?.nickname!.value.trim()}"
                       : member!.nickname!.value.trim()
                   : user.bot == null || reply.masquerade?.name == ''
                       ? user.displayName != null
-                          ? messages.mentions?.length != 0
+                          ? mentions
                               ? "@${user.displayName!.trim()}"
                               : user.displayName!.trim()
-                          : messages.mentions?.length != 0
+                          : mentions
                               ? "@${user.name.trim()}"
                               : user.name.trim()
-                      : messages.mentions?.length != 0
+                      : mentions
                           ? "@${reply.masquerade!.name.trim()}"
                           : reply.masquerade!.name.trim(),
               colors: member != null &&

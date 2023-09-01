@@ -69,6 +69,7 @@ class MessageBox extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: ListView.builder(
                     shrinkWrap: true,
+                    reverse: true,
                     itemCount: ChannelController
                         .controller.selected.value.replyList.length,
                     itemBuilder: (context, index) {
@@ -194,10 +195,19 @@ class MessageBox extends StatelessWidget {
 
                               final content = messageController.text;
                               if (content.trim() != '') {
-                                Message.send(content);
+                                Message.send(content,
+                                    replyList: ChannelController
+                                        .controller.selected.value.replyList);
                                 messageController.clear();
                               }
-                              ItemScrollController().jumpTo(index: 0);
+                              ChannelController
+                                  .controller.selected.value.replyList
+                                  .clear();
+                              ChannelController
+                                  .controller.selected.value.mentionList
+                                  ?.clear();
+
+                              // ItemScrollController().jumpTo(index: 0);
                             },
                           ),
                         ],
@@ -261,7 +271,7 @@ class MessageBanner extends StatelessWidget {
   final Member? member;
   final dynamic messages;
   final int? index;
-  static RxList<bool>? mentionList = <bool>[].obs;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -285,12 +295,16 @@ class MessageBanner extends StatelessWidget {
                       padding: const EdgeInsets.all(0),
                       icon: Icon(
                         Icons.alternate_email,
-                        color: mentionList![index!]
+                        color: ChannelController
+                                .controller.selected.value.mentionList![index!]
                             ? Dark.accent.value
                             : Dark.secondaryForeground.value,
                       ),
                       onPressed: () {
-                        mentionList![index!] = !mentionList![index!];
+                        ChannelController.controller.selected.value
+                                .mentionList![index!] =
+                            !ChannelController
+                                .controller.selected.value.mentionList![index!];
                       },
                     ),
                   ),

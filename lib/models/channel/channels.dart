@@ -28,6 +28,8 @@ class Channel {
   RxBool isUnread = true.obs;
   RxList<User> typingList = <User>[].obs;
   RxList<Message> replyList = <Message>[].obs;
+  RxList<bool>? mentionList = <bool>[].obs;
+
   Channel({
     required this.id,
     required this.name,
