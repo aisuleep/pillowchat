@@ -25,7 +25,6 @@ class ChannelController extends GetxController {
   RxBool showMembers = true.obs;
   RxBool editing = false.obs;
   RxBool replying = false.obs;
-  RxList<Message> replyList = <Message>[].obs;
   RxBool typing = false.obs;
   RxList<String> typingList = <String>[].obs;
   RxBool inCall = false.obs;
@@ -73,11 +72,11 @@ class ChannelController extends GetxController {
   }
 
   void addReply(Message reply) {
-    replyList.add(reply);
+    selected.value.replyList.add(reply);
   }
 
   void removeReply(Message reply) {
-    replyList.remove(reply);
+    selected.value.replyList.remove(reply);
   }
 
   void triggerTyping(bool bool) {

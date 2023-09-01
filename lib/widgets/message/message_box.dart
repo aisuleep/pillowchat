@@ -60,7 +60,8 @@ class MessageBox extends StatelessWidget {
                           })),
                 ),
 
-              if (ChannelController.controller.replyList.isNotEmpty)
+              if (ChannelController
+                  .controller.selected.value.replyList.isNotEmpty)
 
                 // REPLYING BANNER
 
@@ -68,10 +69,11 @@ class MessageBox extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: ChannelController.controller.replyList.length,
+                    itemCount: ChannelController
+                        .controller.selected.value.replyList.length,
                     itemBuilder: (context, index) {
-                      Message message =
-                          ChannelController.controller.replyList[index];
+                      Message message = ChannelController
+                          .controller.selected.value.replyList[index];
                       User? user;
                       int userIndex = ChannelController
                           .controller.selected.value.users
@@ -93,6 +95,7 @@ class MessageBox extends StatelessWidget {
                         icon: Icons.reply_rounded,
                         hasTrailing: true,
                         trailingColor: Dark.secondaryForeground.value,
+                        index: index,
                         message: message,
                         url: ReactorTile.getUrl(
                           true,
@@ -102,7 +105,8 @@ class MessageBox extends StatelessWidget {
                         ),
                         user: user,
                         member: member,
-                        messages: ChannelController.controller.replyList,
+                        messages: ChannelController
+                            .controller.selected.value.replyList,
                         onPressed: () {
                           ChannelController.controller.removeReply(message);
                         },
@@ -244,6 +248,7 @@ class MessageBanner extends StatelessWidget {
     this.user,
     this.member,
     this.messages,
+    this.index,
   });
   final String? title;
   final IconData? icon;
@@ -255,49 +260,61 @@ class MessageBanner extends StatelessWidget {
   final User? user;
   final Member? member;
   final dynamic messages;
-
+  final int? index;
+  static RxList<bool>? mentionList = <bool>[].obs;
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: ListTile(
-          dense: message != null ? true : false,
-          minLeadingWidth: 0,
-          horizontalTitleGap: 4,
-          textColor: Dark.secondaryHeader.value,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon),
-              if (message != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: IconButton(
-                    icon: const Icon(Icons.alternate_email),
-                    onPressed: () {},
+      child: Obx(
+        () => ListTile(
+            dense: message != null ? true : false,
+            minLeadingWidth: 0,
+            horizontalTitleGap: 4,
+            textColor: Dark.secondaryHeader.value,
+            leading: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon),
+                if (message != null &&
+                    message?.author !=
+                        ClientController.controller.selectedUser.value.id)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.alternate_email,
+                        color: mentionList![index!]
+                            ? Dark.accent.value
+                            : Dark.foreground.value,
+                      ),
+                      onPressed: () {
+                        mentionList![index!] = !mentionList![index!];
+                      },
+                    ),
                   ),
-                ),
-            ],
-          ),
-          title: title != null
-              ? Text(title!)
-              : ReplyTile(
-                  url: url!,
-                  user: user!,
-                  member: member,
-                  messages: message!,
-                  reply: message!,
-                  // ignore: prefer_is_empty
-                  hasAttachment: message?.attachments?.length != 0,
-                ),
-          trailing: hasTrailing
-              ? IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    color: trailingColor,
+              ],
+            ),
+            title: title != null
+                ? Text(title!)
+                : ReplyTile(
+                    url: url!,
+                    user: user!,
+                    member: member,
+                    messages: message!,
+                    reply: message!,
+                    // ignore: prefer_is_empty
+                    hasAttachment: message?.attachments?.length != 0,
                   ),
-                  onPressed: onPressed)
-              : null),
+            trailing: hasTrailing
+                ? IconButton(
+                    icon: Icon(
+                      Icons.cancel,
+                      color: trailingColor,
+                    ),
+                    onPressed: onPressed)
+                : null),
+      ),
     );
   }
 }

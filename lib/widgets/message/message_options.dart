@@ -138,10 +138,14 @@ class MessageOptions extends StatelessWidget {
                           .toggleEditing(MessageBox.editing);
                     }
 
-                    if (ChannelController.controller.replyList.length <= 5 &&
-                        !ChannelController.controller.replyList
+                    if (ChannelController
+                                .controller.selected.value.replyList.length <=
+                            5 &&
+                        !ChannelController.controller.selected.value.replyList
                             .contains(messageIndex)) {
-                      ChannelController.controller.replyList.add(messageIndex);
+                      ChannelController.controller.selected.value.replyList
+                          .add(messageIndex);
+                      MessageBanner.mentionList?.add(false);
                       Navigator.pop(context);
                     }
                   },
@@ -204,8 +208,10 @@ class MessageOptions extends StatelessWidget {
                     minLeadingWidth: 8,
                     dense: true,
                     onTap: () {
-                      if (ChannelController.controller.replyList.isNotEmpty) {
-                        ChannelController.controller.replyList.clear();
+                      if (ChannelController
+                          .controller.selected.value.replyList.isNotEmpty) {
+                        ChannelController.controller.selected.value.replyList
+                            .clear();
                       }
                       MessageBox.initialContent = content;
                       MessageBox.messageController.text =

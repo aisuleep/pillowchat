@@ -352,8 +352,8 @@ class ReplyTile extends StatelessWidget {
                   ),
                 if (reply.content != null &&
                         !reply.content!.contains("[]") &&
-                        reply.content != '' ||
-                    reply.content != '' ||
+                        reply.content != ' ' ||
+                    reply.content != ' ' ||
                     contentIndex == 0)
                   Expanded(
                     flex: 4,
@@ -367,7 +367,9 @@ class ReplyTile extends StatelessWidget {
                           jumpToReply();
                         }
                       },
-                      data: contentIndex != 0
+                      data: contentIndex != 0 &&
+                              reply.content != null &&
+                              reply.content != ' '
                           ? reply.content!.replaceAll("\n", ' ')
                           : "  *Couldn't load message*",
                       maxLines: 1,
