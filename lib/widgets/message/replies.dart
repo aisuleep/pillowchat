@@ -199,6 +199,7 @@ class ReplyTile extends StatelessWidget {
     super.key,
     this.contentIndex,
     this.itemScrollController,
+    this.showMention,
     required this.url,
     required this.user,
     required this.member,
@@ -216,6 +217,7 @@ class ReplyTile extends StatelessWidget {
   final ItemScrollController? itemScrollController;
   final bool hasAttachment;
   bool mentions = false;
+  bool? showMention = true;
 
   @override
   Widget build(BuildContext context) {
@@ -242,18 +244,18 @@ class ReplyTile extends StatelessWidget {
             padding: const EdgeInsets.only(right: 6),
             child: GradientText(
               member?.nickname?.value != '' && member?.nickname?.value != null
-                  ? mentions
+                  ? mentions && showMention!
                       ? "@${member?.nickname!.value.trim()}"
                       : member!.nickname!.value.trim()
                   : user.bot == null || reply.masquerade?.name == ''
                       ? user.displayName != null
-                          ? mentions
+                          ? mentions && showMention != false
                               ? "@${user.displayName!.trim()}"
                               : user.displayName!.trim()
-                          : mentions
+                          : mentions && showMention!
                               ? "@${user.name.trim()}"
                               : user.name.trim()
-                      : mentions
+                      : mentions && showMention!
                           ? "@${reply.masquerade!.name.trim()}"
                           : reply.masquerade!.name.trim(),
               colors: member != null &&

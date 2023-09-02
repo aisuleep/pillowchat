@@ -95,12 +95,16 @@ class Events {
           }
           // ADD MESSAGE
 
-          ServerController.controller.serversList[serverIndex]
+          if (!ServerController.controller.serversList[serverIndex]
               .channels[channelIndex].messages
-              .insert(0, message);
-          ServerController.controller.serversList[serverIndex]
-              .channels[channelIndex].messages
-              .refresh();
+              .contains(message)) {
+            ServerController.controller.serversList[serverIndex]
+                .channels[channelIndex].messages
+                .insert(0, message);
+            ServerController.controller.serversList[serverIndex]
+                .channels[channelIndex].messages
+                .refresh();
+          }
         }
       } else {
         if (ServerController.controller.homeIndex.value != 0) {

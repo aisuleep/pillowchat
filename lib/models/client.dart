@@ -220,44 +220,42 @@ class Client {
         'password': passController.text,
         'friendly_name': 'Pillow $mode on $os'
       };
-      if (prefs.getString("token") != null) {
-        if (kDebugMode) print('not null');
-        http.Response response = await http.post(url, body: jsonEncode(body));
-        if (response.statusCode == 200 ||
-            ClientController.controller.selectedUser.value.id != '') {
-          if (kDebugMode) print('successful login');
 
-          if (ClientController.controller.selectedUser.value.id == '') {
-            final json = jsonDecode(response.body);
-            if (kDebugMode) print(json);
-            final t = json['token'];
-            Client.token = t;
-            final i = json['_id'];
-            Client.currentSession.value.id = i;
-            User.fetchSelf();
-          }
+      http.Response response = await http.post(url, body: jsonEncode(body));
+      if (response.statusCode == 200 ||
+          ClientController.controller.selectedUser.value.id != '') {
+        if (kDebugMode) print('successful login');
 
-          ClientController.controller.updateLogStatus(true);
-          ClientController.controller.home.value = true;
-
-          await prefs.setString(
-              "userId", ClientController.controller.selectedUser.value.id);
-          List<Session> sesh = await fetchSessions();
-          sessions.assignAll(sesh);
-          Client.connect(context);
-          saveInfo();
-
-          emailController.clear();
-          passController.clear();
+        if (ClientController.controller.selectedUser.value.id == '') {
+          final json = jsonDecode(response.body);
+          if (kDebugMode) print(json);
+          final t = json['token'];
+          Client.token = t;
+          final i = json['_id'];
+          Client.currentSession.value.id = i;
+          User.fetchSelf();
         }
-        if (response.statusCode == 0) {
-          if (kDebugMode) print(response.body);
-          emailController.clear();
-          passController.clear();
-        } else if (response.statusCode == 1) {
-          if (kDebugMode) print(response.body);
-          throw jsonDecode(response.body)['message'];
-        }
+
+        ClientController.controller.updateLogStatus(true);
+        ClientController.controller.home.value = true;
+
+        await prefs.setString(
+            "userId", ClientController.controller.selectedUser.value.id);
+        List<Session> sesh = await fetchSessions();
+        sessions.assignAll(sesh);
+        Client.connect(context);
+        saveInfo();
+
+        emailController.clear();
+        passController.clear();
+      }
+      if (response.statusCode == 0) {
+        if (kDebugMode) print(response.body);
+        emailController.clear();
+        passController.clear();
+      } else if (response.statusCode == 1) {
+        if (kDebugMode) print(response.body);
+        throw jsonDecode(response.body)['message'];
       }
     } catch (e) {
       if (kDebugMode) print(e);

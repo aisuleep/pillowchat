@@ -18,7 +18,12 @@ eventsHandler(BuildContext context, dynamic json, var socket) {
     case 'Message':
       Message message = Message.fromJson(json);
       Events.addMessage(message);
-      // if (kDebugMode) print('[events]: Message');
+      if (kDebugMode &&
+          json['id'] == ChannelController.controller.selected.value.id) {
+        // ignore: avoid_print
+        print('[events]: Message');
+      }
+
       break;
 
     case 'MessageUpdate':

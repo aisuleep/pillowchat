@@ -68,7 +68,6 @@ class MessageBox extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: ListView.builder(
                     shrinkWrap: true,
-                    reverse: true,
                     itemCount: ChannelController
                         .controller.selected.value.replyList.length,
                     itemBuilder: (context, index) {
@@ -198,13 +197,13 @@ class MessageBox extends StatelessWidget {
                                     replyList: ChannelController
                                         .controller.selected.value.replyList);
                                 messageController.clear();
+                                ChannelController
+                                    .controller.selected.value.replyList
+                                    .clear();
+                                ChannelController
+                                    .controller.selected.value.mentionList
+                                    ?.clear();
                               }
-                              ChannelController
-                                  .controller.selected.value.replyList
-                                  .clear();
-                              ChannelController
-                                  .controller.selected.value.mentionList
-                                  ?.clear();
 
                               // ItemScrollController().jumpTo(index: 0);
                             },
@@ -312,6 +311,7 @@ class MessageBanner extends StatelessWidget {
             title: title != null
                 ? Text(title!)
                 : ReplyTile(
+                    showMention: false,
                     url: url!,
                     user: user!,
                     member: member,
