@@ -9,6 +9,10 @@ import 'package:pillowchat/models/message/message.dart';
 
 eventsHandler(BuildContext context, dynamic json, var socket) {
   switch (json['type']) {
+    case 'Bulk':
+      if (kDebugMode) print('[events]: Bulk');
+      if (kDebugMode) print('[BULK]: $json');
+      break;
     // MESSAGE
 
     case 'Message':
