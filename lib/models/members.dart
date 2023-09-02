@@ -37,7 +37,7 @@ class Member {
     }
 
     if (json['avatar'] != null) {
-      if (kDebugMode) print(json['avatar']);
+      // if (kDebugMode) print(json['avatar']);
       avatar.value = Avatar.fromJson(json['avatar']);
     }
 

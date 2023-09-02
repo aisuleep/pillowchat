@@ -29,7 +29,7 @@ class SessionsPage extends StatelessWidget {
                 itemCount: Client.sessions.length,
                 itemBuilder: (context, index) {
                   return SessionTile(
-                    id: Client.sessions[index].id!,
+                    id: Client.sessions[index].id,
                     name: Client.sessions[index].name!,
                   );
                 }),

@@ -1,12 +1,9 @@
 // ignore_for_file:
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/models/client.dart';
-import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,30 +17,16 @@ class LoginPage extends StatelessWidget {
     // ignore: unused_element
     getLoginState() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (prefs.getString("token") != null) {
+      if (prefs.getString("token") != null &&
+          ServerController.controller.serversList.isEmpty) {
         Client.token = prefs.getString("token")!;
-        ClientController.controller.updateLogStatus(true);
-        if (prefs.getBool('logged') == true) {
-          // GET SAVED USER
-
-          if (prefs.getString("user") != null) {
-            Map<String, dynamic> userMap = jsonDecode(prefs.getString("user")!);
-            User user = User.fromJson(userMap);
-            ClientController.controller.selectUser(user);
-          }
-
-          // GET SAVED SERVERS
-
-          if (prefs.getString("servers") != null) {
-            List<dynamic> serversMap = jsonDecode(prefs.getString("servers")!);
-            var servers = serversMap.map((s) => Server.fromJson(s)).toList();
-            ServerController.controller.serversList.value = servers;
-          }
+        if (ClientController.controller.selectedUser.value.id == '') {
+          User.fetchSelf().then(Client.login(context));
         }
       }
     }
 
-    // getLoginState();
+    getLoginState();
 
     return Scaffold(
       body: Padding(
@@ -59,7 +42,7 @@ class LoginPage extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.only(bottom: 24),
                       child: Text(
-                        "Welcome to !",
+                        "Welcome to pillowchat!",
                         style: TextStyle(fontSize: 30),
                       ),
                     ),

@@ -1,5 +1,5 @@
 class Session {
-  late String? id;
+  late String id;
   late String? name;
 
   Session(this.id, this.name);

@@ -39,7 +39,7 @@ class Client {
   static List<Categories> categories = [];
   static List<User> relations = [];
   static RxList<Session> sessions = <Session>[].obs;
-  static Rx<Session> currentSession = Session(null, null).obs;
+  static Rx<Session> currentSession = Session('', null).obs;
   static const String api = 'api.revolt.chat';
   static const String ws = 'wss://ws.revolt.chat';
   static const String autumn = 'https://autumn.revolt.chat';
@@ -114,6 +114,8 @@ class Client {
         // REMOVE SAVED SESSION
 
         await prefs.remove("token");
+        await prefs.remove("sessionId");
+        await prefs.remove("sessionName");
         await prefs.remove("user");
         await prefs.remove("userId");
         // SAVE VC SETTINGS
@@ -135,6 +137,10 @@ class Client {
   static saveInfo() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("token", Client.token);
+    await prefs.setString("sessionId", Client.currentSession.value.id);
+    if (Client.currentSession.value.name != null) {
+      await prefs.setString("sessionName", Client.currentSession.value.name!);
+    }
 
     final double? radius = prefs.getDouble("iconRadius");
     if (radius != null) {
@@ -214,40 +220,45 @@ class Client {
         'password': passController.text,
         'friendly_name': 'Pillow $mode on $os'
       };
-      // if (prefs.getString("token") == null) {
-      if (kDebugMode) print('not null');
-      http.Response response = await http.post(url, body: jsonEncode(body));
-      if (response.statusCode == 200) {
-        if (kDebugMode) print('successful login');
-        final json = jsonDecode(response.body);
-        if (kDebugMode) print(json);
-        final t = json['token'];
-        Client.token = t;
-        final i = json['_id'];
-        Client.currentSession.value.id = i;
-        ClientController.controller.updateLogStatus(true);
-        ClientController.controller.home.value = true;
-        User.fetchSelf();
-        await prefs.setString(
-            "userId", ClientController.controller.selectedUser.value.id);
-        List<Session> sesh = await fetchSessions();
-        sessions.assignAll(sesh);
-        // await Server.fetchMembers();
-        Client.connect(context);
-        saveInfo();
+      if (prefs.getString("token") != null) {
+        if (kDebugMode) print('not null');
+        http.Response response = await http.post(url, body: jsonEncode(body));
+        if (response.statusCode == 200 ||
+            ClientController.controller.selectedUser.value.id != '') {
+          if (kDebugMode) print('successful login');
 
-        emailController.clear();
-        passController.clear();
+          if (ClientController.controller.selectedUser.value.id == '') {
+            final json = jsonDecode(response.body);
+            if (kDebugMode) print(json);
+            final t = json['token'];
+            Client.token = t;
+            final i = json['_id'];
+            Client.currentSession.value.id = i;
+            User.fetchSelf();
+          }
+
+          ClientController.controller.updateLogStatus(true);
+          ClientController.controller.home.value = true;
+
+          await prefs.setString(
+              "userId", ClientController.controller.selectedUser.value.id);
+          List<Session> sesh = await fetchSessions();
+          sessions.assignAll(sesh);
+          Client.connect(context);
+          saveInfo();
+
+          emailController.clear();
+          passController.clear();
+        }
+        if (response.statusCode == 0) {
+          if (kDebugMode) print(response.body);
+          emailController.clear();
+          passController.clear();
+        } else if (response.statusCode == 1) {
+          if (kDebugMode) print(response.body);
+          throw jsonDecode(response.body)['message'];
+        }
       }
-      if (response.statusCode == 0) {
-        if (kDebugMode) print(response.body);
-        emailController.clear();
-        passController.clear();
-      } else if (response.statusCode == 1) {
-        if (kDebugMode) print(response.body);
-        throw jsonDecode(response.body)['message'];
-      }
-      // }
     } catch (e) {
       if (kDebugMode) print(e);
     }
