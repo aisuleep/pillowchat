@@ -244,7 +244,7 @@ class ReplyTile extends StatelessWidget {
             padding: const EdgeInsets.only(right: 6),
             child: GradientText(
               member?.nickname?.value != '' && member?.nickname?.value != null
-                  ? mentions && showMention!
+                  ? mentions && showMention != false
                       ? "@${member?.nickname!.value.trim()}"
                       : member!.nickname!.value.trim()
                   : user.bot == null || reply.masquerade?.name == ''
@@ -252,7 +252,7 @@ class ReplyTile extends StatelessWidget {
                           ? mentions && showMention != false
                               ? "@${user.displayName!.trim()}"
                               : user.displayName!.trim()
-                          : mentions && showMention!
+                          : mentions && showMention != false
                               ? "@${user.name.trim()}"
                               : user.name.trim()
                       : mentions && showMention!
