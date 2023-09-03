@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
           ServerController.controller.serversList.isEmpty) {
         Client.token = prefs.getString("token")!;
         if (ClientController.controller.selectedUser.value.id == '') {
-          User.fetchSelf().then(Client.login(context));
+          User.fetchSelf().then(await Client.login(context));
         }
       }
     }
