@@ -395,11 +395,13 @@ class UserIcon extends StatelessWidget {
     this.user,
     this.onPressed,
     this.url,
+    this.isReply,
   });
   final User? user;
   final double radius;
   final RxString? url;
   final bool hasStatus;
+  final bool? isReply;
   final VoidCallback? onPressed;
   final RxBool? isHovered = false.obs;
   @override
@@ -422,9 +424,11 @@ class UserIcon extends StatelessWidget {
                     )
                   : null,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  IconBorder.radius.toDouble(),
-                ),
+                borderRadius: isReply != null
+                    ? BorderRadius.circular(IconBorder.radius.toDouble()) * .5
+                    : BorderRadius.circular(
+                        IconBorder.radius.toDouble(),
+                      ),
                 child: Image.network(
                   width: radius,
                   height: radius,

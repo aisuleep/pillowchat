@@ -235,6 +235,7 @@ class ReplyTile extends StatelessWidget {
               url: url.obs,
               user: user,
               hasStatus: false,
+              isReply: true,
               radius: 15,
             ),
           ),
