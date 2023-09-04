@@ -195,10 +195,11 @@ class ServersPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: 8,
-                color: Dark.primaryBackground.value,
-              ),
+              if (Client.isMobile)
+                Container(
+                  width: 8,
+                  color: Dark.primaryBackground.value,
+                ),
             ],
           ),
         ),
