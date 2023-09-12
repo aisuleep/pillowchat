@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
+import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/message/parts/message_components.dart';
-import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProxiesPage extends StatelessWidget {
   const ProxiesPage({super.key});
@@ -16,36 +17,24 @@ class ProxiesPage extends StatelessWidget {
         children: [
           Obx(
             () => Expanded(
-              child: ListView(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 8,
                   horizontal: 16,
                 ),
-                children: [
-                  ProxyTile(
-                    proxy: Masquerade(
-                        ClientController.controller.selectedUser.value.name,
-                        '',
-                        null),
+                child: Column(
+                  children: List.generate(
+                    ClientController.controller.proxies.length,
+                    (index) {
+                      Masquerade proxy =
+                          ClientController.controller.proxies[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: ProxyTile(proxy: proxy),
+                      );
+                    },
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("Proxies"),
-                  ),
-                  Column(
-                    children: List.generate(
-                      ClientController.controller.proxies.length,
-                      (index) {
-                        Masquerade proxy =
-                            ClientController.controller.proxies[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: ProxyTile(proxy: proxy),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -64,6 +53,7 @@ class ProxyTile extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
   final RxBool isEditing = false.obs;
   final RxBool isEditingIcon = false.obs;
+  final SharedPreferences? prefs = Client.prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -80,38 +70,50 @@ class ProxyTile extends StatelessWidget {
                   EditableUserIcon(
                     isEditing: isEditingIcon,
                     proxy: proxy.obs,
-                    user: ClientController.controller.selectedUser.value,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: CircleAvatar(
-                      radius: 10,
-                      foregroundColor: Colors.teal,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: EditableText(
-                      isEditing: isEditing,
-                      controller: controller,
-                      proxy: proxy.obs,
-                      text: proxy.name,
-                      toChange: "name",
-                      // style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
                   ),
                   Expanded(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              ClientController.controller.removeProxy(proxy);
-                            },
-                            icon: const Icon((Icons.remove)))
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: CircleAvatar(
+                            radius: 10,
+                            foregroundColor: Colors.teal,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: EditableText(
+                            isEditing: isEditing,
+                            controller: controller,
+                            proxy: proxy.obs,
+                            text: proxy.name,
+                            toChange: "name",
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    int index = ClientController
+                                        .controller.proxies
+                                        .indexWhere(
+                                            (proxies) => proxies == proxy);
+                                    if (index != -1) {
+                                      ClientController.controller
+                                          .removeProxy(proxy, index);
+                                    }
+                                    Client.prefs?.remove('proxyIndex');
+                                  },
+                                  icon: const Icon((Icons.remove)))
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -125,7 +127,6 @@ class ProxyTile extends StatelessWidget {
 class EditableUserIcon extends StatelessWidget {
   EditableUserIcon({
     super.key,
-    required this.user,
     required this.isEditing,
     required this.proxy,
     this.url,
@@ -143,7 +144,7 @@ class EditableUserIcon extends StatelessWidget {
     isEditing.value = false;
   }
 
-  final User user;
+  final SharedPreferences? prefs = Client.prefs;
   @override
   Widget build(BuildContext context) {
     return Obx(

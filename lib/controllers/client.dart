@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClientController extends GetxController {
   final RxBool logged = false.obs;
@@ -13,6 +16,7 @@ class ClientController extends GetxController {
   final RxInt time = 0.obs;
   Rx<User> selectedUser = Rx<User>(User(id: '', name: ''));
   RxList<Masquerade> proxies = <Masquerade>[].obs;
+  Rx<Masquerade> selectedProxy = Masquerade('', '', null).obs;
 
   // INIT CONTROLLER
   static final ClientController controller = Get.put(ClientController());
@@ -25,11 +29,16 @@ class ClientController extends GetxController {
     selectedUser.value = user;
   }
 
-  addProxy(Masquerade proxy) {
+  addProxy(Masquerade proxy, int index) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     proxies.add(proxy);
+    await prefs.setString('proxy$index',
+        jsonEncode(Masquerade(proxy.name, proxy.avatar, proxy.color)));
   }
 
-  removeProxy(Masquerade proxy) {
-    proxies.removeWhere((proxies) => proxies.name == proxy.name);
+  removeProxy(Masquerade proxy, int index) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    proxies.remove(proxy);
+    await prefs.remove('proxy$index');
   }
 }

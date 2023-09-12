@@ -43,6 +43,8 @@ class Client {
   static const String api = 'api.revolt.chat';
   static const String ws = 'wss://ws.revolt.chat';
   static const String autumn = 'https://autumn.revolt.chat';
+  static SharedPreferences? prefs;
+
   static String getAvatar(User user, {String? id}) {
     String url;
     if (user.avatar?.value.id != null && user.avatar?.value.id != '') {
@@ -101,7 +103,7 @@ class Client {
   }
 
   static logout(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     try {
       var url = Uri.https(api, '/auth/session/logout');
 
@@ -113,16 +115,16 @@ class Client {
         ClientController.controller.updateLogStatus(false);
         // REMOVE SAVED SESSION
 
-        await prefs.remove("token");
-        await prefs.remove("sessionId");
-        await prefs.remove("sessionName");
-        await prefs.remove("user");
-        await prefs.remove("userId");
+        await prefs?.remove("token");
+        await prefs?.remove("sessionId");
+        await prefs?.remove("sessionName");
+        await prefs?.remove("user");
+        await prefs?.remove("userId");
         // SAVE VC SETTINGS
 
-        await prefs.setDouble("iconRadius", IconBorder.radius.value);
-        await prefs.setBool("muted", ChannelController.controller.muted.value);
-        await prefs.setBool(
+        await prefs?.setDouble("iconRadius", IconBorder.radius.value);
+        await prefs?.setBool("muted", ChannelController.controller.muted.value);
+        await prefs?.setBool(
             "defeaned", ChannelController.controller.deafened.value);
         // ServerController.controller.dispose();
         // ChannelController.controller.dispose();

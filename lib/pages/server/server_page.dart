@@ -107,6 +107,8 @@ class ServersPage extends StatelessWidget {
                                             size: 24,
                                           ),
                                           onPressed: () {
+                                            ClientController.controller.proxies
+                                                .clear();
                                             showModalBottomSheet(
                                               backgroundColor:
                                                   Dark.background.value,

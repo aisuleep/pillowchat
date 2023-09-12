@@ -7,19 +7,22 @@ import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
+import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/widgets/message/replies.dart';
 import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 
+// ignore: must_be_immutable
 class MessageBox extends StatelessWidget {
-  const MessageBox({super.key});
+  MessageBox({super.key});
 
   static TextEditingController messageController = TextEditingController();
   static bool unlocked = true;
   static bool editing = false;
   static late String id;
   static late String initialContent;
+  RxInt index = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -162,15 +165,53 @@ class MessageBox extends StatelessWidget {
                           color: Dark.secondaryForeground.value),
                       counterText: ''),
                 ),
-                leading: Visibility(
-                  visible: unlocked,
-                  child: IconButton(
-                    padding: const EdgeInsets.all(0),
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.add,
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Visibility(
+                      visible: unlocked,
+                      child: IconButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.add,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (ClientController.controller.proxies.isNotEmpty)
+                      IntrinsicWidth(
+                        child: DropdownButton(
+                          // onChanged: (value) {},
+                          onChanged: (value) {
+                            ClientController.controller.selectedProxy.value ==
+                                value;
+                            index.value = ClientController.controller.proxies
+                                .indexWhere((proxies) =>
+                                    proxies ==
+                                    ClientController
+                                        .controller.selectedProxy.value);
+                          },
+                          items: ClientController.controller.proxies
+                              .map((Masquerade proxy) {
+                            return DropdownMenuItem(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 12,
+                                    backgroundImage: NetworkImage(proxy.avatar),
+                                  ),
+                                  Text(
+                                    proxy.name,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    // ),
+                  ],
                 ),
                 trailing: unlocked && !editing
                     ? Row(

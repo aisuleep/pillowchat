@@ -186,7 +186,8 @@ class MyApp extends StatelessWidget {
             isSubpage: true,
             trailing: Icons.add,
             trailingPressed: () {
-              ClientController.controller.addProxy(Masquerade('', '', null));
+              ClientController.controller.addProxy(Masquerade('', '', null),
+                  ClientController.controller.proxies.length);
             }),
         '/settings/status': (context) => SettingsSubPage(
               page: StatusPage(),
