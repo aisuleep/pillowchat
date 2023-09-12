@@ -436,7 +436,7 @@ class UserIcon extends StatelessWidget {
                   filterQuality: FilterQuality.medium,
                   !ClientController.controller.home.value
                       ? url?.value ?? Client.getAvatar(user!)
-                      : Client.getAvatar(user!),
+                      : url?.value ?? Client.getAvatar(user!),
                 ),
               ),
             ),

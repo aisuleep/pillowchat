@@ -63,6 +63,7 @@ class ProxyTile extends StatelessWidget {
   final Masquerade proxy;
   final TextEditingController controller = TextEditingController();
   final RxBool isEditing = false.obs;
+  final RxBool isEditingIcon = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +77,10 @@ class ProxyTile extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  UserIcon(
+                  EditableUserIcon(
+                    isEditing: isEditingIcon,
+                    proxy: proxy.obs,
                     user: ClientController.controller.selectedUser.value,
-                    radius: 48,
-                    hasStatus: false,
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -94,6 +95,8 @@ class ProxyTile extends StatelessWidget {
                       isEditing: isEditing,
                       controller: controller,
                       proxy: proxy.obs,
+                      text: proxy.name,
+                      toChange: "name",
                       // style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -120,15 +123,61 @@ class ProxyTile extends StatelessWidget {
 }
 
 class EditableUserIcon extends StatelessWidget {
-  const EditableUserIcon({
+  EditableUserIcon({
     super.key,
     required this.user,
+    required this.isEditing,
+    required this.proxy,
+    this.url,
   });
+  final TextEditingController controller = TextEditingController();
+  final RxBool isEditing;
+  final Rx<Masquerade> proxy;
+  final RxString? url;
+
+  void startEditing() {
+    isEditing.value = true;
+  }
+
+  void stopEditing() {
+    isEditing.value = false;
+  }
+
   final User user;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: UserIcon(user: user, hasStatus: false, radius: 30),
+    return Obx(
+      () => proxy.value.avatar != '' && !isEditing.value
+          ? InkWell(
+              onTap: () {
+                startEditing();
+              },
+              onFocusChange: (value) {
+                stopEditing();
+              },
+              child: UserIcon(
+                  url: proxy.value.avatar.obs, hasStatus: false, radius: 48),
+            )
+          : isEditing.value
+              ? EditableText(
+                  controller: controller,
+                  isEditing: isEditing,
+                  proxy: proxy,
+                  text: proxy.value.avatar,
+                  toChange: "avatar",
+                )
+              : InkWell(
+                  onTap: () {
+                    startEditing();
+                  },
+                  onFocusChange: (value) {
+                    stopEditing();
+                  },
+                  child: CircleAvatar(
+                    foregroundColor: Dark.secondaryBackground.value,
+                    child: const Icon(Icons.image),
+                  ),
+                ),
     );
   }
 }
@@ -139,15 +188,27 @@ class EditableText extends StatelessWidget {
     required this.controller,
     required this.isEditing,
     required this.proxy,
+    required this.text,
+    required this.toChange,
   });
   final RxBool isEditing;
   final Rx<Masquerade> proxy;
   final TextEditingController controller;
+  final String text;
+  final String toChange;
 
   void startEditing() {
     Future.delayed(Duration.zero, () {
       isEditing.value = true;
-      controller.text = proxy.value.name;
+      switch (toChange) {
+        case 'name':
+          controller.text = proxy.value.name;
+          break;
+
+        case 'avatar':
+          controller.text = proxy.value.avatar;
+          break;
+      }
     });
   }
 
@@ -167,10 +228,29 @@ class EditableText extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     contentPadding: EdgeInsets.symmetric(horizontal: 8)),
                 onSubmitted: (_) {
+                  switch (toChange) {
+                    case 'name':
+                      proxy.value.name = controller.text;
+                      break;
+
+                    case 'avatar':
+                      proxy.value.avatar = controller.text;
+                      break;
+                  }
+
                   stopEditing();
                 },
                 onTapOutside: (event) {
-                  proxy.value.name = controller.text;
+                  switch (toChange) {
+                    case 'name':
+                      proxy.value.name = controller.text;
+                      break;
+
+                    case 'avatar':
+                      proxy.value.avatar = controller.text;
+                      break;
+                  }
+
                   stopEditing();
                 },
               ),
