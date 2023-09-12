@@ -125,6 +125,7 @@ class EditableUserIcon extends StatelessWidget {
     required this.user,
   });
   final User user;
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       child: UserIcon(user: user, hasStatus: false, radius: 30),
