@@ -66,5 +66,13 @@ class Masquerade {
     name = json['name'];
     avatar = json['avatar'];
     color = json['colour'];
+
+    Map<String, dynamic> toJson() {
+      return {
+        'name': name,
+        'avatar': avatar,
+        'colour': color,
+      };
+    }
   }
 }

@@ -1,7 +1,6 @@
 // ignore_for_file:
 
 import 'package:flutter/foundation.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';

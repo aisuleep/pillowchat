@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
 
 class ClientController extends GetxController {
@@ -11,6 +12,7 @@ class ClientController extends GetxController {
   final RxDouble fontSize = 14.0.obs;
   final RxInt time = 0.obs;
   Rx<User> selectedUser = Rx<User>(User(id: '', name: ''));
+  RxList<Masquerade> proxies = <Masquerade>[].obs;
 
   // INIT CONTROLLER
   static final ClientController controller = Get.put(ClientController());
@@ -21,5 +23,13 @@ class ClientController extends GetxController {
 
   selectUser(User user) {
     selectedUser.value = user;
+  }
+
+  addProxy(Masquerade proxy) {
+    proxies.add(proxy);
+  }
+
+  removeProxy(Masquerade proxy) {
+    proxies.removeWhere((proxies) => proxies.name == proxy.name);
   }
 }

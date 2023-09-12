@@ -7,6 +7,8 @@ class TabHeader extends StatelessWidget {
   final IconData? icon;
   final Color color;
   final IconData? leading;
+  final IconData? trailing;
+  final Function()? trailingPressed;
   final VoidCallback? onPressed;
 
   const TabHeader({
@@ -16,6 +18,8 @@ class TabHeader extends StatelessWidget {
     this.icon,
     this.leading,
     this.onPressed,
+    this.trailing,
+    this.trailingPressed,
   });
 
   @override
@@ -48,7 +52,7 @@ class TabHeader extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: trailingPressed,
                       icon: Icon(
                         icon,
                         color: color,

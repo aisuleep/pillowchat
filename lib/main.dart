@@ -8,6 +8,7 @@ import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
+import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/pages/friends.dart';
 import 'package:pillowchat/pages/login.dart';
 import 'package:pillowchat/pages/server/chat_page.dart';
@@ -20,6 +21,7 @@ import 'package:pillowchat/themes/ui.dart';
 
 import 'pages/home/discover.dart';
 import 'pages/home/welcome.dart';
+import 'pages/settings/pages/proxies_page.dart';
 
 void main() {
   // initMeeduPlayer();
@@ -177,6 +179,15 @@ class MyApp extends StatelessWidget {
               leading: Icons.close,
               isSubpage: true,
             ),
+        '/settings/proxies': (context) => SettingsSubPage(
+            page: const ProxiesPage(),
+            title: 'Proxies',
+            leading: Icons.close,
+            isSubpage: true,
+            trailing: Icons.add,
+            trailingPressed: () {
+              ClientController.controller.addProxy(Masquerade('', '', null));
+            }),
         '/settings/status': (context) => SettingsSubPage(
               page: StatusPage(),
               title: 'Status',

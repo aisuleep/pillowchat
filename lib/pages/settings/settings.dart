@@ -181,6 +181,12 @@ class SettingsPage extends StatelessWidget {
                                               isSubpage: true,
                                             ),
                                             SettingsTab(
+                                              icon: Icons.switch_account,
+                                              title: 'Proxies',
+                                              trailingIcon: Icons.arrow_forward,
+                                              isSubpage: true,
+                                            ),
+                                            SettingsTab(
                                               icon: Icons.verified_user,
                                               title: 'Sessions',
                                               trailingIcon: Icons.arrow_forward,
@@ -434,7 +440,6 @@ class SettingsTab extends StatelessWidget {
     this.trailingIcon,
     this.icon,
     this.logout,
-    // this.page,
     this.text,
     this.color,
     this.isSubpage,
@@ -447,7 +452,6 @@ class SettingsTab extends StatelessWidget {
   final bool? isSubpage;
   final Widget? text;
   final Color? color;
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -494,12 +498,17 @@ class SettingsSubPage extends StatelessWidget {
     required this.page,
     this.leading,
     this.isSubpage,
+    this.trailing,
+    this.trailingPressed,
   });
 
   final String title;
   final Widget page;
   final IconData? leading;
+  final IconData? trailing;
   final bool? isSubpage;
+  final Function()? trailingPressed;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -508,6 +517,8 @@ class SettingsSubPage extends StatelessWidget {
           children: [
             TabHeader(
               leading: leading,
+              icon: trailing,
+              trailingPressed: trailingPressed,
               onPressed: isSubpage == true
                   ? () {
                       Navigator.pop(context);
