@@ -29,6 +29,10 @@ class ClientController extends GetxController {
     selectedUser.value = user;
   }
 
+  selectProxy(Masquerade proxy) {
+    selectedProxy.value = proxy;
+  }
+
   addProxy(Masquerade proxy, int index) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     proxies.add(proxy);

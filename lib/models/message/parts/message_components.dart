@@ -67,6 +67,7 @@ class Masquerade {
     avatar = json['avatar'];
     color = json['colour'];
 
+    // ignore: unused_element
     Map<String, dynamic> toJson() {
       return {
         'name': name,

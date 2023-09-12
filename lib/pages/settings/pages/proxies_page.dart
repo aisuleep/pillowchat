@@ -51,6 +51,7 @@ class ProxyTile extends StatelessWidget {
   });
   final Masquerade proxy;
   final TextEditingController controller = TextEditingController();
+  final TextEditingController controllerIcon = TextEditingController();
   final RxBool isEditing = false.obs;
   final RxBool isEditingIcon = false.obs;
   final SharedPreferences? prefs = Client.prefs;
@@ -68,6 +69,7 @@ class ProxyTile extends StatelessWidget {
               child: Row(
                 children: [
                   EditableUserIcon(
+                    controller: controllerIcon,
                     isEditing: isEditingIcon,
                     proxy: proxy.obs,
                   ),
@@ -130,8 +132,9 @@ class EditableUserIcon extends StatelessWidget {
     required this.isEditing,
     required this.proxy,
     this.url,
+    required this.controller,
   });
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController controller;
   final RxBool isEditing;
   final Rx<Masquerade> proxy;
   final RxString? url;

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_meedu_videoplayer/meedu_player.dart';
@@ -21,7 +22,7 @@ import 'package:pillowchat/themes/ui.dart';
 
 import 'pages/home/discover.dart';
 import 'pages/home/welcome.dart';
-import 'pages/settings/pages/proxies_page.dart';
+import 'pages/settings/pages/proxies_page.dart' as prox;
 
 void main() {
   // initMeeduPlayer();
@@ -180,14 +181,75 @@ class MyApp extends StatelessWidget {
               isSubpage: true,
             ),
         '/settings/proxies': (context) => SettingsSubPage(
-            page: const ProxiesPage(),
+            page: const prox.ProxiesPage(),
             title: 'Proxies',
             leading: Icons.close,
             isSubpage: true,
             trailing: Icons.add,
             trailingPressed: () {
-              ClientController.controller.addProxy(Masquerade('', '', null),
-                  ClientController.controller.proxies.length);
+              RxBool isEditing = false.obs;
+              RxBool isEditingIcon = false.obs;
+              Masquerade proxy = Masquerade('', '', null);
+              TextEditingController controller = TextEditingController();
+              TextEditingController controllerIcon = TextEditingController();
+              showPopup(
+                  context: context,
+                  widget: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4),
+                                child: Text('Avatar'),
+                              ),
+                              prox.EditableUserIcon(
+                                controller: controllerIcon,
+                                isEditing: isEditingIcon,
+                                proxy: proxy.obs,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4),
+                                child: Text('Name'),
+                              ),
+                              prox.EditableText(
+                                  controller: controller,
+                                  isEditing: isEditing,
+                                  proxy: proxy.obs,
+                                  text: 'name',
+                                  toChange: 'name'),
+                            ],
+                          ),
+                        ),
+                        Center(
+                          child: TextButton(
+                              onPressed: () {
+                                proxy = Masquerade(
+                                    controller.text, controllerIcon.text, null);
+                                ClientController.controller.addProxy(proxy,
+                                    ClientController.controller.proxies.length);
+                                if (ClientController
+                                        .controller.proxies.length ==
+                                    1) {
+                                  ClientController
+                                          .controller.selectedProxy.value =
+                                      ClientController.controller.proxies[0];
+                                  if (kDebugMode) {
+                                    print(
+                                        "SELECTED PROXY: index: ${ClientController.controller.proxies.length} ${ClientController.controller.selectedProxy.value.name}");
+                                  }
+                                }
+                              },
+                              child: const Text('Add Proxy')),
+                        ),
+                      ],
+                    ),
+                  ));
             }),
         '/settings/status': (context) => SettingsSubPage(
               page: StatusPage(),

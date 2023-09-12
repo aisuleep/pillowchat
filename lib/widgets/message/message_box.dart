@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
+import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/members.dart';
 import 'package:pillowchat/models/message/message.dart';
-import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/themes/ui.dart';
 import 'package:pillowchat/widgets/message/replies.dart';
@@ -15,14 +15,13 @@ import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 
 // ignore: must_be_immutable
 class MessageBox extends StatelessWidget {
-  MessageBox({super.key});
+  const MessageBox({super.key});
 
   static TextEditingController messageController = TextEditingController();
   static bool unlocked = true;
   static bool editing = false;
   static late String id;
   static late String initialContent;
-  RxInt index = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -179,38 +178,72 @@ class MessageBox extends StatelessWidget {
                       ),
                     ),
                     if (ClientController.controller.proxies.isNotEmpty)
-                      IntrinsicWidth(
-                        child: DropdownButton(
-                          // onChanged: (value) {},
-                          onChanged: (value) {
-                            ClientController.controller.selectedProxy.value ==
-                                value;
-                            index.value = ClientController.controller.proxies
-                                .indexWhere((proxies) =>
-                                    proxies ==
-                                    ClientController
-                                        .controller.selectedProxy.value);
-                          },
-                          items: ClientController.controller.proxies
-                              .map((Masquerade proxy) {
-                            return DropdownMenuItem(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 12,
-                                    backgroundImage: NetworkImage(proxy.avatar),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: PopupMenuButton(
+                            color: Dark.primaryBackground.value,
+                            enableFeedback: true,
+                            iconSize: 0,
+                            padding: EdgeInsets.zero,
+                            tooltip: '',
+                            child: IntrinsicWidth(
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                    Dark.primaryBackground.value,
                                   ),
-                                  Text(
-                                    proxy.name,
-                                  ),
-                                ],
+                                ),
+                                onPressed: null,
+                                child: Row(
+                                  children: [
+                                    UserIcon(
+                                      url: ClientController.controller
+                                          .selectedProxy.value.avatar.obs,
+                                      hasStatus: false,
+                                      radius: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Text(
+                                          "${ClientController.controller.selectedProxy.value.name}:"),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    // ),
+                            ),
+                            onSelected: (value) {
+                              ClientController.controller.selectProxy(
+                                  ClientController.controller.proxies[value]);
+                            },
+                            itemBuilder: (context) {
+                              return ClientController.controller.proxies
+                                  .asMap()
+                                  .entries
+                                  .map((proxy) => PopupMenuItem(
+                                      value: proxy.key,
+                                      child: Center(
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8),
+                                              child: UserIcon(
+                                                hasStatus: false,
+                                                radius: 20,
+                                                url: proxy.value.avatar.obs,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${proxy.value.name}:",
+                                            ),
+                                          ]))))
+                                  .toList();
+                            }),
+                      )
                   ],
                 ),
                 trailing: unlocked && !editing

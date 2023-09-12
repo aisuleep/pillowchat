@@ -234,7 +234,7 @@ class ChatPage extends StatelessWidget {
                                       if (ChannelController
                                               .controller.selected.value.type !=
                                           'VoiceChannel')
-                                        MessageBox(),
+                                        const MessageBox(),
                                     ],
                                   ),
                                 ),
