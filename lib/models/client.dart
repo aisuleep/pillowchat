@@ -169,7 +169,7 @@ class Client {
     }
   }
 
-  static login(BuildContext context) async {
+  static Future login(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       String getOS() {

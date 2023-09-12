@@ -1,6 +1,7 @@
 // ignore_for_file:
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
 import 'package:pillowchat/controllers/servers.dart';
@@ -13,6 +14,7 @@ import 'package:pillowchat/models/message/parts/reactions.dart';
 import 'package:pillowchat/models/server.dart';
 import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/widgets/home_channels.dart';
+import 'package:pillowchat/widgets/reactions/reactor_tile.dart';
 
 class Events {
   // MESSAGES
@@ -492,6 +494,8 @@ class Events {
     final Server? server;
     final int memberIndex;
     late final Member member;
+    final int userIndex;
+    late final User user;
 
     serverIndex = ServerController.controller.serversList
         .indexWhere((server) => server.id == serverId);
@@ -503,14 +507,25 @@ class Events {
             .controller.serversList[serverIndex].members[memberIndex];
         // if (kDebugMode) print(member.nickname?.value ?? member.userId);
       }
+      userIndex = ServerController.controller.serversList[serverIndex].users
+          .indexWhere((users) => users.id == userId);
+      if (userIndex != -1) {
+        user = ServerController
+            .controller.serversList[serverIndex].users[userIndex];
+      }
       server = ServerController.controller.serversList[serverIndex];
       if (data["nickname"] != null) {
         server.members[memberIndex].nickname?.value = data["nickname"];
+        server.members[memberIndex].nickname?.refresh();
         if (kDebugMode) print('[Updated] member nickname');
       }
-      if (data["avatar"] != null) {
+      if (data["avatar"] != null && userIndex != -1) {
         server.members[memberIndex].avatar.value =
             Avatar.fromJson(data["avatar"]);
+        server.members[memberIndex].avatar.value!.id =
+            ReactorTile.getUrl(true, user, serverMember: member)
+                .replaceAll("$autumn/avatars/", '');
+        server.members[memberIndex].avatar.refresh();
         if (kDebugMode) print('[Updated] member avatar');
 
         // }if (data["roles"]!= null) {
