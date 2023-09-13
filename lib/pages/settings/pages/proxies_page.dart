@@ -76,11 +76,11 @@ class ProxyTile extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: CircleAvatar(
                             radius: 10,
-                            foregroundColor: Colors.teal,
+                            foregroundColor: Dark.primaryBackground.value,
                           ),
                         ),
                         Padding(
@@ -189,7 +189,8 @@ class EditableUserIcon extends StatelessWidget {
                     stopEditing();
                   },
                   child: CircleAvatar(
-                    foregroundColor: Dark.secondaryBackground.value,
+                    backgroundColor: Dark.accent.value,
+                    foregroundColor: Dark.primaryBackground.value,
                     child: const Icon(Icons.image),
                   ),
                 ),
@@ -279,8 +280,8 @@ class EditableText extends StatelessWidget {
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll(Colors.teal.withOpacity(0.5)),
+                    backgroundColor: MaterialStatePropertyAll(
+                        Dark.primaryBackground.value.withOpacity(0.5)),
                     alignment: Alignment.centerLeft,
                   ),
                   child: Text(proxy.value.name))),

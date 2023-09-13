@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/widgets/home_channels.dart';
 import 'package:pillowchat/controllers/channels.dart';
 import 'package:pillowchat/controllers/client.dart';
@@ -244,6 +245,18 @@ class Client {
         await prefs.setString(
             "userId", ClientController.controller.selectedUser.value.id);
         List<Session> sesh = await fetchSessions();
+
+        int proxyLength = int.parse(prefs.getString('proxyLength') ?? '0');
+        for (int i = 0; i < proxyLength; i++) {
+          Masquerade proxy =
+              Masquerade.fromJson(jsonDecode(prefs.getString('proxy$i')!));
+          if (kDebugMode) {
+            print("GOT PROXY: ${proxy.name}");
+          }
+          ClientController.controller.proxies.add(proxy);
+          ClientController.controller.selectedProxy.value =
+              ClientController.controller.proxies[0];
+        }
         sessions.assignAll(sesh);
         Client.connect(context);
         saveInfo();

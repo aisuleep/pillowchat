@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pillowchat/models/message/parts/message_components.dart';
 import 'package:pillowchat/models/user.dart';
@@ -36,6 +37,13 @@ class ClientController extends GetxController {
   addProxy(Masquerade proxy, int index) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     proxies.add(proxy);
+
+    await prefs.setString(
+        'proxyLength', ClientController.controller.proxies.length.toString());
+    if (kDebugMode) {
+      print("ADDED PROXY: ${proxy.name} $index");
+      print(prefs.getString('proxyLength'));
+    }
     await prefs.setString('proxy$index',
         jsonEncode(Masquerade(proxy.name, proxy.avatar, proxy.color).toJson()));
   }
@@ -43,6 +51,11 @@ class ClientController extends GetxController {
   removeProxy(Masquerade proxy, int index) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     proxies.remove(proxy);
+    if (kDebugMode) {
+      print("DELETED PROXY: ${proxy.name}");
+    }
+    await prefs.setString(
+        'proxyLength', ClientController.controller.proxies.length.toString());
     await prefs.remove('proxy$index');
   }
 }
