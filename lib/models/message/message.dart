@@ -171,6 +171,7 @@ class Message {
   static send(String content, {List<Message>? replyList}) async {
     final channel = ChannelController.controller.selected.value.id;
     RxList<Map> repliesList = <Map>[].obs;
+    Map<String, dynamic>? proxy;
 
     if (replyList != null) {
       for (Message reply in replyList) {
@@ -194,13 +195,17 @@ class Message {
           print(repliesList[0]['mention']);
         }
       }
-
-      // ignore: prefer_is_empty
+      if (ClientController.controller.proxies.isNotEmpty &&
+          ClientController.controller.selectedProxy.value.avatar !=
+              ClientController.controller.selectedUser.value.avatar?.value.id) {
+        proxy = ClientController.controller.selectedProxy.toJson();
+      }
     }
 
     Map body = {
       'content': content,
       'replies': repliesList.isEmpty ? null : repliesList,
+      'masquerade': proxy,
     };
     try {
       var url = Uri.https(

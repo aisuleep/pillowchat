@@ -97,19 +97,30 @@ class ProxyTile extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              IconButton(
-                                  onPressed: () {
-                                    int index = ClientController
-                                        .controller.proxies
-                                        .indexWhere(
-                                            (proxies) => proxies == proxy);
-                                    if (index != -1) {
+                              Visibility(
+                                visible: proxy.avatar !=
+                                    ClientController.controller.selectedUser
+                                        .value.avatar?.value.id,
+                                child: IconButton(
+                                    onPressed: () {
+                                      int index = ClientController
+                                          .controller.proxies
+                                          .indexWhere(
+                                              (proxies) => proxies == proxy);
+
                                       ClientController.controller
                                           .removeProxy(proxy, index);
-                                    }
-                                    Client.prefs?.remove('proxyIndex');
-                                  },
-                                  icon: const Icon((Icons.remove)))
+                                      if (ClientController
+                                              .controller.selectedProxy.value ==
+                                          proxy) {
+                                        ClientController.controller.selectProxy(
+                                            ClientController
+                                                .controller.proxies[0]);
+                                      }
+                                      Client.prefs?.remove('proxyIndex');
+                                    },
+                                    icon: const Icon((Icons.remove))),
+                              )
                             ],
                           ),
                         )

@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_meedu_videoplayer/meedu_player.dart';
@@ -10,6 +9,7 @@ import 'package:pillowchat/controllers/servers.dart';
 import 'package:pillowchat/custom/overlapping_panels.dart';
 import 'package:pillowchat/models/client.dart';
 import 'package:pillowchat/models/message/parts/message_components.dart';
+import 'package:pillowchat/models/user.dart';
 import 'package:pillowchat/pages/friends.dart';
 import 'package:pillowchat/pages/login.dart';
 import 'package:pillowchat/pages/server/chat_page.dart';
@@ -229,20 +229,29 @@ class MyApp extends StatelessWidget {
                         Center(
                           child: TextButton(
                               onPressed: () {
-                                proxy = Masquerade(
-                                    controller.text, controllerIcon.text, null);
-                                ClientController.controller.addProxy(proxy,
-                                    ClientController.controller.proxies.length);
                                 if (ClientController
-                                        .controller.proxies.length ==
-                                    1) {
+                                    .controller.proxies.isEmpty) {
+                                  User user = ClientController
+                                      .controller.selectedUser.value;
+
+                                  ClientController.controller.addProxy(
+                                      Masquerade(user.displayName ?? user.name,
+                                          Client.getAvatar(user), null),
+                                      0);
                                   ClientController
                                           .controller.selectedProxy.value =
                                       ClientController.controller.proxies[0];
-                                  if (kDebugMode) {
-                                    print(
-                                        "SELECTED PROXY: index: ${ClientController.controller.proxies.length} ${ClientController.controller.selectedProxy.value.name}");
-                                  }
+                                }
+                                if (controller.text != '' &&
+                                    controllerIcon.text != '') {
+                                  proxy = Masquerade(controller.text,
+                                      controllerIcon.text, null);
+                                  ClientController.controller.addProxy(
+                                      proxy,
+                                      ClientController
+                                          .controller.proxies.length);
+
+                                  Navigator.pop(context);
                                 }
                               },
                               child: const Text('Add Proxy')),

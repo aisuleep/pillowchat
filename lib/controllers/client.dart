@@ -37,7 +37,7 @@ class ClientController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     proxies.add(proxy);
     await prefs.setString('proxy$index',
-        jsonEncode(Masquerade(proxy.name, proxy.avatar, proxy.color)));
+        jsonEncode(Masquerade(proxy.name, proxy.avatar, proxy.color).toJson()));
   }
 
   removeProxy(Masquerade proxy, int index) async {
